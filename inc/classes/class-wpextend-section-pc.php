@@ -483,7 +483,7 @@ class Buzzpress_Section_Pc {
 
 
   /**
-  * Update private variable $buzzpress_global_settings to add new custom field
+  * Update private variable $Buzzpress_Section_Pc to add new custom field
   */
   public function add_new_section($name, $description, $post_type, $category, $file, $alias = 'none'){
 
@@ -529,7 +529,7 @@ class Buzzpress_Section_Pc {
 
 
   /**
-  * Update private variable $buzzpress_global_settings to add new custom field
+  * Update private variable $Buzzpress_Section_Pc to add new custom field
   */
   public function update_section($id_section, $name, $description, $post_type, $category, $file, $alias = 'none'){
 
@@ -574,7 +574,7 @@ class Buzzpress_Section_Pc {
 
 
 	/**
-   * Update private variable $buzzpress_global_settings to add new custom field
+   * Update private variable $Buzzpress_Section_Pc to add new custom field
    */
    public function delete_category_section_type($post_type, $category){
 
@@ -587,7 +587,7 @@ class Buzzpress_Section_Pc {
 
 
   /**
-  * Update private variable $buzzpress_global_settings to add new custom field
+  * Update private variable $Buzzpress_Section_Pc to add new custom field
   */
   public function delete_section_type($post_type, $category, $id){
 

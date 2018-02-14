@@ -244,7 +244,7 @@ class Buzzpress_Single_Post_Type {
 			is_array( $_POST['taxonomy'] )
 		 ) {
 
-			// Get Buzzpress_Global_Settings instance
+			// Get Buzzpress_Post_Type instance
 			$instance_Buzzpress_Post_Type = Buzzpress_Post_Type::getInstance();
 
 			// Protect data
@@ -279,7 +279,7 @@ class Buzzpress_Single_Post_Type {
 				}
 			}
 
-			// Add in Buzzpress_Global_Settings
+			// Add in Buzzpress_Post_Type
 			$instance_Buzzpress_Post_Type->add_new( $labels, $slug, $args, $taxonomy );
 
 			// Save in Wordpress database
@@ -303,10 +303,10 @@ class Buzzpress_Single_Post_Type {
 
 			$id_post_type = sanitize_text_field( $_GET['id'] );
 
-			// Get Buzzpress_Global_Settings instance
+			// Get Buzzpress_Post_Type instance
 			$instance_Buzzpress_Post_Type = Buzzpress_Post_Type::getInstance();
 
-			// Add in Buzzpress_Global_Settings
+			// Add in Buzzpress_Post_Type
  			$instance_Buzzpress_Post_Type->delete( $id_post_type );
 
  			// Save in Wordpress database

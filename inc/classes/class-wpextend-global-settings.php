@@ -4,12 +4,12 @@
 /**
 *
 */
-class Buzzpress_Global_Settings {
+class Wpextend_Global_Settings {
 
 	 private static $_instance;
-	 public $buzzpress_global_settings;
-	 public $buzzpress_global_settings_values = array();
-	 public $buzzpress_global_settings_values_to_export = array();
+	 public $wpextend_global_settings;
+	 public $wpextend_global_settings_values = array();
+	 public $wpextend_global_settings_values_to_export = array();
 	 public $name_option_in_database = '_buzzpress_global_settings';
 	 public $name_option_value_in_database = '_buzzpress_global_settings_value_';
 	 public $WPML_default_langage = 'all';
@@ -20,13 +20,13 @@ class Buzzpress_Global_Settings {
 
 
 	/**
-	* First instance of class Buzzpress_Global_Settings
+	* First instance of class Wpextend_Global_Settings
 	*
-	* @return object Buzzpress_Global_Settings
+	* @return object Wpextend_Global_Settings
 	*/
 	public static function getInstance() {
 		 if (is_null(self::$_instance)) {
-			  self::$_instance = new Buzzpress_Global_Settings();
+			  self::$_instance = new Wpextend_Global_Settings();
 		 }
 		 return self::$_instance;
 	}
@@ -51,16 +51,16 @@ class Buzzpress_Global_Settings {
 
 
 		// Set option from database
-		$this->buzzpress_global_settings = get_option( $this->name_option_in_database );
-		if( !is_array( $this->buzzpress_global_settings ) ) {
-			$this->buzzpress_global_settings = array();
+		$this->wpextend_global_settings = get_option( $this->name_option_in_database );
+		if( !is_array( $this->wpextend_global_settings ) ) {
+			$this->wpextend_global_settings = array();
 		}
 
 
-		foreach( $this->buzzpress_global_settings as $key => $val){
+		foreach( $this->wpextend_global_settings as $key => $val){
 			$value_in_database = get_option( $this->name_option_value_in_database . $key );
 
-			$this->buzzpress_global_settings_values_to_export[$key] = $value_in_database;
+			$this->wpextend_global_settings[$key] = $value_in_database;
 
 			if(is_array($value_in_database)){
 				foreach($value_in_database as $key2 => $val2){
@@ -72,12 +72,12 @@ class Buzzpress_Global_Settings {
 				}
 			}
 
-			$this->buzzpress_global_settings_values[$key] = $value_in_database;
-			if( !is_array($this->buzzpress_global_settings_values[$key]) )
-				$this->buzzpress_global_settings_values[$key] = array();
+			$this->wpextend_global_settings_values[$key] = $value_in_database;
+			if( !is_array($this->wpextend_global_settings_values[$key]) )
+				$this->wpextend_global_settings_values[$key] = array();
 
-			if( !is_array($this->buzzpress_global_settings_values_to_export[$key]) )
-				$this->buzzpress_global_settings_values_to_export[$key] = array();
+			if( !is_array($this->wpextend_global_settings_values_to_export[$key]) )
+				$this->wpextend_global_settings_values_to_export[$key] = array();
 		}
 
 		// Configure hooks
@@ -97,16 +97,16 @@ class Buzzpress_Global_Settings {
 		add_action('admin_enqueue_scripts', array( __CLASS__, 'script_admin' ) );
 
 	   	// $_POST traitment if necessary
-	   	add_action( 'admin_post_update_settings_buzzpress', 'Buzzpress_Global_Settings::udpate_values' );
+	   	add_action( 'admin_post_update_settings_buzzpress', 'Wpextend_Global_Settings::udpate_values' );
 	   	add_action( 'admin_post_add_category_setting_buzzpress', 'Wpextend_Category_Settings::add_new' );
 	   	add_action( 'admin_post_add_settings_buzzpress', 'Buzzpress_Single_Setting::add_new' );
 		add_action( 'admin_post_delete_category_setting', 'Wpextend_Category_Settings::delete_category_setting' );
 		add_action( 'admin_post_delete_setting', 'Buzzpress_Single_Setting::delete_setting' );
-		add_action( 'admin_post_import_buzzpress_global_settings', array($this, 'import') );
-		add_action( 'admin_post_import_buzzpress_global_settings_values', array($this, 'import_values') );
+		add_action( 'admin_post_import_wpextend_global_settings', array($this, 'import') );
+		add_action( 'admin_post_import_wpextend_global_settings_values', array($this, 'import_values') );
 
 	   	// AJAX $_POST traitment if necessary
-	   	add_action( 'wp_ajax_update_settings_buzzpress', 'Buzzpress_Global_Settings::udpate_values' );
+	   	add_action( 'wp_ajax_update_settings_buzzpress', 'Wpextend_Global_Settings::udpate_values' );
 	   	add_action( 'wp_ajax_add_category_setting_buzzpress', 'Wpextend_Category_Settings::add_new' );
 	   	add_action( 'wp_ajax_add_settings_buzzpress', 'Buzzpress_Single_Setting::add_new' );
 	}
@@ -121,10 +121,10 @@ class Buzzpress_Global_Settings {
 
 		wp_enqueue_media();
 
-		wp_enqueue_script( 'script_admin_Buzzpress_Global_Settings', WPEXTEND_ASSETS_URL . 'js/admin/site-settings.js', array('jquery'));
-		wp_localize_script( 'script_admin_Buzzpress_Global_Settings', 'OBJECT', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
+		wp_enqueue_script( 'script_admin_wpextend_global_settings', WPEXTEND_ASSETS_URL . 'js/admin/site-settings.js', array('jquery'));
+		wp_localize_script( 'script_admin_wpextend_global_settings', 'OBJECT', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
 
-		wp_enqueue_style( 'style_admin_Buzzpress_Global_Settings', WPEXTEND_ASSETS_URL . 'style/admin/site-settings.css', false, true );
+		wp_enqueue_style( 'style_admin_wpextend_global_settings', WPEXTEND_ASSETS_URL . 'style/admin/site-settings.css', false, true );
 	}
 
 
@@ -140,25 +140,25 @@ class Buzzpress_Global_Settings {
 			$category = sanitize_title( $category );
 
 			if(
-				is_array( $this->buzzpress_global_settings_values ) &&
-				array_key_exists($category, $this->buzzpress_global_settings_values ) &&
-				is_array( $this->buzzpress_global_settings_values[$category] ) &&
-				array_key_exists($id, $this->buzzpress_global_settings_values[$category] ) &&
+				is_array( $this->wpextend_global_settings_values ) &&
+				array_key_exists($category, $this->wpextend_global_settings_values ) &&
+				is_array( $this->wpextend_global_settings_values[$category] ) &&
+				array_key_exists($id, $this->wpextend_global_settings_values[$category] ) &&
 				(
-					( $this->buzzpress_global_settings[$category]['wpml_compatible'] == 1 && array_key_exists( $this->WPML_langage, $this->buzzpress_global_settings_values[$category][$id]) ) ||
-					( $this->buzzpress_global_settings[$category]['wpml_compatible'] != 1 && array_key_exists( $this->WPML_default_langage, $this->buzzpress_global_settings_values[$category][$id]) )
+					( $this->wpextend_global_settings[$category]['wpml_compatible'] == 1 && array_key_exists( $this->WPML_langage, $this->wpextend_global_settings_values[$category][$id]) ) ||
+					( $this->wpextend_global_settings[$category]['wpml_compatible'] != 1 && array_key_exists( $this->WPML_default_langage, $this->wpextend_global_settings_values[$category][$id]) )
 				)
 			){
 
-				if( $this->buzzpress_global_settings[$category]['wpml_compatible'] == 1 ){
+				if( $this->wpextend_global_settings[$category]['wpml_compatible'] == 1 ){
 
-					if( $this->WPML_current_langage != null && array_key_exists($this->WPML_current_langage, $this->buzzpress_global_settings_values[$category][$id]) )
-						return $this->buzzpress_global_settings_values[$category][$id][$this->WPML_current_langage];
+					if( $this->WPML_current_langage != null && array_key_exists($this->WPML_current_langage, $this->wpextend_global_settings_values[$category][$id]) )
+						return $this->wpextend_global_settings_values[$category][$id][$this->WPML_current_langage];
 					else
-						return $this->buzzpress_global_settings_values[$category][$id][$this->WPML_langage];
+						return $this->wpextend_global_settings_values[$category][$id][$this->WPML_langage];
 				}
 				else
-					return $this->buzzpress_global_settings_values[$category][$id][$this->WPML_default_langage];
+					return $this->wpextend_global_settings_values[$category][$id][$this->WPML_default_langage];
 			}
 		}
 		else{
@@ -166,13 +166,13 @@ class Buzzpress_Global_Settings {
 			$category = sanitize_title( $category );
 
 			if(
-				is_array( $this->buzzpress_global_settings_values ) &&
-				array_key_exists($category, $this->buzzpress_global_settings_values ) &&
-				is_array( $this->buzzpress_global_settings_values[$category] )
+				is_array( $this->wpextend_global_settings_values ) &&
+				array_key_exists($category, $this->wpextend_global_settings_values ) &&
+				is_array( $this->wpextend_global_settings_values[$category] )
 			){
 				$retour = array();
-				foreach( $this->buzzpress_global_settings_values[$category] as $key => $val ){
-					if( $this->buzzpress_global_settings[$category]['wpml_compatible'] == 1 ){
+				foreach( $this->wpextend_global_settings_values[$category] as $key => $val ){
+					if( $this->wpextend_global_settings[$category]['wpml_compatible'] == 1 ){
 						
 						if( $this->WPML_current_langage != null && array_key_exists($this->WPML_current_langage, $val) )
 							$retour[$key] = $val[$this->WPML_current_langage];
@@ -196,22 +196,22 @@ class Buzzpress_Global_Settings {
 	*/
 	public function get_all_settings(){
 
-		return $this->buzzpress_global_settings_values;
+		return $this->wpextend_global_settings_values;
 	}
 
 
 
 	/**
- 	* Retrieve all categories juste using loop in $this->buzzpress_global_settings
+ 	* Retrieve all categories juste using loop in $this->wpextend_global_settings
 	*
 	* @return array
  	*/
  	public function get_all_category() {
 
  		$all_category = array();
- 		if( is_array($this->buzzpress_global_settings) ) {
+ 		if( is_array($this->wpextend_global_settings) ) {
 
- 			foreach( $this->buzzpress_global_settings as $key => $val ) {
+ 			foreach( $this->wpextend_global_settings as $key => $val ) {
  				$all_category[$key] = $val['name'];
  			}
  		}
@@ -297,7 +297,7 @@ class Buzzpress_Global_Settings {
 
 
 	/**
- 	* Update private variable $buzzpress_global_settings to add new category
+ 	* Update private variable $wpextend_global_settings to add new category
 	*/
 	public function add_new_category($name, $traduisible = false, $capabilities = false) {
 
@@ -307,8 +307,8 @@ class Buzzpress_Global_Settings {
 			$id_new_category = sanitize_title($name);
 
 			// Test if no already exists
-			if( !array_key_exists($id_new_category, $this->buzzpress_global_settings) ) {
-				$this->buzzpress_global_settings[$id_new_category] = array('name' => $name, 'wpml_compatible' => $traduisible, 'capabilities' => $capabilities, 'fields' => array() );
+			if( !array_key_exists($id_new_category, $this->wpextend_global_settings) ) {
+				$this->wpextend_global_settings[$id_new_category] = array('name' => $name, 'wpml_compatible' => $traduisible, 'capabilities' => $capabilities, 'fields' => array() );
 			}
 		}
 	}
@@ -318,7 +318,7 @@ class Buzzpress_Global_Settings {
 
 
 	/**
- 	* Update private variable $buzzpress_global_settings to add new setting
+ 	* Update private variable $wpextend_global_settings to add new setting
 	*/
 	public function add_new_setting($name, $description, $type, $id_category, $options = false, $repeatable = false) {
 
@@ -331,10 +331,10 @@ class Buzzpress_Global_Settings {
 			$id_new_setting = sanitize_title($name);
 
 			// Test if no already exists
-			if( !array_key_exists( $id_new_setting, $this->buzzpress_global_settings[$id_category]['fields'] ) ){
-				$this->buzzpress_global_settings[$id_category]['fields'][$id_new_setting] = array('name' => $name, 'description' => $description, 'type' => $type, 'value' => null, 'repeatable' => $repeatable );
+			if( !array_key_exists( $id_new_setting, $this->wpextend_global_settings[$id_category]['fields'] ) ){
+				$this->wpextend_global_settings[$id_category]['fields'][$id_new_setting] = array('name' => $name, 'description' => $description, 'type' => $type, 'value' => null, 'repeatable' => $repeatable );
 				if( $type == 'select' || $type == 'radio' || $type == 'checkbox' || $type ==  'select_post_type' ){
-					$this->buzzpress_global_settings[$id_category]['fields'][$id_new_setting]['options'] = $options;
+					$this->wpextend_global_settings[$id_category]['fields'][$id_new_setting]['options'] = $options;
 				}
 			}
 		}
@@ -355,18 +355,18 @@ class Buzzpress_Global_Settings {
 
 		if( $key_category == false ){
 
-			if( count($this->buzzpress_global_settings) == 0)
-				$this->buzzpress_global_settings = false;
+			if( count($this->wpextend_global_settings) == 0)
+				$this->wpextend_global_settings = false;
 
-			return update_option( $this->name_option_in_database , $this->buzzpress_global_settings);
+			return update_option( $this->name_option_in_database , $this->wpextend_global_settings);
 		}
 		else{
 
-			if( array_key_exists($key_category, $this->buzzpress_global_settings_values) ){
-				if( count($this->buzzpress_global_settings_values[$key_category]) == 0)
-					$this->buzzpress_global_settings_values[$key_category] = false;
+			if( array_key_exists($key_category, $this->wpextend_global_settings_values) ){
+				if( count($this->wpextend_global_settings_values[$key_category]) == 0)
+					$this->wpextend_global_settings_values[$key_category] = false;
 
-				return update_option( $this->name_option_value_in_database . $key_category, $this->buzzpress_global_settings_values[$key_category] );
+				return update_option( $this->name_option_value_in_database . $key_category, $this->wpextend_global_settings_values[$key_category] );
 			}
 		}
 	}
@@ -387,8 +387,8 @@ class Buzzpress_Global_Settings {
 
 		if( isset( $_POST['category'], $_POST['fields'] ) && is_array( $_POST['fields'] ) ){
 
-			// Get Buzzpress_Global_Settings instance
-			$instance_global_settings = Buzzpress_Global_Settings::getInstance();
+			// Get Wpextend_Global_Settings instance
+			$instance_global_settings = Wpextend_Global_Settings::getInstance();
 
 			$all_category = $instance_global_settings->get_all_category();
 
@@ -400,34 +400,34 @@ class Buzzpress_Global_Settings {
 					foreach( $category as $key_field => $value ){
 
 						// Second test if setting exists
-						if( array_key_exists( $key_field, $instance_global_settings->buzzpress_global_settings[$key_category]['fields'] ) ){
+						if( array_key_exists( $key_field, $instance_global_settings->wpextend_global_settings[$key_category]['fields'] ) ){
 
-							if( $instance_global_settings->buzzpress_global_settings[$key_category]['wpml_compatible'] == 1 ){
+							if( $instance_global_settings->wpextend_global_settings[$key_category]['wpml_compatible'] == 1 ){
 
 								if( is_array($value) ){
 
 									// Cleanning repeatble variable
-									if($instance_global_settings->buzzpress_global_settings[$key_category]['fields'][$key_field]['repeatable'] == 1){
-										if($instance_global_settings->buzzpress_global_settings[$key_category]['fields'][$key_field]['type'] == 'link'){
+									if($instance_global_settings->wpextend_global_settings[$key_category]['fields'][$key_field]['repeatable'] == 1){
+										if($instance_global_settings->wpextend_global_settings[$key_category]['fields'][$key_field]['type'] == 'link'){
 											foreach($value as $key_tab_link => $val_tab_link){
 												if(count($value) > 1 && $val_tab_link['link'] == '' && $val_tab_link['label'] == ''){ unset($value[$key_tab_link]); }
 											}
 										}
 									}
 
-									$instance_global_settings->buzzpress_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_langage] = $value;
+									$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_langage] = $value;
 									if( $instance_global_settings->WPML_current_langage != null && $instance_global_settings->WPML_langage != $instance_global_settings->WPML_current_langage )
-										$instance_global_settings->buzzpress_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_current_langage] = $value;
+										$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_current_langage] = $value;
 								}
-								elseif( $instance_global_settings->buzzpress_global_settings[$key_category]['fields'][$key_field]['type'] == 'textarea' ){
-									$instance_global_settings->buzzpress_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_langage] = $value;
+								elseif( $instance_global_settings->wpextend_global_settings[$key_category]['fields'][$key_field]['type'] == 'textarea' ){
+									$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_langage] = $value;
 									if( $instance_global_settings->WPML_current_langage != null && $instance_global_settings->WPML_langage != $instance_global_settings->WPML_current_langage )
-										$instance_global_settings->buzzpress_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_current_langage] = $value;
+										$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_current_langage] = $value;
 								}
 								else{
-									$instance_global_settings->buzzpress_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_langage] = sanitize_text_field($value);
+									$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_langage] = sanitize_text_field($value);
 									if( $instance_global_settings->WPML_current_langage != null && $instance_global_settings->WPML_langage != $instance_global_settings->WPML_current_langage )
-										$instance_global_settings->buzzpress_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_current_langage] = sanitize_text_field($value);
+										$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_current_langage] = sanitize_text_field($value);
 								}
 							}
 							else{
@@ -435,21 +435,21 @@ class Buzzpress_Global_Settings {
 								if( is_array($value) ){
 
 									// Cleanning repeatble variable
-									if($instance_global_settings->buzzpress_global_settings[$key_category]['fields'][$key_field]['repeatable'] == 1){
-										if($instance_global_settings->buzzpress_global_settings[$key_category]['fields'][$key_field]['type'] == 'link'){
+									if($instance_global_settings->wpextend_global_settings[$key_category]['fields'][$key_field]['repeatable'] == 1){
+										if($instance_global_settings->wpextend_global_settings[$key_category]['fields'][$key_field]['type'] == 'link'){
 											foreach($value as $key_tab_link => $val_tab_link){
 												if(count($value) > 1 && $val_tab_link['link'] == '' && $val_tab_link['label'] == ''){ unset($value[$key_tab_link]); }
 											}
 										}
 									}
 
-									$instance_global_settings->buzzpress_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_default_langage] = $value;
+									$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_default_langage] = $value;
 								}
-								elseif( $instance_global_settings->buzzpress_global_settings[$key_category]['fields'][$key_field]['type'] == 'textarea' ){
-									$instance_global_settings->buzzpress_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_default_langage] = $value;
+								elseif( $instance_global_settings->wpextend_global_settings[$key_category]['fields'][$key_field]['type'] == 'textarea' ){
+									$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_default_langage] = $value;
 								}
 								else{
-									$instance_global_settings->buzzpress_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_default_langage] = sanitize_text_field($value);
+									$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_default_langage] = sanitize_text_field($value);
 								}
 							}
 						}
@@ -473,9 +473,9 @@ class Buzzpress_Global_Settings {
 
 	public function remove_category_setting($category){
 
-		if( array_key_exists( $category, $this->buzzpress_global_settings ) ){
-			unset( $this->buzzpress_global_settings[$category] );
-			unset( $this->buzzpress_global_settings_values[$category] );
+		if( array_key_exists( $category, $this->wpextend_global_settings ) ){
+			unset( $this->wpextend_global_settings[$category] );
+			unset( $this->wpextend_global_settings_values[$category] );
 
 			$this->save( $category );
 		}
@@ -486,9 +486,9 @@ class Buzzpress_Global_Settings {
 
 	public function remove_setting( $category, $key ){
 
-		if( array_key_exists( $category, $this->buzzpress_global_settings ) && array_key_exists( $key, $this->buzzpress_global_settings[$category]['fields'] ) ){
-			unset( $this->buzzpress_global_settings[$category]['fields'][$key] );
-			unset( $this->buzzpress_global_settings_values[$category][$key] );
+		if( array_key_exists( $category, $this->wpextend_global_settings ) && array_key_exists( $key, $this->wpextend_global_settings[$category]['fields'] ) ){
+			unset( $this->wpextend_global_settings[$category]['fields'][$key] );
+			unset( $this->wpextend_global_settings_values[$category][$key] );
 
 			$this->save( $category );
 		}
@@ -502,21 +502,21 @@ class Buzzpress_Global_Settings {
 		check_admin_referer($action_nonce);
 
 		// Get new data to import
-		if( isset( $_POST['buzzpress_global_settings_to_import'] ) && !empty($_POST['buzzpress_global_settings_to_import']) ) {
+		if( isset( $_POST['wpextend_global_settings_to_import'] ) && !empty($_POST['wpextend_global_settings_to_import']) ) {
 
-			$this->buzzpress_global_settings = json_decode( stripslashes($_POST['buzzpress_global_settings_to_import']), true );
+			$this->wpextend_global_settings = json_decode( stripslashes($_POST['wpextend_global_settings_to_import']), true );
 		}
 		elseif( isset($_GET['file']) && file_exists( WPEXTEND_DIR . '/inc/import/' . $_GET['file'] . '.json' ) ){
 
 			$data_json_file = file_get_contents( WPEXTEND_DIR . '/inc/import/' . $_GET['file'] . '.json' );
-			$this->buzzpress_global_settings = json_decode( $data_json_file, true );
+			$this->wpextend_global_settings = json_decode( $data_json_file, true );
 		}
 		else{
 			exit;
 		}
 
 		// Save in Wordpress database
-		if( is_array($this->buzzpress_global_settings) ){
+		if( is_array($this->wpextend_global_settings) ){
 
 			$this->save();
 
@@ -537,23 +537,23 @@ class Buzzpress_Global_Settings {
 		check_admin_referer($action_nonce);
 
 		// Get new data to import
-		if( isset( $_POST['buzzpress_global_settings_values_to_import'] ) && !empty($_POST['buzzpress_global_settings_values_to_import']) ) {
+		if( isset( $_POST['wpextend_global_settings_values_to_import'] ) && !empty($_POST['wpextend_global_settings_values_to_import']) ) {
 
-			$this->buzzpress_global_settings_values = json_decode( stripslashes($_POST['buzzpress_global_settings_values_to_import']), true );
+			$this->wpextend_global_settings_values = json_decode( stripslashes($_POST['wpextend_global_settings_values_to_import']), true );
 		}
 		elseif( isset($_GET['file']) && file_exists( WPEXTEND_DIR . '/inc/import/' . $_GET['file'] . '.json' ) ){
 
 			$data_json_file = file_get_contents( WPEXTEND_DIR . '/inc/import/' . $_GET['file'] . '.json' );
-			$this->buzzpress_global_settings_values = json_decode( $data_json_file, true );
+			$this->wpextend_global_settings_values = json_decode( $data_json_file, true );
 		}
 		else{
 			exit;
 		}
 
 		// Save in Wordpress database
-		if( is_array($this->buzzpress_global_settings) && is_array($this->buzzpress_global_settings_values) ){
+		if( is_array($this->wpextend_global_settings) && is_array($this->wpextend_global_settings_values) ){
 
-			foreach( $this->buzzpress_global_settings as $key => $val ){
+			foreach( $this->wpextend_global_settings as $key => $val ){
 				$this->save($key);
 			}
 

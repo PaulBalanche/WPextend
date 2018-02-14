@@ -60,7 +60,7 @@ class Wpextend_Category_Section_Pc {
 
 	  if( isset( $_POST['name'], $_POST['post_type'] ) ) {
 
-		  // Get Buzzpress_Global_Settings instance
+		  // Get Buzzpress_Section_Pc instance
 		  $instance_Buzzpress_Section_Pc = Buzzpress_Section_Pc::getInstance();
 
 		  // Protect data

@@ -92,7 +92,7 @@ class Buzzpress_Single_Custom_Field {
 
 		if( isset( $_POST['name'], $_POST['type'], $_POST['metabox'] ) ) {
 
-			// Get Buzzpress_Global_Settings instance
+			// Get Wpextend_Custom_Field instance
 			$instance_wpextend_custom_field = Wpextend_Custom_Field::getInstance();
 
 			// Protect data
@@ -148,7 +148,7 @@ class Buzzpress_Single_Custom_Field {
 			$spec_post_type = sanitize_text_field( $_GET['spec_post_type'] );
 			$metabox = sanitize_text_field( $_GET['metabox'] );
 
-			// Get Buzzpress_Global_Settings instance
+			// Get Wpextend_Custom_Field instance
 			$instance_wpextend_custom_field = Wpextend_Custom_Field::getInstance();
 
 			if( isset( $_GET['id']) ){

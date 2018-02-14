@@ -373,7 +373,7 @@ class Wpextend_Custom_Field {
 
 
 	/**
- 	* Update private variable $buzzpress_global_settings to add new custom field
+ 	* Update private variable $wpextend_global_settings to add new custom field
 	*
 	*/
 	public function add_new_custom_field(){

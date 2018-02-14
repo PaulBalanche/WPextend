@@ -144,7 +144,7 @@ class Buzzpress_Post_Type {
 
 
 	/**
- 	* Update private variable $buzzpress_global_settings to add new setting
+ 	* Update private variable Buzzpress_Post_Type to add new setting
 	*/
 	public function add_new( $labels, $slug, $args, $taxonomy ){
 
@@ -161,7 +161,7 @@ class Buzzpress_Post_Type {
 
 
 	/**
- 	* Update private variable $buzzpress_global_settings to add new setting
+ 	* Update private variable Buzzpress_Post_Type to add new setting
 	*/
 	public function delete($slug){
 

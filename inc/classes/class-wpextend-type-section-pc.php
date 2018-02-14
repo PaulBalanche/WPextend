@@ -108,7 +108,7 @@ class Buzzpress_Type_Section_Pc {
 		  )
 	  ) {
 
-		  // Get Buzzpress_Global_Settings instance
+		  // Get Buzzpress_Section_Pc instance
 		  $instance_Buzzpress_Section_Pc = Buzzpress_Section_Pc::getInstance();
 
 		  // Protect data
@@ -160,7 +160,7 @@ class Buzzpress_Type_Section_Pc {
 		)
 	 ) {
 
-		 // Get Buzzpress_Global_Settings instance
+		 // Get Buzzpress_Section_Pc instance
 		 $instance_Buzzpress_Section_Pc = Buzzpress_Section_Pc::getInstance();
 
 		 // Protect data
@@ -203,7 +203,7 @@ class Buzzpress_Type_Section_Pc {
 			$post_type = sanitize_text_field( $_GET['post_type'] );
 			$category = sanitize_text_field( $_GET['category'] );
 
-			// Get Buzzpress_Global_Settings instance
+			// Get Buzzpress_Section_Pc instance
 			$instance_Buzzpress_Section_Pc = Buzzpress_Section_Pc::getInstance();
 
 			if(isset($_GET['id'])){

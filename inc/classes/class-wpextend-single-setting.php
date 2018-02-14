@@ -22,20 +22,20 @@ class Buzzpress_Single_Setting {
 	*/
 	public function __construct($id, $category) {
 
-		$instance_settings_buzzpress = Buzzpress_Global_Settings::getInstance();
-		if( array_key_exists($category, $instance_settings_buzzpress->buzzpress_global_settings) &&
-			array_key_exists($id, $instance_settings_buzzpress->buzzpress_global_settings[$category]['fields'])
+		$instance_settings_buzzpress = Wpextend_Global_Settings::getInstance();
+		if( array_key_exists($category, $instance_settings_buzzpress->wpextend_global_settings) &&
+			array_key_exists($id, $instance_settings_buzzpress->wpextend_global_settings[$category]['fields'])
 		) {
 
 			$this->id = $id;
-			$this->name = $instance_settings_buzzpress->buzzpress_global_settings[$category]['fields'][$id]['name'];
-			$this->description = ( array_key_exists('description', $instance_settings_buzzpress->buzzpress_global_settings[$category]['fields'][$id]) ) ? $instance_settings_buzzpress->buzzpress_global_settings[$category]['fields'][$id]['description'] : '';
+			$this->name = $instance_settings_buzzpress->wpextend_global_settings[$category]['fields'][$id]['name'];
+			$this->description = ( array_key_exists('description', $instance_settings_buzzpress->wpextend_global_settings[$category]['fields'][$id]) ) ? $instance_settings_buzzpress->wpextend_global_settings[$category]['fields'][$id]['description'] : '';
 			$this->placeholder = '';
 			$this->category = $category;
-			$this->type = $instance_settings_buzzpress->buzzpress_global_settings[$category]['fields'][$id]['type'];
-			$this->options = ( array_key_exists( 'options', $instance_settings_buzzpress->buzzpress_global_settings[$category]['fields'][$id]) ) ? $instance_settings_buzzpress->buzzpress_global_settings[$category]['fields'][$id]['options'] : false;
+			$this->type = $instance_settings_buzzpress->wpextend_global_settings[$category]['fields'][$id]['type'];
+			$this->options = ( array_key_exists( 'options', $instance_settings_buzzpress->wpextend_global_settings[$category]['fields'][$id]) ) ? $instance_settings_buzzpress->wpextend_global_settings[$category]['fields'][$id]['options'] : false;
 			$this->value = $instance_settings_buzzpress->get( $id, $category );
-			$this->repeatable = ( array_key_exists('repeatable', $instance_settings_buzzpress->buzzpress_global_settings[$category]['fields'][$id]) ) ? $instance_settings_buzzpress->buzzpress_global_settings[$category]['fields'][$id]['repeatable'] : false;
+			$this->repeatable = ( array_key_exists('repeatable', $instance_settings_buzzpress->wpextend_global_settings[$category]['fields'][$id]) ) ? $instance_settings_buzzpress->wpextend_global_settings[$category]['fields'][$id]['repeatable'] : false;
 
 			// Pour les champs custom post
 			if( $this->type == 'select_post_type' ){
@@ -170,8 +170,8 @@ class Buzzpress_Single_Setting {
 
 		if( isset( $_POST['name'], $_POST['description'], $_POST['type_field'], $_POST['category'] ) ) {
 
-			// Get Buzzpress_Global_Settings instance
-			$instance_global_settings = Buzzpress_Global_Settings::getInstance();
+			// Get Wpextend_Global_Settings instance
+			$instance_global_settings = Wpextend_Global_Settings::getInstance();
 
 			// Protect data
 			$name 			= sanitize_text_field( $_POST['name'] );
@@ -196,7 +196,7 @@ class Buzzpress_Single_Setting {
 			// Champs repeatable
 			$repeatable = ( isset($_POST['repeatable']) && is_array($_POST['repeatable']) && $_POST['repeatable'][0] == true ) ? true : false;
 
-			// Add in Buzzpress_Global_Settings
+			// Add in Wpextend_Global_Settings
 			$instance_global_settings->add_new_setting($name, $description, $type, $id_category, $options, $repeatable);
 
 			// Save in Wordpress database
@@ -223,14 +223,14 @@ class Buzzpress_Single_Setting {
 
 		if( isset( $_GET['category'], $_GET['key'] ) ) {
 
-			// Get Buzzpress_Global_Settings instance
-			$instance_global_settings = Buzzpress_Global_Settings::getInstance();
+			// Get Wpextend_Global_Settings instance
+			$instance_global_settings = Wpextend_Global_Settings::getInstance();
 
 			// Protect data
 			$category = sanitize_text_field( $_GET['category'] );
 			$key = sanitize_text_field( $_GET['key'] );
 
-			// Add in Buzzpress_Global_Settings
+			// Add in Wpextend_Global_Settings
 			$instance_global_settings->remove_setting( $category, $key );
 
 			// Save in Wordpress database

@@ -1,19 +1,19 @@
-body.buzzpress_page_buzzpress_custom_field .form_add_custom_field .tr_metabox th, body.buzzpress_page_buzzpress_custom_field .form_add_custom_field .tr_metabox td,
-body.buzzpress_page_buzzpress_custom_field .form_add_custom_field .tr_post_type th, body.buzzpress_page_buzzpress_custom_field .form_add_custom_field .tr_post_type td,
-body.buzzpress_page_buzzpress_custom_field .form_add_custom_field .tr_post_type_options th, body.buzzpress_page_buzzpress_custom_field .form_add_custom_field .tr_post_type_options td,
-body.buzzpress_page_buzzpress_custom_field .form_add_metabox .tr_post_type th, body.buzzpress_page_buzzpress_custom_field .form_add_metabox .tr_post_type td{
+body.buzzpress_page_wpextend_custom_field .form_add_custom_field .tr_metabox th, body.buzzpress_page_wpextend_custom_field .form_add_custom_field .tr_metabox td,
+body.buzzpress_page_wpextend_custom_field .form_add_custom_field .tr_post_type th, body.buzzpress_page_wpextend_custom_field .form_add_custom_field .tr_post_type td,
+body.buzzpress_page_wpextend_custom_field .form_add_custom_field .tr_post_type_options th, body.buzzpress_page_wpextend_custom_field .form_add_custom_field .tr_post_type_options td,
+body.buzzpress_page_wpextend_custom_field .form_add_metabox .tr_post_type th, body.buzzpress_page_wpextend_custom_field .form_add_metabox .tr_post_type td{
 	display: none;
 }
 
-body.buzzpress_page_buzzpress_custom_field .li_postType.section-buzzpress th, body.buzzpress_page_buzzpress_custom_field .li_postType.section-buzzpress td{
+body.buzzpress_page_wpextend_custom_field .li_postType.section-buzzpress th, body.buzzpress_page_wpextend_custom_field .li_postType.section-buzzpress td{
 	display: table-cell;
 }
 
-body.buzzpress_page_buzzpress_custom_field .ulMetabox{
+body.buzzpress_page_wpextend_custom_field .ulMetabox{
 	list-style: none;
 }
 
-body.buzzpress_page_buzzpress_custom_field .liMetabox{
+body.buzzpress_page_wpextend_custom_field .liMetabox{
 	border: 1px solid rgb(220,220,220);
 	background: rgb(245,245,245);
 	float: left;
@@ -22,11 +22,11 @@ body.buzzpress_page_buzzpress_custom_field .liMetabox{
 	padding: 1rem;
 	box-sizing: border-box;
 }
-body.buzzpress_page_buzzpress_custom_field .liMetabox:nth-child(3n){
+body.buzzpress_page_wpextend_custom_field .liMetabox:nth-child(3n){
 	margin-right: 0;
 }
 
-body.buzzpress_page_buzzpress_custom_field .liCustomField{
+body.buzzpress_page_wpextend_custom_field .liCustomField{
 	border: 1px solid rgb(220,220,220);
 	background: rgb(235,235,235);
    padding: 1rem;

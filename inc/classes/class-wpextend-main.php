@@ -38,7 +38,7 @@ class Buzzpress_Main {
     private function __construct() {
 
 		 if( WPEXTEND_ENABLE_SECTION ){ $this->section_pc_buzzpress = Buzzpress_Section_Pc::getInstance(); }
-		 $this->instance_global_settings = Buzzpress_Global_Settings::getInstance();
+		 $this->instance_global_settings = Wpextend_Global_Settings::getInstance();
 		 $this->instance_wpextend_custom_field = Wpextend_Custom_Field::getInstance();
 		 $this->instance_post_type_buzzpress = Buzzpress_Post_Type::getInstance();
 
@@ -58,11 +58,11 @@ class Buzzpress_Main {
     */
     public static function define_admin_menu() {
 
-		add_menu_page(WPEXTEND_NAME_MENU_SETTINGS_EDITOR, WPEXTEND_NAME_MENU_SETTINGS_EDITOR, 'edit_posts', 'buzzpress_site_settings', array( Buzzpress_Global_Settings::getInstance(), 'render_admin_page' ), '', 3 );
-		add_submenu_page('buzzpress_site_settings', 'Site settings', 'Site settings', 'edit_posts', 'buzzpress_site_settings', array( Buzzpress_Global_Settings::getInstance(), 'render_admin_page' ) );
+		add_menu_page(WPEXTEND_NAME_MENU_SETTINGS_EDITOR, WPEXTEND_NAME_MENU_SETTINGS_EDITOR, 'edit_posts', 'buzzpress_site_settings', array( Wpextend_Global_Settings::getInstance(), 'render_admin_page' ), '', 3 );
+		add_submenu_page('buzzpress_site_settings', 'Site settings', 'Site settings', 'edit_posts', 'buzzpress_site_settings', array( Wpextend_Global_Settings::getInstance(), 'render_admin_page' ) );
 
-		add_menu_page('BuzzPress', 'BuzzPress', 'manage_options', 'buzzpress', array( Buzzpress_Global_Settings::getInstance(), 'render_admin_page' ) );
-		add_submenu_page('buzzpress', 'BuzzPress - Site settings', 'Site settings', 'manage_options', Buzzpress_Global_Settings::$admin_url, array( Buzzpress_Global_Settings::getInstance(), 'render_admin_page' ) );
+		add_menu_page('BuzzPress', 'BuzzPress', 'manage_options', 'buzzpress', array( Wpextend_Global_Settings::getInstance(), 'render_admin_page' ) );
+		add_submenu_page('buzzpress', 'BuzzPress - Site settings', 'Site settings', 'manage_options', Wpextend_Global_Settings::$admin_url, array( Wpextend_Global_Settings::getInstance(), 'render_admin_page' ) );
 		add_submenu_page('buzzpress', 'BuzzPress - Custom Post Type', 'Custom Post Type', 'manage_options', Buzzpress_Post_Type::$admin_url, array( Buzzpress_Post_Type::getInstance(), 'render_admin_page' ) );
 		add_submenu_page('buzzpress', 'BuzzPress - Custom Fields', 'Custom Fields', 'manage_options', Wpextend_Custom_Field::$admin_url, array( Wpextend_Custom_Field::getInstance(), 'render_admin_page' ) );
 		if( WPEXTEND_ENABLE_SECTION ){ add_submenu_page('buzzpress', 'BuzzPress - Section', 'Section', 'manage_options', Buzzpress_Section_Pc::$admin_url, array( Buzzpress_Section_Pc::getInstance(), 'render_admin_page' ) ); }
@@ -104,12 +104,12 @@ class Buzzpress_Main {
 
 	 	// Global settings
 		$retour_html .= Buzzpress_Render_Admin_Html::table_edit_open();
-		$retour_html .= Buzzpress_Type_Field::render_input_textarea( 'Buzzpress Global settings', 'buzzpress_global_settings_export', stripslashes( json_encode( Buzzpress_Global_Settings::getInstance()->buzzpress_global_settings, JSON_UNESCAPED_UNICODE ) ) );
+		$retour_html .= Buzzpress_Type_Field::render_input_textarea( 'Buzzpress Global settings', 'wpextend_global_settings_export', stripslashes( json_encode( Wpextend_Global_Settings::getInstance()->wpextend_global_settings, JSON_UNESCAPED_UNICODE ) ) );
 		$retour_html .= Buzzpress_Render_Admin_Html::table_edit_close();
 
 		// Global settings values
 		$retour_html .= Buzzpress_Render_Admin_Html::table_edit_open();
-		$retour_html .= Buzzpress_Type_Field::render_input_textarea( 'Buzzpress Global settings values', 'buzzpress_global_settings_value_export', stripslashes( json_encode( Buzzpress_Global_Settings::getInstance()->buzzpress_global_settings_values_to_export, JSON_UNESCAPED_UNICODE ) ) );
+		$retour_html .= Buzzpress_Type_Field::render_input_textarea( 'Buzzpress Global settings values', 'wpextend_global_settings_value_export', stripslashes( json_encode( Wpextend_Global_Settings::getInstance()->wpextend_global_settings_values_to_export, JSON_UNESCAPED_UNICODE ) ) );
 		$retour_html .= Buzzpress_Render_Admin_Html::table_edit_close();
 
 		// Custom post type
@@ -143,29 +143,29 @@ class Buzzpress_Main {
 	 	$retour_html = '';
 
 	 	// Formulaire d'import Global settings
-		$retour_html .= Buzzpress_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'import_buzzpress_global_settings', 'import_buzzpress_global_settings' );
+		$retour_html .= Buzzpress_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'import_wpextend_global_settings', 'import_wpextend_global_settings' );
 
 		$retour_html .= Buzzpress_Render_Admin_Html::table_edit_open();
-		$retour_html .= Buzzpress_Type_Field::render_input_textarea( 'Buzzpress Global settings to import', 'buzzpress_global_settings_to_import' );
+		$retour_html .= Buzzpress_Type_Field::render_input_textarea( 'Buzzpress Global settings to import', 'wpextend_global_settings_to_import' );
 		$retour_html .= Buzzpress_Render_Admin_Html::table_edit_close();
 
 		$retour_html .= Buzzpress_Render_Admin_Html::form_close( 'Import' );
 		if( file_exists( WPEXTEND_DIR . '/inc/import/global_settings.json' ) ){
-			$retour_html .= '<p><a href="' . add_query_arg( ['action' => 'import_buzzpress_global_settings', 'file' => 'global_settings'] , wp_nonce_url(admin_url( 'admin-post.php' ), 'import_buzzpress_global_settings')) . '" class="button" >Import JSON file</a></p>';
+			$retour_html .= '<p><a href="' . add_query_arg( ['action' => 'import_wpextend_global_settings', 'file' => 'global_settings'] , wp_nonce_url(admin_url( 'admin-post.php' ), 'import_wpextend_global_settings')) . '" class="button" >Import JSON file</a></p>';
 		}
 
 		$retour_html .= '<br /><hr><br />';
 
 		// Formulaire d'import Global settings values
-		$retour_html .= Buzzpress_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'import_buzzpress_global_settings_values', 'import_buzzpress_global_settings_values' );
+		$retour_html .= Buzzpress_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'import_wpextend_global_settings_values', 'import_wpextend_global_settings_values' );
 
 		$retour_html .= Buzzpress_Render_Admin_Html::table_edit_open();
-		$retour_html .= Buzzpress_Type_Field::render_input_textarea( 'Buzzpress Global settings values to import', 'buzzpress_global_settings_values_to_import' );
+		$retour_html .= Buzzpress_Type_Field::render_input_textarea( 'Buzzpress Global settings values to import', 'wpextend_global_settings_values_to_import' );
 		$retour_html .= Buzzpress_Render_Admin_Html::table_edit_close();
 
 		$retour_html .= Buzzpress_Render_Admin_Html::form_close( 'Import' );
 		if( file_exists( WPEXTEND_DIR . '/inc/import/global_settings_value.json' ) ){
-			$retour_html .= '<p><a href="' . add_query_arg( ['action' => 'import_buzzpress_global_settings_values', 'file' => 'global_settings_value'] , wp_nonce_url(admin_url( 'admin-post.php' ), 'import_buzzpress_global_settings_values')) . '" class="button" >Import JSON file</a></p>';
+			$retour_html .= '<p><a href="' . add_query_arg( ['action' => 'import_wpextend_global_settings_values', 'file' => 'global_settings_value'] , wp_nonce_url(admin_url( 'admin-post.php' ), 'import_wpextend_global_settings_values')) . '" class="button" >Import JSON file</a></p>';
 		}
 
 		$retour_html .= '<br /><hr><br />';
