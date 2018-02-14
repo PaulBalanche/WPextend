@@ -1,0 +1,72 @@
+#metabox_buzzpress_sections .browser_sortable{
+	background: #f1f1f1;
+	margin: 2% 4%;
+    padding: 2%;
+    -webkit-border-radius: 20px; -moz-border-radius: 20px; border-radius: 20px;
+    -webkit-box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.2); -moz-box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.2); box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.2);
+}
+	.ui-sortable #metabox_buzzpress_sections ul li{
+		background: white;
+		padding: 20px;
+		margin: 0 0 10px 0;
+		border: 1px solid #e5e5e5;
+		text-align: center;
+	}
+		.ui-sortable #metabox_buzzpress_sections ul li ul li{
+			display: inline-block;
+			padding: 10px;
+			margin: 10px 10px 0 0;
+			background: #f5f5f5;
+			border: 1px solid #e5e5e5;
+		}
+		.ui-sortable #metabox_buzzpress_sections ul li ul li:last-child{ margin-right: 0; }
+
+
+.ui-sortable li{
+	position: relative;
+	cursor: move;
+}
+.ui-sortable li.ui-state-disabled{ cursor: initial; opacity: 0.5; }
+.ui-sortable li.ui-state-disabled.add_new_post{ opacity: 1; }
+
+
+span.delete_panneau_in_config{
+	display: none;
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	background: white;
+	cursor: pointer;
+}
+.sortable li:hover > span.delete_panneau_in_config{
+	display: inline-block;
+}
+
+
+.link_upload_img_buzzpress img{ max-width: 200px; }
+
+
+
+
+
+body.buzzpress_page_buzzpress_sections .form_add_custom_field .tr_metabox th, body.buzzpress_page_buzzpress_sections .form_add_custom_field .tr_metabox td,
+body.buzzpress_page_buzzpress_sections .form_add_metabox .tr_post_type th, body.buzzpress_page_buzzpress_sections .form_add_metabox .tr_post_type td,
+body.buzzpress_page_buzzpress_sections .form_add_category_section .tr_post_type th, body.buzzpress_page_buzzpress_sections .form_add_category_section .tr_post_type td,
+body.buzzpress_page_buzzpress_sections .form_add_section .tr_category th, body.buzzpress_page_buzzpress_sections .form_add_section .tr_category td{
+	display: none;
+}
+
+body.buzzpress_page_buzzpress_sections .li_subPostType	{
+	border: 1px solid rgb(220,220,220);
+	background: rgb(245,245,245);
+   padding: 1rem;
+}
+
+body.buzzpress_page_buzzpress_sections .liMetabox{
+
+}
+body.buzzpress_page_buzzpress_sections .liCustomField{
+	border: 1px solid rgb(220,220,220);
+	background: rgb(235,235,235);
+   padding: 1rem;
+}

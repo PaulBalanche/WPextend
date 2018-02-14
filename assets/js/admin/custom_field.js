@@ -1,0 +1,244 @@
+/** READY **/
+jQuery(document).ready(function(){
+
+
+	jQuery( '.add_new_metabox, .add_new_custom_field' ).click( function() {
+
+		jQuery(this).addClass('hidden');
+		jQuery(this).next('form').removeClass('hidden');
+	});
+
+
+
+	jQuery( '.accordionBuzzpress' ).accordion({
+		heightStyle: "content",
+		collapsible: true,
+		active: false
+	});
+
+	jQuery( '.tabs' ).tabs();
+
+
+
+
+	/**
+	* Repeatable field
+	*
+	*/
+	jQuery( '.repeat_field').click(function(){
+
+
+		if( jQuery(this).prev('.repeatable_field').length > 0){
+
+			var repeatable_field = jQuery(this).prev( '.repeatable_field' );
+			var clone = repeatable_field.clone();
+
+			// If repeatable field is CTA field
+			if( jQuery(this).prev('.repeatable_field').hasClass('input_cta') && jQuery(this).next('.input_hidden_cta').length == 1 ){
+				var new_name_repeatble_field = jQuery(this).next('.input_hidden_cta').val();
+				var nb_repeatble_already_created = jQuery(this).parent('td').find('.repeatable_field').length;
+				new_name_repeatble_field = new_name_repeatble_field.replace('index', nb_repeatble_already_created);
+
+				clone.find('.cta_link').attr('name', new_name_repeatble_field + '[link]');
+				clone.find('.cta_label').attr('name', new_name_repeatble_field + '[label]');
+			}
+			// END : If repeatable field is CTA field
+
+			clone.insertAfter(repeatable_field);
+		}
+	});
+
+
+
+
+	var frame,
+		link_upload_img = jQuery('a.link_upload_img_buzzpress'),
+		link_remove_img = jQuery('a.link_remove_img_buzzpress'),
+		link_upload_file = jQuery('a.link_upload_file_buzzpress'),
+		link_remove_file = jQuery('a.link_remove_file_buzzpress');
+
+	/**
+	* Ajout d'un média
+	*
+	*/
+	link_upload_img.on('click', function( event ){
+
+		link_upload_img_courant = jQuery(this);
+
+		if(frame){
+		  frame.open();
+		  return false;
+		}
+
+		frame = wp.media({
+			title: 'Sélectionnez une image',
+			button: {
+				text: 'Ajouter !'
+			},
+			multiple: false  // Set to true to allow multiple files to be selected
+		});
+
+		frame.on('select', function(){
+
+			// Get media attachment details from the frame state
+			var attachment = frame.state().get('selection').first();
+
+			if( attachment.attributes.type == 'image' ){
+
+				if( attachment.attributes.sizes )
+					var src_image_uploade = attachment.attributes.sizes.thumbnail.url;
+				else
+					var src_image_uploade = attachment.attributes.url;
+
+				link_upload_img_courant.html('<img src="'+src_image_uploade+'" />');
+				link_upload_img_courant.parents('td').find('.input_upload_img_buzzpress').val(attachment.attributes.id);
+				link_upload_img_courant.parents('td').find(link_remove_img).removeClass('hidden');
+			}
+		});
+
+		frame.open();
+
+		return false;
+	});
+
+
+	/**
+	* Suppression d'un média
+	*
+	*/
+	link_remove_img.on('click', function( event ){
+
+		event.preventDefault();
+
+		jQuery(this).parents('td').find('.input_upload_img_buzzpress').val(-1);
+		jQuery(this).parents('td').find('a.thickbox').html('Ajouter une image');
+		jQuery(this).parent().find(link_remove_img).addClass('hidden');
+	});
+
+
+
+
+
+
+	/**
+	* Datepicker initialization
+	*
+	*/
+	jQuery( ".input_daterange_from" ).each(function(){
+
+		var current_date_picker_from = jQuery(this);
+		var current_date_picker_to = jQuery(this).parent().find('.input_daterange_to');
+
+		current_date_picker_from.datepicker({
+			dateFormat: "mm/dd/yy"
+		});
+	    current_date_picker_to.datepicker({
+			dateFormat: "mm/dd/yy"
+		});
+	});
+
+
+
+
+	/**
+	* Slider-range initialization
+	*
+	*/
+	jQuery( ".div_sliderrange" ).each(function(){
+
+		var sliderrange = jQuery(this);
+		var sliderInput_from = jQuery(this).parent().find('.input_sliderrange_from');
+		var sliderInput_to = jQuery(this).parent().find('.input_sliderrange_to');
+
+		var attr_min = jQuery(this).attr('attr-min');
+		var attr_max = jQuery(this).attr('attr-max');
+		
+
+		if( typeof(attr_min) == 'undefined' ){
+			attr_min = 0;
+		}
+
+		if( typeof(attr_max) == 'undefined' ){
+			attr_max = 24 * 60;
+		}
+
+		sliderrange.slider({
+			range: true,
+			min: 0,
+			max: 24 * 60,
+			step: 15,
+			values: [ attr_min, attr_max ],
+			slide: function( event, ui ) {
+
+				var hours_min = Math.floor(ui.values[0] / 60);
+            	var minutes_min = ui.values[0] - (hours_min * 60);
+
+            	var hours_max = Math.floor(ui.values[1] / 60);
+            	var minutes_max = ui.values[1] - (hours_max * 60);
+
+	        	sliderInput_from.val( hours_min + ":" + minutes_min);
+	        	sliderInput_to.val( hours_max + ":" + minutes_max );
+	    	}
+		});
+
+		// sliderInput.val( attr_min + "-" + attr_max );
+	});
+
+
+
+
+
+
+	/**
+	* Ajout d'un fichier
+	*
+	*/
+	link_upload_file.on('click', function( event ){
+
+		link_upload_file_courant = jQuery(this);
+
+		if(frame){
+		  frame.open();
+		  return false;
+		}
+
+		frame = wp.media({
+			title: 'Sélectionnez un fichier',
+			button: {
+				text: 'Ajouter !'
+			},
+			multiple: false  // Set to true to allow multiple files to be selected
+		});
+
+		frame.on('select', function(){
+
+			// Get media attachment details from the frame state
+			var attachment = frame.state().get('selection').first();
+
+			link_upload_file_courant.html(attachment.attributes.filename);
+			link_upload_file_courant.parents('td').find('.input_file_buzzpress').val(attachment.attributes.id);
+			link_upload_file_courant.parents('td').find(link_remove_file).removeClass('hidden');
+		});
+
+		frame.open();
+
+		return false;
+	});
+
+
+
+	/**
+	* Suppression d'un fichier
+	*
+	*/
+	link_remove_file.on('click', function( event ){
+
+		event.preventDefault();
+
+		jQuery(this).parents('td').find('.input_file_buzzpress').val(-1);
+		jQuery(this).parents('td').find('a.thickbox').html('Ajouter un fichier');
+		jQuery(this).parent().find(link_remove_file).addClass('hidden');
+	});
+
+
+});
