@@ -4,7 +4,7 @@
 /**
  *
  */
-class Buzzpress_Type_Field {
+class Wpextend_Type_Field {
 
 	public static $class_input_text = 'input_text_buzzpress';
 	public static $class_input_link = 'input_link_buzzpress';

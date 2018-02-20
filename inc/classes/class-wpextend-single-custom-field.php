@@ -2,7 +2,7 @@
 /**
  *
  */
-class Buzzpress_Single_Custom_Field {
+class Wpextend_Single_Custom_Field {
 
 	public $post_id;
 	public $kez_metabox;
@@ -59,15 +59,15 @@ class Buzzpress_Single_Custom_Field {
  		$retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'add_custom_field_buzzpress', 'add_custom_field_buzzpress', 'hidden' );
 
  		$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
- 		$retour_html .= Buzzpress_Type_Field::render_input_text( 'Name', 'name' );
-		$retour_html .= Buzzpress_Type_Field::render_input_select('Type', 'type_field', Buzzpress_Type_Field::get_available_fields() );
-		$retour_html .= Buzzpress_Type_Field::render_input_select('Post type select', 'post_type_options', Wpextend_Post_Type::getInstance()->get_all_include_base_wordpress() );
-		$retour_html .= Buzzpress_Type_Field::render_input_hidden( 'post_type', $post_type );
-		$retour_html .= Buzzpress_Type_Field::render_input_hidden( 'category', $key_category );
-		$retour_html .= Buzzpress_Type_Field::render_input_hidden( 'type', $key_type );
-		$retour_html .= Buzzpress_Type_Field::render_input_hidden( 'metabox', $key_metabox );
-		$retour_html .= Buzzpress_Type_Field::render_input_checkbox( 'Repeatable ?', 'repeatable', array( 'true' => 'Ce champ pourra être dupliqué') );
-		$retour_html .= Buzzpress_Type_Field::render_input_checkbox( 'Indexable ?', 'indexable', array( 'true' => 'Ce champ pourra faire l\'objet d\'une recherche') );
+ 		$retour_html .= Wpextend_Type_Field::render_input_text( 'Name', 'name' );
+		$retour_html .= Wpextend_Type_Field::render_input_select('Type', 'type_field', Wpextend_Type_Field::get_available_fields() );
+		$retour_html .= Wpextend_Type_Field::render_input_select('Post type select', 'post_type_options', Wpextend_Post_Type::getInstance()->get_all_include_base_wordpress() );
+		$retour_html .= Wpextend_Type_Field::render_input_hidden( 'post_type', $post_type );
+		$retour_html .= Wpextend_Type_Field::render_input_hidden( 'category', $key_category );
+		$retour_html .= Wpextend_Type_Field::render_input_hidden( 'type', $key_type );
+		$retour_html .= Wpextend_Type_Field::render_input_hidden( 'metabox', $key_metabox );
+		$retour_html .= Wpextend_Type_Field::render_input_checkbox( 'Repeatable ?', 'repeatable', array( 'true' => 'Ce champ pourra être dupliqué') );
+		$retour_html .= Wpextend_Type_Field::render_input_checkbox( 'Indexable ?', 'indexable', array( 'true' => 'Ce champ pourra faire l\'objet d\'une recherche') );
  		$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 
  		$retour_html .= Wpextend_Render_Admin_Html::form_close( 'Add field' );
@@ -191,49 +191,49 @@ class Buzzpress_Single_Custom_Field {
 		switch( $this->data['type'] ){
 
 			case 'text':
-				$retour_html .= Buzzpress_Type_Field::render_input_text( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->default_value_field, '', $this->repeatable );
+				$retour_html .= Wpextend_Type_Field::render_input_text( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->default_value_field, '', $this->repeatable );
 				break;
 
 			case 'textarea':
-				$retour_html .= Buzzpress_Type_Field::render_input_textarea( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->default_value_field );
+				$retour_html .= Wpextend_Type_Field::render_input_textarea( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->default_value_field );
 				break;
 
 			case 'select':
-				$retour_html .= Buzzpress_Type_Field::render_input_select( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->options, $this->default_value_field, $this->repeatable );
+				$retour_html .= Wpextend_Type_Field::render_input_select( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->options, $this->default_value_field, $this->repeatable );
 				break;
 
 			case 'select_post_type':
-				$retour_html .= Buzzpress_Type_Field::render_input_select( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->options, $this->default_value_field, $this->repeatable );
+				$retour_html .= Wpextend_Type_Field::render_input_select( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->options, $this->default_value_field, $this->repeatable );
 				break;
 
 			case 'radio':
-				$retour_html .= Buzzpress_Type_Field::render_input_radio( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->options, $this->default_value_field );
+				$retour_html .= Wpextend_Type_Field::render_input_radio( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->options, $this->default_value_field );
 				break;
 
 			case 'checkbox':
-				$retour_html .= Buzzpress_Type_Field::render_input_checkbox( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->options, $this->default_value_field );
+				$retour_html .= Wpextend_Type_Field::render_input_checkbox( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->options, $this->default_value_field );
 				break;
 
 			case 'link':
-				$retour_html .= Buzzpress_Type_Field::render_input_cta( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->default_value_field, $this->repeatable );
+				$retour_html .= Wpextend_Type_Field::render_input_cta( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->default_value_field, $this->repeatable );
 				break;
 
 			case 'image':
-				$retour_html .= Buzzpress_Type_Field::render_input_image( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->default_value_field );
+				$retour_html .= Wpextend_Type_Field::render_input_image( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->default_value_field );
 				break;
 
 			case 'file':
-				$retour_html .= Buzzpress_Type_Field::render_input_file( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->default_value_field );
+				$retour_html .= Wpextend_Type_Field::render_input_file( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->default_value_field );
 				break;
 
 			case 'daterange':
 
-				$retour_html .= Buzzpress_Type_Field::render_input_daterange( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->default_value_field );
+				$retour_html .= Wpextend_Type_Field::render_input_daterange( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->default_value_field );
 				break;
 
 			case 'sliderrange':
 
-				$retour_html .= Buzzpress_Type_Field::render_input_sliderrange( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->default_value_field );
+				$retour_html .= Wpextend_Type_Field::render_input_sliderrange( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->default_value_field );
 				break;
 
 			case 'listing_section':

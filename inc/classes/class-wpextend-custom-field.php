@@ -232,7 +232,7 @@ class Wpextend_Custom_Field {
 											$retour_html .=' (<a href="'.add_query_arg( array( 'action' => 'delete_custom_field_buzzpress', 'post_type' => $post_type, 'category' => $key_category, 'type' => $key_type, 'metabox' => $key_metabox, 'id' => $key, '_wpnonce' => wp_create_nonce( 'delete_custom_field_buzzpress' ) ), admin_url( 'admin-post.php' ) ).'">Delete</a>)</li>';
 										}
 
-										$retour_html .= Buzzpress_Single_Custom_Field::render_form_create( $post_type, $key_category, $key_type, $key_metabox );
+										$retour_html .= Wpextend_Single_Custom_Field::render_form_create( $post_type, $key_category, $key_type, $key_metabox );
 
 										$retour_html .= '</ul></li>';
 									}
@@ -249,10 +249,10 @@ class Wpextend_Custom_Field {
 					 		$retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'add_metabox_buzzpress', 'add_metabox_buzzpress', 'hidden' );
 
 					 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
-					 		$retour_html .= Buzzpress_Type_Field::render_input_text( 'Name', 'name' );
-							$retour_html .= Buzzpress_Type_Field::render_input_hidden( 'post_type', $post_type );
-							$retour_html .= Buzzpress_Type_Field::render_input_hidden( 'category', $key_category );
-							$retour_html .= Buzzpress_Type_Field::render_input_hidden( 'type', $key_type );
+					 		$retour_html .= Wpextend_Type_Field::render_input_text( 'Name', 'name' );
+							$retour_html .= Wpextend_Type_Field::render_input_hidden( 'post_type', $post_type );
+							$retour_html .= Wpextend_Type_Field::render_input_hidden( 'category', $key_category );
+							$retour_html .= Wpextend_Type_Field::render_input_hidden( 'type', $key_type );
 					 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 
 					 		$retour_html .= Wpextend_Render_Admin_Html::form_close( 'Add metabox' );

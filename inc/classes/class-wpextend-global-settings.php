@@ -99,16 +99,16 @@ class Wpextend_Global_Settings {
 	   	// $_POST traitment if necessary
 	   	add_action( 'admin_post_update_settings_buzzpress', 'Wpextend_Global_Settings::udpate_values' );
 	   	add_action( 'admin_post_add_category_setting_buzzpress', 'Wpextend_Category_Settings::add_new' );
-	   	add_action( 'admin_post_add_settings_buzzpress', 'Buzzpress_Single_Setting::add_new' );
+	   	add_action( 'admin_post_add_settings_buzzpress', 'Wpextend_Single_Setting::add_new' );
 		add_action( 'admin_post_delete_category_setting', 'Wpextend_Category_Settings::delete_category_setting' );
-		add_action( 'admin_post_delete_setting', 'Buzzpress_Single_Setting::delete_setting' );
+		add_action( 'admin_post_delete_setting', 'Wpextend_Single_Setting::delete_setting' );
 		add_action( 'admin_post_import_wpextend_global_settings', array($this, 'import') );
 		add_action( 'admin_post_import_wpextend_global_settings_values', array($this, 'import_values') );
 
 	   	// AJAX $_POST traitment if necessary
 	   	add_action( 'wp_ajax_update_settings_buzzpress', 'Wpextend_Global_Settings::udpate_values' );
 	   	add_action( 'wp_ajax_add_category_setting_buzzpress', 'Wpextend_Category_Settings::add_new' );
-	   	add_action( 'wp_ajax_add_settings_buzzpress', 'Buzzpress_Single_Setting::add_new' );
+	   	add_action( 'wp_ajax_add_settings_buzzpress', 'Wpextend_Single_Setting::add_new' );
 	}
 
 
@@ -260,7 +260,7 @@ class Wpextend_Global_Settings {
 					$retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'update_settings_buzzpress');
 				}
 				
-				$retour_html .= Buzzpress_Type_Field::render_input_hidden( 'category', $key );
+				$retour_html .= Wpextend_Type_Field::render_input_hidden( 'category', $key );
 
 				if($current_screen->parent_base == 'buzzpress'){
 					$retour_html .= '<h2>'.$val.' (<a href="'.add_query_arg( array( 'action' => 'delete_category_setting', 'category' => $key, '_wpnonce' => wp_create_nonce( 'delete_setting' ) ), admin_url( 'admin-post.php' ) ).'">Delete</a>)</h2>';
@@ -273,7 +273,7 @@ class Wpextend_Global_Settings {
 				}
 
 				if($current_screen->parent_base == 'buzzpress'){
-				 	$retour_html .= '<hr>'.Buzzpress_Single_Setting::render_form_create( $this->get_all_category(), $key );
+				 	$retour_html .= '<hr>'.Wpextend_Single_Setting::render_form_create( $this->get_all_category(), $key );
 			 	}
 				$retour_html .= '</div>';
 			}
@@ -323,7 +323,7 @@ class Wpextend_Global_Settings {
 	public function add_new_setting($name, $description, $type, $id_category, $options = false, $repeatable = false) {
 
 		if( !empty($name) &&
-			array_key_exists( $type, Buzzpress_Type_Field::get_available_fields() ) &&
+			array_key_exists( $type, Wpextend_Type_Field::get_available_fields() ) &&
 		 	array_key_exists( $id_category, $this->get_all_category() )
 		) {
 

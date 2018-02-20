@@ -4,7 +4,7 @@
 /**
  *
  */
-class Buzzpress_Single_Post_Type {
+class Wpextend_Single_Post_Type {
 
 	public $slug;
 	public $labels;
@@ -62,9 +62,9 @@ class Buzzpress_Single_Post_Type {
  	*/
  	public function __construct($slug, $data) {
 
-		$this->labels = wp_parse_args( $data['labels'], Buzzpress_Single_Post_Type::$default_labels );
+		$this->labels = wp_parse_args( $data['labels'], self::$default_labels );
 		$this->slug = $slug;
-		$this->args = wp_parse_args( $data['args'], Buzzpress_Single_Post_Type::$default_args );
+		$this->args = wp_parse_args( $data['args'], self::$default_args );
 		$this->args['labels'] = $this->labels;
 
 		if( array_key_exists('taxonomy', $data) && is_array($data['taxonomy']) && array_key_exists('slug', $data['taxonomy']) && array_key_exists('label', $data['taxonomy']) && !empty($data['taxonomy']['slug']) && !empty($data['taxonomy']['label']) ){
@@ -123,9 +123,9 @@ class Buzzpress_Single_Post_Type {
  	*/
  	static public function render_form_create() {
 
-		$tab_labels = Buzzpress_Single_Post_Type::$default_labels;
+		$tab_labels = self::$default_labels;
 		$slug = '';
-		$tab_args = Buzzpress_Single_Post_Type::$default_args;
+		$tab_args = self::$default_args;
 		$taxonomy = array('slug' => '', 'label' => '');
 
 		$retour_html = self::render_form( $tab_labels, $slug, $tab_args, $taxonomy );
@@ -161,14 +161,14 @@ class Buzzpress_Single_Post_Type {
 	*/
 	static private function render_form( $tab_labels, $slug, $tab_args, $taxonomy ){
 
-		$tab_labels_default = Buzzpress_Single_Post_Type::$default_labels;
-		$tab_args_default = Buzzpress_Single_Post_Type::$default_args;
+		$tab_labels_default = self::$default_labels;
+		$tab_args_default = self::$default_args;
 
 		$retour_html = '<hr>';
  		$retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'add_custom_post_type_buzzpress', 'add_custom_post_type_buzzpress' );
 
  		$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
-		$retour_html .= Buzzpress_Type_Field::render_input_text( 'Slug', 'slug', $slug);
+		$retour_html .= Wpextend_Type_Field::render_input_text( 'Slug', 'slug', $slug);
 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 
 		$retour_html .= '<hr>';
@@ -177,14 +177,14 @@ class Buzzpress_Single_Post_Type {
 		foreach( $tab_labels_default as $key => $val) {
 			if( is_array($val) ) {
 				if( isAssoc($val) ){
-					$retour_html .= Buzzpress_Type_Field::render_input_checkbox( $key, 'labels['.$key.']', $val );
+					$retour_html .= Wpextend_Type_Field::render_input_checkbox( $key, 'labels['.$key.']', $val );
 				}
 				else{
-					$retour_html .= Buzzpress_Type_Field::render_input_select( $key, 'labels['.$key.']', $val );
+					$retour_html .= Wpextend_Type_Field::render_input_select( $key, 'labels['.$key.']', $val );
 				}
 			}
 			else {
-				$retour_html .= Buzzpress_Type_Field::render_input_text( $key, 'labels['.$key.']', $tab_labels[$key] );
+				$retour_html .= Wpextend_Type_Field::render_input_text( $key, 'labels['.$key.']', $tab_labels[$key] );
 			}
 		}
 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
@@ -196,15 +196,15 @@ class Buzzpress_Single_Post_Type {
 			if( is_array($val) ) {
 				if( isAssoc($val) ){
 					$defaut_value = ($tab_args_default != $tab_args) ? $tab_args[$key] : false;
-					$retour_html .= Buzzpress_Type_Field::render_input_checkbox( $key, 'args['.$key.']', $val, $defaut_value );
+					$retour_html .= Wpextend_Type_Field::render_input_checkbox( $key, 'args['.$key.']', $val, $defaut_value );
 				}
 				else{
 					$defaut_value = ($tab_args_default != $tab_args) ? $tab_args[$key] : false;
-					$retour_html .= Buzzpress_Type_Field::render_input_select( $key, 'args['.$key.']', $val, $defaut_value );
+					$retour_html .= Wpextend_Type_Field::render_input_select( $key, 'args['.$key.']', $val, $defaut_value );
 				}
 			}
 			else {
-				$retour_html .= Buzzpress_Type_Field::render_input_text( $key, 'args['.$key.']', $tab_args[$key] );
+				$retour_html .= Wpextend_Type_Field::render_input_text( $key, 'args['.$key.']', $tab_args[$key] );
 			}
 		}
  		$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
@@ -212,8 +212,8 @@ class Buzzpress_Single_Post_Type {
 		$retour_html .= '<hr>';
 
 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
-		$retour_html .= Buzzpress_Type_Field::render_input_text( 'Taxonomy label', 'taxonomy[label]', $taxonomy['label']);
-		$retour_html .= Buzzpress_Type_Field::render_input_text( 'Taxonomy slug', 'taxonomy[slug]', $taxonomy['slug']);
+		$retour_html .= Wpextend_Type_Field::render_input_text( 'Taxonomy label', 'taxonomy[label]', $taxonomy['label']);
+		$retour_html .= Wpextend_Type_Field::render_input_text( 'Taxonomy slug', 'taxonomy[slug]', $taxonomy['slug']);
 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 
  		return $retour_html;
@@ -261,7 +261,7 @@ class Buzzpress_Single_Post_Type {
 
 				if( is_array($val) ) {
 
-					if( isAssoc( Buzzpress_Single_Post_Type::$default_args[$key] ) ) {
+					if( isAssoc( self::$default_args[$key] ) ) {
 						$new_val = array();
 						foreach( $val as $val2 ){
 							$new_val[] = sanitize_text_field( $val2 );

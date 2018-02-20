@@ -33,8 +33,8 @@ class Wpextend_Category_Section_Pc {
 	  $retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'add_category_section_buzzpress', 'add_category_section_buzzpress', 'hidden' );
 
 	  $retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
-	  $retour_html .= Buzzpress_Type_Field::render_input_text( 'Name', 'name' );
-	  $retour_html .= Buzzpress_Type_Field::render_input_select( 'Post type', 'post_type', Wpextend_Post_Type::getInstance()->get_all_include_base_wordpress(), $post_type );
+	  $retour_html .= Wpextend_Type_Field::render_input_text( 'Name', 'name' );
+	  $retour_html .= Wpextend_Type_Field::render_input_select( 'Post type', 'post_type', Wpextend_Post_Type::getInstance()->get_all_include_base_wordpress(), $post_type );
 	  $retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 
 	  $retour_html .= Wpextend_Render_Admin_Html::form_close( 'Add category' );

@@ -69,11 +69,11 @@ class Wpextend_Section_Pc {
 
 	   // $_POST traitment if necessary
 	   	add_action( 'admin_post_add_category_section_buzzpress', 'Wpextend_Category_Section_Pc::add_new' );
-		add_action( 'admin_post_add_type_section_buzzpress', 'Buzzpress_Type_Section_Pc::add_new' );
-		add_action( 'admin_post_update_type_section_buzzpress', 'Buzzpress_Type_Section_Pc::update' );
+		add_action( 'admin_post_add_type_section_buzzpress', 'Wpextend_Type_Section_Pc::add_new' );
+		add_action( 'admin_post_update_type_section_buzzpress', 'Wpextend_Type_Section_Pc::update' );
 
-		add_action( 'admin_post_delete_section_buzzpress', 'Buzzpress_Type_Section_Pc::delete' );
-		add_action( 'admin_post_delete_category_section_buzzpress', 'Buzzpress_Type_Section_Pc::delete' );
+		add_action( 'admin_post_delete_section_buzzpress', 'Wpextend_Type_Section_Pc::delete' );
+		add_action( 'admin_post_delete_category_section_buzzpress', 'Wpextend_Type_Section_Pc::delete' );
 
 		add_action( 'admin_post_import_wpextend_section_pc', array($this, 'import') );
 
@@ -335,11 +335,11 @@ class Wpextend_Section_Pc {
 		 $retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
 
 		 // Select Type of section
-		 $retour_html .= Buzzpress_Type_Field::render_input_text( 'Parent ID', 'config_section[parent_id]', $main_parent_id );
+		 $retour_html .= Wpextend_Type_Field::render_input_text( 'Parent ID', 'config_section[parent_id]', $main_parent_id );
 
 		 // Select Type of section
 		 $options = $this->get_all_sections_by_post_type(get_post_type( $main_parent_id ));
-		 $retour_html .= Buzzpress_Type_Field::render_input_select( 'Type', 'config_section[type_section]', $options, $type_section );
+		 $retour_html .= Wpextend_Type_Field::render_input_select( 'Type', 'config_section[type_section]', $options, $type_section );
 
 		 $retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 
@@ -415,11 +415,11 @@ class Wpextend_Section_Pc {
 				  }
 
 				  if( isset( $_GET['type_post'], $_GET['category'], $_GET['id'] ) ){
-		   		  $instance_Buzzpress_Type_Section_Pc = new Buzzpress_Type_Section_Pc( $_GET['type_post'], $_GET['category'], $_GET['id'], $this->Wpextend_Section_Pc[$_GET['type_post']][$_GET['category']]['sections'][$_GET['id']] );
-		   		  $retour_html .= $instance_Buzzpress_Type_Section_Pc->render_form_edit();
+		   		  $instance_Wpextend_Type_Section_Pc = new Wpextend_Type_Section_Pc( $_GET['type_post'], $_GET['category'], $_GET['id'], $this->Wpextend_Section_Pc[$_GET['type_post']][$_GET['category']]['sections'][$_GET['id']] );
+		   		  $retour_html .= $instance_Wpextend_Type_Section_Pc->render_form_edit();
 		   	  }
 		   	  else{
-		   		  $retour_html .= Buzzpress_Type_Section_Pc::render_form_create($post_type.'__'.$key_category);
+		   		  $retour_html .= Wpextend_Type_Section_Pc::render_form_create($post_type.'__'.$key_category);
 		   	  }
 
 				  $retour_html .= '</ul></li>';

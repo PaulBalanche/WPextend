@@ -72,7 +72,7 @@ class Wpextend_Post_Type {
 
 		if( is_array($this->custom_post_type_buzzpress) ){
 			foreach( $this->custom_post_type_buzzpress as $slug => $val ) {
-				$custom_post = new Buzzpress_Single_Post_Type( $slug, $val );
+				$custom_post = new Wpextend_Single_Post_Type( $slug, $val );
 				$custom_post->register_custom_post_type();
 			}
 		}
@@ -89,8 +89,8 @@ class Wpextend_Post_Type {
 
 		// Initialise les customs posts
 		add_action( 'init', array( $this, 'initialize') );
-	  	add_action( 'admin_post_add_custom_post_type_buzzpress', 'Buzzpress_Single_Post_Type::add_new' );
-	  	add_action( 'admin_post_delete_custom_post_type', 'Buzzpress_Single_Post_Type::delete' );
+	  	add_action( 'admin_post_add_custom_post_type_buzzpress', 'Wpextend_Single_Post_Type::add_new' );
+	  	add_action( 'admin_post_delete_custom_post_type', 'Wpextend_Single_Post_Type::delete' );
 	  	add_action( 'admin_post_import_buzzpress_custom_post_type', array($this, 'import') );
 	}
 
@@ -118,11 +118,11 @@ class Wpextend_Post_Type {
 		// Add custom psot type form
 		if(isset($_GET['id'])){
 
-			$custom_post = new Buzzpress_Single_Post_Type( $_GET['id'], $this->custom_post_type_buzzpress[ $_GET['id'] ] );
+			$custom_post = new Wpextend_Single_Post_Type( $_GET['id'], $this->custom_post_type_buzzpress[ $_GET['id'] ] );
 			$retour_html .= $custom_post->render_form_edit();
 		}
 		else{
-			$retour_html .= Buzzpress_Single_Post_Type::render_form_create();
+			$retour_html .= Wpextend_Single_Post_Type::render_form_create();
 		}
 
 		// return

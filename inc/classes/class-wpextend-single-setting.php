@@ -4,7 +4,7 @@
 /**
  *
  */
-class Buzzpress_Single_Setting {
+class Wpextend_Single_Setting {
 
     public $id;
     public $name;
@@ -73,39 +73,39 @@ class Buzzpress_Single_Setting {
 		switch( $this->type ) {
 
 			case 'text':
-				$retour_html .= Buzzpress_Type_Field::render_input_text( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->value, $this->placeholder, $this->repeatable, $this->description );
+				$retour_html .= Wpextend_Type_Field::render_input_text( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->value, $this->placeholder, $this->repeatable, $this->description );
 				break;
 
 			case 'textarea':
-				$retour_html .= Buzzpress_Type_Field::render_input_textarea( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->value, $this->repeatable, $this->description );
+				$retour_html .= Wpextend_Type_Field::render_input_textarea( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->value, $this->repeatable, $this->description );
 				break;
 
 			case 'select':
-				$retour_html .= Buzzpress_Type_Field::render_input_select( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->options, $this->value, $this->repeatable );
+				$retour_html .= Wpextend_Type_Field::render_input_select( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->options, $this->value, $this->repeatable );
 				break;
 
 			case 'select_post_type':
-				$retour_html .= Buzzpress_Type_Field::render_input_select( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->options, $this->value, $this->repeatable );
+				$retour_html .= Wpextend_Type_Field::render_input_select( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->options, $this->value, $this->repeatable );
 				break;
 
 			case 'radio':
-				$retour_html .= Buzzpress_Type_Field::render_input_radio( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->options, $this->value );
+				$retour_html .= Wpextend_Type_Field::render_input_radio( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->options, $this->value );
 				break;
 
 			case 'link':
-				$retour_html .= Buzzpress_Type_Field::render_input_cta( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->value, $this->repeatable, $this->description );
+				$retour_html .= Wpextend_Type_Field::render_input_cta( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->value, $this->repeatable, $this->description );
 				break;
 
 			case 'checkbox':
-				$retour_html .= Buzzpress_Type_Field::render_input_checkbox( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->options, $this->value );
+				$retour_html .= Wpextend_Type_Field::render_input_checkbox( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->options, $this->value );
 				break;
 
 			case 'image':
-				$retour_html .= Buzzpress_Type_Field::render_input_image( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->value );
+				$retour_html .= Wpextend_Type_Field::render_input_image( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->value );
 				break;
 
 			case 'file':
-				$retour_html .= Buzzpress_Type_Field::render_input_file( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->value );
+				$retour_html .= Wpextend_Type_Field::render_input_file( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->value );
 				break;
 
 		}
@@ -136,12 +136,12 @@ class Buzzpress_Single_Setting {
 		$retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'add_settings_buzzpress', '', 'hidden');
 
 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
-		$retour_html .= Buzzpress_Type_Field::render_input_text( 'Name', 'name' );
-		$retour_html .= Buzzpress_Type_Field::render_input_text( 'Description', 'description' );
-		$retour_html .= Buzzpress_Type_Field::render_input_select('Type', 'type_field', Buzzpress_Type_Field::get_available_fields() );
-		$retour_html .= Buzzpress_Type_Field::render_input_select('Post type select', 'post_type_options', Wpextend_Post_Type::getInstance()->get_all_include_base_wordpress() );
-		$retour_html .= Buzzpress_Type_Field::render_input_checkbox( 'Repeatable ?', 'repeatable', array( 'true' => 'Ce champ pourra être dupliqué') );
-		$retour_html .= Buzzpress_Type_Field::render_input_select('Catégorie', 'category', $tab_list_category, $key_category );
+		$retour_html .= Wpextend_Type_Field::render_input_text( 'Name', 'name' );
+		$retour_html .= Wpextend_Type_Field::render_input_text( 'Description', 'description' );
+		$retour_html .= Wpextend_Type_Field::render_input_select('Type', 'type_field', Wpextend_Type_Field::get_available_fields() );
+		$retour_html .= Wpextend_Type_Field::render_input_select('Post type select', 'post_type_options', Wpextend_Post_Type::getInstance()->get_all_include_base_wordpress() );
+		$retour_html .= Wpextend_Type_Field::render_input_checkbox( 'Repeatable ?', 'repeatable', array( 'true' => 'Ce champ pourra être dupliqué') );
+		$retour_html .= Wpextend_Type_Field::render_input_select('Catégorie', 'category', $tab_list_category, $key_category );
 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 
 		$retour_html .= Wpextend_Render_Admin_Html::form_close( 'Add settings' );

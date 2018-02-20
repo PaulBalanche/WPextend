@@ -4,7 +4,7 @@
 /**
  *
  */
-class Buzzpress_Type_Section_Pc {
+class Wpextend_Type_Section_Pc {
 
 
 	public $type_post;
@@ -44,11 +44,11 @@ class Buzzpress_Type_Section_Pc {
 	  $retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'add_type_section_buzzpress', 'add_type_section_buzzpress', 'hidden' );
 
 	  $retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
-	  $retour_html .= Buzzpress_Type_Field::render_input_text( 'Name', 'name' );
-	  $retour_html .= Buzzpress_Type_Field::render_input_text( 'Description', 'description' );
-	  $retour_html .= Buzzpress_Type_Field::render_input_select('Category', 'category', Wpextend_Section_Pc::getInstance()->get_all_category(), $category );
-	  $retour_html .= Buzzpress_Type_Field::render_input_select('File controller / view', 'file_controller_view', Wpextend_Section_Pc::getInstance()->scan_views_controllers() );
-	  $retour_html .= Buzzpress_Type_Field::render_input_select( 'Est un alias', 'alias', array_merge( array('none' => 'None'), Wpextend_Section_Pc::getInstance()->get_all_type_section_pc(true) ) );
+	  $retour_html .= Wpextend_Type_Field::render_input_text( 'Name', 'name' );
+	  $retour_html .= Wpextend_Type_Field::render_input_text( 'Description', 'description' );
+	  $retour_html .= Wpextend_Type_Field::render_input_select('Category', 'category', Wpextend_Section_Pc::getInstance()->get_all_category(), $category );
+	  $retour_html .= Wpextend_Type_Field::render_input_select('File controller / view', 'file_controller_view', Wpextend_Section_Pc::getInstance()->scan_views_controllers() );
+	  $retour_html .= Wpextend_Type_Field::render_input_select( 'Est un alias', 'alias', array_merge( array('none' => 'None'), Wpextend_Section_Pc::getInstance()->get_all_type_section_pc(true) ) );
 	  $retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 
 	  $retour_html .= Wpextend_Render_Admin_Html::form_close( 'Add section' );
@@ -70,12 +70,12 @@ class Buzzpress_Type_Section_Pc {
 	 $retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'update_type_section_buzzpress', 'update_type_section_buzzpress' );
 
 	 $retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
-	 $retour_html .= Buzzpress_Type_Field::render_input_hidden( 'id', $this->id );
-	 $retour_html .= Buzzpress_Type_Field::render_input_text( 'Name', 'name', $this->data['name'] );
-	 $retour_html .= Buzzpress_Type_Field::render_input_text( 'Description', 'description', $this->data['description'] );
-	 $retour_html .= Buzzpress_Type_Field::render_input_select('Category', 'category', Wpextend_Section_Pc::getInstance()->get_all_category(), $this->type_post.'__'.$this->category );
-	 $retour_html .= Buzzpress_Type_Field::render_input_select('File controller / view', 'file_controller_view', Wpextend_Section_Pc::getInstance()->scan_views_controllers(), $this->data['file'] );
-	 $retour_html .= Buzzpress_Type_Field::render_input_select( 'Est un alias', 'alias', array_merge( array('none' => 'None'), Wpextend_Section_Pc::getInstance()->get_all_type_section_pc(true) ), $this->alias );
+	 $retour_html .= Wpextend_Type_Field::render_input_hidden( 'id', $this->id );
+	 $retour_html .= Wpextend_Type_Field::render_input_text( 'Name', 'name', $this->data['name'] );
+	 $retour_html .= Wpextend_Type_Field::render_input_text( 'Description', 'description', $this->data['description'] );
+	 $retour_html .= Wpextend_Type_Field::render_input_select('Category', 'category', Wpextend_Section_Pc::getInstance()->get_all_category(), $this->type_post.'__'.$this->category );
+	 $retour_html .= Wpextend_Type_Field::render_input_select('File controller / view', 'file_controller_view', Wpextend_Section_Pc::getInstance()->scan_views_controllers(), $this->data['file'] );
+	 $retour_html .= Wpextend_Type_Field::render_input_select( 'Est un alias', 'alias', array_merge( array('none' => 'None'), Wpextend_Section_Pc::getInstance()->get_all_type_section_pc(true) ), $this->alias );
 	 $retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 
 	 $retour_html .= Wpextend_Render_Admin_Html::form_close( 'Update section' );
