@@ -4,7 +4,7 @@
 /**
  *
  */
-class Buzzpress_Post_Type {
+class Wpextend_Post_Type {
 
 
 
@@ -22,7 +22,7 @@ class Buzzpress_Post_Type {
  	*/
 	public static function getInstance() {
 		 if (is_null(self::$_instance)) {
-			  self::$_instance = new Buzzpress_Post_Type();
+			  self::$_instance = new Wpextend_Post_Type();
 		 }
 		 return self::$_instance;
 	}
@@ -104,7 +104,7 @@ class Buzzpress_Post_Type {
 	public function render_admin_page() {
 
 		// Header page & open form
-		$retour_html = Buzzpress_Render_Admin_Html::header('Custom Post Type');
+		$retour_html = Wpextend_Render_Admin_Html::header('Custom Post Type');
 
 		// Get all custom type to create fieldset
 		$all_custom_post_type = $this->get_all();
@@ -144,7 +144,7 @@ class Buzzpress_Post_Type {
 
 
 	/**
- 	* Update private variable Buzzpress_Post_Type to add new setting
+ 	* Update private variable Wpextend_Post_Type to add new setting
 	*/
 	public function add_new( $labels, $slug, $args, $taxonomy ){
 
@@ -161,7 +161,7 @@ class Buzzpress_Post_Type {
 
 
 	/**
- 	* Update private variable Buzzpress_Post_Type to add new setting
+ 	* Update private variable Wpextend_Post_Type to add new setting
 	*/
 	public function delete($slug){
 
@@ -184,7 +184,7 @@ class Buzzpress_Post_Type {
 			 }
 		}
 
-		 $return_all_custom_post_buzzpress = apply_filters( 'Buzzpress_Post_Type_get_all', $all_custom_post_buzzpress );
+		 $return_all_custom_post_buzzpress = apply_filters( 'Wpextend_Post_Type_get_all', $all_custom_post_buzzpress );
 
 		 return $return_all_custom_post_buzzpress;
     }

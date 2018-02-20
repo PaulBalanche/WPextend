@@ -17,7 +17,7 @@
 
 
 	// Stats
-	$instance_section = new Buzzpress_Post($data_section->ID);
+	$instance_section = new Wpextend_Post($data_section->ID);
 	$stats = $instance_section->get_sections_pc_buzzpress();
 	if( is_array($stats) && count($stats) > 0){
 

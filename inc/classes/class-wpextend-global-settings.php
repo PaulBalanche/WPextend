@@ -234,7 +234,7 @@ class Wpextend_Global_Settings {
 		 $current_screen = get_current_screen();
 
 		 // Header page & open form
-		 $retour_html = Buzzpress_Render_Admin_Html::header('Site settings');
+		 $retour_html = Wpextend_Render_Admin_Html::header('Site settings');
 
 		 $retour_html .= '<div class="accordionBuzzpress">';
 
@@ -257,7 +257,7 @@ class Wpextend_Global_Settings {
 			 	$retour_html .= '</h2><div>';
 
 			 	if($current_screen->parent_base != 'buzzpress'){
-					$retour_html .= Buzzpress_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'update_settings_buzzpress');
+					$retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'update_settings_buzzpress');
 				}
 				
 				$retour_html .= Buzzpress_Type_Field::render_input_hidden( 'category', $key );
@@ -269,7 +269,7 @@ class Wpextend_Global_Settings {
 				$retour_html .= $instance_category->render_html();
 
 				if($current_screen->parent_base != 'buzzpress'){
-					$retour_html .= Buzzpress_Render_Admin_Html::form_close();
+					$retour_html .= Wpextend_Render_Admin_Html::form_close();
 				}
 
 				if($current_screen->parent_base == 'buzzpress'){

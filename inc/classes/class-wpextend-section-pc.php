@@ -4,10 +4,10 @@
 /**
 *
 */
-class Buzzpress_Section_Pc {
+class Wpextend_Section_Pc {
 
 	private static $_instance;
-	public $Buzzpress_Section_Pc;
+	public $Wpextend_Section_Pc;
 	public $name_option_in_database = '_buzzpress_sections';
 
 	static public $name_section_register_post_type = 'section-buzzpress';
@@ -23,7 +23,7 @@ class Buzzpress_Section_Pc {
    */
  	public static function getInstance() {
  		 if (is_null(self::$_instance)) {
- 			  self::$_instance = new Buzzpress_Section_Pc();
+ 			  self::$_instance = new Wpextend_Section_Pc();
  		 }
  		 return self::$_instance;
  	}
@@ -37,9 +37,9 @@ class Buzzpress_Section_Pc {
     private function __construct() {
 
 		// Get option from database
-  		$this->Buzzpress_Section_Pc = get_option( $this->name_option_in_database );
-  		if( !is_array( $this->Buzzpress_Section_Pc ) )
-  			$this->Buzzpress_Section_Pc = array();
+  		$this->Wpextend_Section_Pc = get_option( $this->name_option_in_database );
+  		if( !is_array( $this->Wpextend_Section_Pc ) )
+  			$this->Wpextend_Section_Pc = array();
 		else
 			$this->traitement_des_alias();
 
@@ -47,10 +47,10 @@ class Buzzpress_Section_Pc {
  		$this->create_hooks();
 
 		// Add default keys post_type if no exists
-		$all_custom_post = Buzzpress_Post_Type::getInstance()->get_all_include_base_wordpress();
+		$all_custom_post = Wpextend_Post_Type::getInstance()->get_all_include_base_wordpress();
 		foreach($all_custom_post as $key_post_type => $post_type){
-			if( !array_key_exists($key_post_type, $this->Buzzpress_Section_Pc) ){
-				$this->Buzzpress_Section_Pc[$key_post_type] = array();
+			if( !array_key_exists($key_post_type, $this->Wpextend_Section_Pc) ){
+				$this->Wpextend_Section_Pc[$key_post_type] = array();
 			}
 		}
     }
@@ -75,7 +75,7 @@ class Buzzpress_Section_Pc {
 		add_action( 'admin_post_delete_section_buzzpress', 'Buzzpress_Type_Section_Pc::delete' );
 		add_action( 'admin_post_delete_category_section_buzzpress', 'Buzzpress_Type_Section_Pc::delete' );
 
-		add_action( 'admin_post_import_buzzpress_section_pc', array($this, 'import') );
+		add_action( 'admin_post_import_wpextend_section_pc', array($this, 'import') );
 
 		add_action( 'save_post', array($this, 'save_meta_boxes') );
 		add_action( 'add_meta_boxes', array($this, 'add_meta_boxes') );
@@ -123,8 +123,8 @@ class Buzzpress_Section_Pc {
 	 */
 	 public static function script_admin() {
 
-		 wp_enqueue_style( 'style_admin_Buzzpress_Section_Pc', WPEXTEND_ASSETS_URL . 'style/admin/section_pc.css', false, true );
-		 wp_enqueue_script( 'script_admin_Buzzpress_Section_Pc', WPEXTEND_ASSETS_URL . '/js/admin/section_pc.js', array('jquery'));
+		 wp_enqueue_style( 'style_admin_Wpextend_Section_Pc', WPEXTEND_ASSETS_URL . 'style/admin/section_pc.css', false, true );
+		 wp_enqueue_script( 'script_admin_Wpextend_Section_Pc', WPEXTEND_ASSETS_URL . '/js/admin/section_pc.js', array('jquery'));
 	 }
 
 
@@ -196,7 +196,7 @@ class Buzzpress_Section_Pc {
 	public function add_section_posts_types_to_custom_field($Wpextend_Custom_Field){
 
 		// foreach post_type
-		foreach( $this->Buzzpress_Section_Pc as $post_type => $category ){
+		foreach( $this->Wpextend_Section_Pc as $post_type => $category ){
 
 			if( count($category) > 0 ){
 
@@ -236,13 +236,13 @@ class Buzzpress_Section_Pc {
 		$post = get_post();
 		if( $show_sections == true ){
 
-			$instance_post = new Buzzpress_Post( $post->ID );
+			$instance_post = new Wpextend_Post( $post->ID );
 			$tab_section_post = $instance_post->get_sections_pc_buzzpress();
 
 			if( is_array($tab_section_post) && count($tab_section_post) > 0 ){
 				foreach( $tab_section_post as $section_id ){
 
-					$instance_section_courante = new Buzzpress_Post( $section_id );
+					$instance_section_courante = new Wpextend_Post( $section_id );
 					$content .= $this->render_front_html( $instance_section_courante );
 				}
 			}
@@ -282,7 +282,7 @@ class Buzzpress_Section_Pc {
 
 				$retour = false;
 
-				$post_section = new Buzzpress_Post($post->ID);
+				$post_section = new Wpextend_Post($post->ID);
 				$type_section = $post_section->get_type_section();
 
 				// Check if post parent correspond to post_type_parent_accepted by this metabox
@@ -312,7 +312,7 @@ class Buzzpress_Section_Pc {
 	*/
 	 public function show_metabox_listing_sections($post){
 
-		 $instance_post_parent = new Buzzpress_Post( $post->ID );
+		 $instance_post_parent = new Wpextend_Post( $post->ID );
 		 $default_value_field = $instance_post_parent->get_sections_pc_buzzpress();
 
 		 echo self::listing_section( $post->ID, $default_value_field );
@@ -332,7 +332,7 @@ class Buzzpress_Section_Pc {
 		 $main_parent_id = ( isset($_GET['parent_id']) ) ? $_GET['parent_id'] : $main_parent_id;
 		 $type_section = ( is_array($config_section) && isset($config_section['type_section']) ) ? $config_section['type_section'] : false;
 
-		 $retour_html .= Buzzpress_Render_Admin_Html::table_edit_open();
+		 $retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
 
 		 // Select Type of section
 		 $retour_html .= Buzzpress_Type_Field::render_input_text( 'Parent ID', 'config_section[parent_id]', $main_parent_id );
@@ -341,7 +341,7 @@ class Buzzpress_Section_Pc {
 		 $options = $this->get_all_sections_by_post_type(get_post_type( $main_parent_id ));
 		 $retour_html .= Buzzpress_Type_Field::render_input_select( 'Type', 'config_section[type_section]', $options, $type_section );
 
-		 $retour_html .= Buzzpress_Render_Admin_Html::table_edit_close();
+		 $retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 
 		 echo $retour_html;
 	 }
@@ -363,7 +363,7 @@ class Buzzpress_Section_Pc {
 				$new_config_section = $config_actuelle_section;
 
 				if( isset($_POST['config_section']['parent_id']) ){
-					$instance_post_parent = new Buzzpress_Post($_POST['config_section']['parent_id']);
+					$instance_post_parent = new Wpextend_Post($_POST['config_section']['parent_id']);
 					$instance_post_parent->add_section($post_id);
 
 					$new_config_section['parent_id'] = $_POST['config_section']['parent_id'];
@@ -380,7 +380,7 @@ class Buzzpress_Section_Pc {
 		// Save listing section
 		if( isset($_POST[self::$name_input_hidden_list_section_in_database]) ){
 
-			$instance_post_parent = new Buzzpress_Post($post_id);
+			$instance_post_parent = new Wpextend_Post($post_id);
 			$instance_post_parent->update_sections( json_decode($_POST[self::$name_input_hidden_list_section_in_database]) );
 		}
  	}
@@ -397,11 +397,11 @@ class Buzzpress_Section_Pc {
 	  $retour_html = '';
 
 	  // Header page & open form
-	  $retour_html .= Buzzpress_Render_Admin_Html::header('Sections');
+	  $retour_html .= Wpextend_Render_Admin_Html::header('Sections');
 
 	  // Render actual metabox and custom fields
 	  $retour_html .= '<ul class="ulBuzzpressAdmin">';
-	  foreach( $this->Buzzpress_Section_Pc as $post_type => $list_category ) {
+	  foreach( $this->Wpextend_Section_Pc as $post_type => $list_category ) {
 
 		  $retour_html .= '<li class="li_postType"><h2>'.$post_type.'</h2><ul>';
 		  if( is_array($list_category) ){
@@ -415,7 +415,7 @@ class Buzzpress_Section_Pc {
 				  }
 
 				  if( isset( $_GET['type_post'], $_GET['category'], $_GET['id'] ) ){
-		   		  $instance_Buzzpress_Type_Section_Pc = new Buzzpress_Type_Section_Pc( $_GET['type_post'], $_GET['category'], $_GET['id'], $this->Buzzpress_Section_Pc[$_GET['type_post']][$_GET['category']]['sections'][$_GET['id']] );
+		   		  $instance_Buzzpress_Type_Section_Pc = new Buzzpress_Type_Section_Pc( $_GET['type_post'], $_GET['category'], $_GET['id'], $this->Wpextend_Section_Pc[$_GET['type_post']][$_GET['category']]['sections'][$_GET['id']] );
 		   		  $retour_html .= $instance_Buzzpress_Type_Section_Pc->render_form_edit();
 		   	  }
 		   	  else{
@@ -444,10 +444,10 @@ class Buzzpress_Section_Pc {
 	 // Check valid nonce
 	 check_admin_referer($_POST['action']);
 
-	 if( isset( $_POST['buzzpress_section_pc_to_import'] ) && !empty($_POST['buzzpress_section_pc_to_import']) ) {
+	 if( isset( $_POST['wpextend_section_pc_to_import'] ) && !empty($_POST['wpextend_section_pc_to_import']) ) {
 
-		 $this->Buzzpress_Section_Pc = json_decode( stripslashes($_POST['buzzpress_section_pc_to_import']), true );
-		 if( is_array($this->Buzzpress_Section_Pc) ){
+		 $this->Wpextend_Section_Pc = json_decode( stripslashes($_POST['wpextend_section_pc_to_import']), true );
+		 if( is_array($this->Wpextend_Section_Pc) ){
 
 			 // Save in Wordpress database
 			 $this->save();
@@ -474,8 +474,8 @@ class Buzzpress_Section_Pc {
 		  $id_new_category = sanitize_title($name);
 
 		  // Test if no already exists
-		  if( !array_key_exists($post_type, $this->Buzzpress_Section_Pc) || !array_key_exists($id_new_category, $this->Buzzpress_Section_Pc[$post_type]) ) {
-			  $this->Buzzpress_Section_Pc[$post_type][$id_new_category] = array( 'name' => $name, 'sections' => array() );
+		  if( !array_key_exists($post_type, $this->Wpextend_Section_Pc) || !array_key_exists($id_new_category, $this->Wpextend_Section_Pc[$post_type]) ) {
+			  $this->Wpextend_Section_Pc[$post_type][$id_new_category] = array( 'name' => $name, 'sections' => array() );
 		  }
 	  }
   }
@@ -483,12 +483,12 @@ class Buzzpress_Section_Pc {
 
 
   /**
-  * Update private variable $Buzzpress_Section_Pc to add new custom field
+  * Update private variable $Wpextend_Section_Pc to add new custom field
   */
   public function add_new_section($name, $description, $post_type, $category, $file, $alias = 'none'){
 
 	  if(
-		  array_key_exists( $post_type, Buzzpress_Post_Type::getInstance()->get_all_include_base_wordpress() ) &&
+		  array_key_exists( $post_type, Wpextend_Post_Type::getInstance()->get_all_include_base_wordpress() ) &&
 		  array_key_exists( $post_type.'__'.$category, $this->get_all_category() )
 	  ){
 
@@ -501,10 +501,10 @@ class Buzzpress_Section_Pc {
 
 			  // Test if alias exists
 			  if(
-				  array_key_exists( $key_section, $this->Buzzpress_Section_Pc[$post_type_alias][$cat_section_alias]['sections'] ) &&
-				 !array_key_exists( $key_section, $this->Buzzpress_Section_Pc[$post_type][$category]['sections'] )
+				  array_key_exists( $key_section, $this->Wpextend_Section_Pc[$post_type_alias][$cat_section_alias]['sections'] ) &&
+				 !array_key_exists( $key_section, $this->Wpextend_Section_Pc[$post_type][$category]['sections'] )
 			  ){
-				  $this->Buzzpress_Section_Pc[$post_type][$category]['sections'][$key_section] = array(
+				  $this->Wpextend_Section_Pc[$post_type][$category]['sections'][$key_section] = array(
 					  'alias' => $alias
 					);
 			  }
@@ -515,8 +515,8 @@ class Buzzpress_Section_Pc {
 			  $id_new_section = sanitize_title($name);
 
 			  // Test if no already exists
-			  if( !array_key_exists( $id_new_section, $this->Buzzpress_Section_Pc[$post_type][$category]['sections'] ) ){
-				  $this->Buzzpress_Section_Pc[$post_type][$category]['sections'][$id_new_section] = array(
+			  if( !array_key_exists( $id_new_section, $this->Wpextend_Section_Pc[$post_type][$category]['sections'] ) ){
+				  $this->Wpextend_Section_Pc[$post_type][$category]['sections'][$id_new_section] = array(
 					  'name'				=> $name,
 					  'description'	=> $description,
 					  'file'				=> $file
@@ -529,15 +529,15 @@ class Buzzpress_Section_Pc {
 
 
   /**
-  * Update private variable $Buzzpress_Section_Pc to add new custom field
+  * Update private variable $Wpextend_Section_Pc to add new custom field
   */
   public function update_section($id_section, $name, $description, $post_type, $category, $file, $alias = 'none'){
 
 	 if(
 		 !empty($id_section) &&
-		 array_key_exists( $post_type, Buzzpress_Post_Type::getInstance()->get_all_include_base_wordpress() ) &&
+		 array_key_exists( $post_type, Wpextend_Post_Type::getInstance()->get_all_include_base_wordpress() ) &&
 		 array_key_exists( $post_type.'__'.$category, $this->get_all_category() ) &&
-		 array_key_exists( $id_section, $this->Buzzpress_Section_Pc[$post_type][$category]['sections'] )
+		 array_key_exists( $id_section, $this->Wpextend_Section_Pc[$post_type][$category]['sections'] )
 	 ) {
 
 		 if($alias != 'none'){
@@ -548,19 +548,19 @@ class Buzzpress_Section_Pc {
 			 $key_section = $alias_temp[2];
 
 			 // Test if alias exists
-			 if( array_key_exists( $key_section, $this->Buzzpress_Section_Pc[$post_type_alias][$cat_section_alias]['sections'] ) ){
+			 if( array_key_exists( $key_section, $this->Wpextend_Section_Pc[$post_type_alias][$cat_section_alias]['sections'] ) ){
 
-				if( array_key_exists( $key_section, $this->Buzzpress_Section_Pc[$post_type][$category]['sections'] ) ){
-					unset( $this->Buzzpress_Section_Pc[$post_type][$category]['sections'][$id_section] );
+				if( array_key_exists( $key_section, $this->Wpextend_Section_Pc[$post_type][$category]['sections'] ) ){
+					unset( $this->Wpextend_Section_Pc[$post_type][$category]['sections'][$id_section] );
 				}
-				$this->Buzzpress_Section_Pc[$post_type][$category]['sections'][$key_section] = array(
+				$this->Wpextend_Section_Pc[$post_type][$category]['sections'][$key_section] = array(
 					'alias' => $alias
 				);
 			 }
 		 }
 		 elseif( !empty($id_section) && !empty($name) ){
 
-			 $this->Buzzpress_Section_Pc[$post_type][$category]['sections'][$id_section] = array(
+			 $this->Wpextend_Section_Pc[$post_type][$category]['sections'][$id_section] = array(
 				 'name'				=> $name,
 				 'description'		=> $description,
 				 'file'				=> $file
@@ -574,24 +574,24 @@ class Buzzpress_Section_Pc {
 
 
 	/**
-   * Update private variable $Buzzpress_Section_Pc to add new custom field
+   * Update private variable $Wpextend_Section_Pc to add new custom field
    */
    public function delete_category_section_type($post_type, $category){
 
- 	  unset( $this->Buzzpress_Section_Pc[$post_type][$category] );
-	  if( count($this->Buzzpress_Section_Pc[$post_type]) == 0){
-		  unset( $this->Buzzpress_Section_Pc[$post_type] );
+ 	  unset( $this->Wpextend_Section_Pc[$post_type][$category] );
+	  if( count($this->Wpextend_Section_Pc[$post_type]) == 0){
+		  unset( $this->Wpextend_Section_Pc[$post_type] );
 	  }
    }
 
 
 
   /**
-  * Update private variable $Buzzpress_Section_Pc to add new custom field
+  * Update private variable $Wpextend_Section_Pc to add new custom field
   */
   public function delete_section_type($post_type, $category, $id){
 
-	  unset( $this->Buzzpress_Section_Pc[$post_type][$category]['sections'][$id] );
+	  unset( $this->Wpextend_Section_Pc[$post_type][$category]['sections'][$id] );
   }
 
 
@@ -604,9 +604,9 @@ class Buzzpress_Section_Pc {
    public function get_all_post_type_applied(){
 
 		$all_post_type = array();
-		if( is_array($this->Buzzpress_Section_Pc) ) {
+		if( is_array($this->Wpextend_Section_Pc) ) {
 
-			foreach( $this->Buzzpress_Section_Pc as $key => $val ) {
+			foreach( $this->Wpextend_Section_Pc as $key => $val ) {
 				$all_post_type[] = $key;
 			}
 		}
@@ -625,11 +625,11 @@ class Buzzpress_Section_Pc {
 	 public function get_all_category(){
 
 		$all_category = array();
-		if( is_array($this->Buzzpress_Section_Pc) ) {
+		if( is_array($this->Wpextend_Section_Pc) ) {
 
-			$tab_all_custom_type = Buzzpress_Post_Type::getInstance()->get_all_include_base_wordpress();
+			$tab_all_custom_type = Wpextend_Post_Type::getInstance()->get_all_include_base_wordpress();
 
-			foreach( $this->Buzzpress_Section_Pc as $key => $val ) {
+			foreach( $this->Wpextend_Section_Pc as $key => $val ) {
 				foreach( $val as $key2 => $val2 ){
 					$all_category[$key.'__'.$key2] = $tab_all_custom_type[$key].' > '.$val2['name'];
 				}
@@ -651,9 +651,9 @@ class Buzzpress_Section_Pc {
 
 		 if( $post_type ){
 			 $all_sections_by_post_type = array();
-			 if( is_array( $this->Buzzpress_Section_Pc ) && array_key_exists( $post_type, $this->Buzzpress_Section_Pc ) ) {
+			 if( is_array( $this->Wpextend_Section_Pc ) && array_key_exists( $post_type, $this->Wpextend_Section_Pc ) ) {
 
-				 foreach( $this->Buzzpress_Section_Pc[$post_type] as $key => $val ) {
+				 foreach( $this->Wpextend_Section_Pc[$post_type] as $key => $val ) {
 					 if( is_array($val['sections']) ){
 						 foreach( $val['sections'] as $key2 => $val2 ){
 							 $all_sections_by_post_type[$key.'__'.$key2] = stripslashes( $val['name'] ) .' > '. stripslashes( $val2['name'] );
@@ -674,13 +674,13 @@ class Buzzpress_Section_Pc {
 	 */
 	 public function save(){
 
-		 foreach($this->Buzzpress_Section_Pc as $post_type => $category_section){
-			 if( count( $this->Buzzpress_Section_Pc[$post_type] ) == 0 ){
-				unset( $this->Buzzpress_Section_Pc[$post_type] );
+		 foreach($this->Wpextend_Section_Pc as $post_type => $category_section){
+			 if( count( $this->Wpextend_Section_Pc[$post_type] ) == 0 ){
+				unset( $this->Wpextend_Section_Pc[$post_type] );
 			 }
 		 }
 
-		  return update_option( $this->name_option_in_database, $this->Buzzpress_Section_Pc);
+		  return update_option( $this->name_option_in_database, $this->Wpextend_Section_Pc);
 	 }
 
 
@@ -749,7 +749,7 @@ class Buzzpress_Section_Pc {
 		 $category_type_section = $type_section_temp[0];
 		 $type_section = $type_section_temp[1];
 
-		 $file_to_load = $this->Buzzpress_Section_Pc[$post_type_parent][$category_type_section]['sections'][$type_section]['file'];
+		 $file_to_load = $this->Wpextend_Section_Pc[$post_type_parent][$category_type_section]['sections'][$type_section]['file'];
 
 		 $data_section = get_post( $instance_section_courante->id );
 
@@ -785,7 +785,7 @@ class Buzzpress_Section_Pc {
 
 		 $return_get_all_type_section_pc = array();
 
-		 foreach( $this->Buzzpress_Section_Pc as $post_type => $category ){
+		 foreach( $this->Wpextend_Section_Pc as $post_type => $category ){
 
 			 foreach( $category as $key_category => $data_category ){
 
@@ -811,7 +811,7 @@ class Buzzpress_Section_Pc {
 	 */
 	 public function traitement_des_alias(){
 
-		 foreach( $this->Buzzpress_Section_Pc as $post_type => $category ){
+		 foreach( $this->Wpextend_Section_Pc as $post_type => $category ){
 
 			 foreach( $category as $key_category => $data_category ){
 
@@ -825,14 +825,14 @@ class Buzzpress_Section_Pc {
 						 $key_section_alias = $alias_temp[2];
 
 						 if(
-							 array_key_exists($post_type_alias, $this->Buzzpress_Section_Pc) &&
-							 array_key_exists($cat_section_alias, $this->Buzzpress_Section_Pc[$post_type_alias]) &&
-							 array_key_exists('sections', $this->Buzzpress_Section_Pc[$post_type_alias][$cat_section_alias]) &&
-							 array_key_exists($key_section_alias, $this->Buzzpress_Section_Pc[$post_type_alias][$cat_section_alias]['sections'])
+							 array_key_exists($post_type_alias, $this->Wpextend_Section_Pc) &&
+							 array_key_exists($cat_section_alias, $this->Wpextend_Section_Pc[$post_type_alias]) &&
+							 array_key_exists('sections', $this->Wpextend_Section_Pc[$post_type_alias][$cat_section_alias]) &&
+							 array_key_exists($key_section_alias, $this->Wpextend_Section_Pc[$post_type_alias][$cat_section_alias]['sections'])
 						){
-							 $this->Buzzpress_Section_Pc[$post_type][$key_category]['sections'][$key_section]['name'] = $this->Buzzpress_Section_Pc[$post_type_alias][$cat_section_alias]['sections'][$key_section_alias]['name'];
-							 $this->Buzzpress_Section_Pc[$post_type][$key_category]['sections'][$key_section]['description'] = $this->Buzzpress_Section_Pc[$post_type_alias][$cat_section_alias]['sections'][$key_section_alias]['description'];
-							 $this->Buzzpress_Section_Pc[$post_type][$key_category]['sections'][$key_section]['file'] = $this->Buzzpress_Section_Pc[$post_type_alias][$cat_section_alias]['sections'][$key_section_alias]['file'];
+							 $this->Wpextend_Section_Pc[$post_type][$key_category]['sections'][$key_section]['name'] = $this->Wpextend_Section_Pc[$post_type_alias][$cat_section_alias]['sections'][$key_section_alias]['name'];
+							 $this->Wpextend_Section_Pc[$post_type][$key_category]['sections'][$key_section]['description'] = $this->Wpextend_Section_Pc[$post_type_alias][$cat_section_alias]['sections'][$key_section_alias]['description'];
+							 $this->Wpextend_Section_Pc[$post_type][$key_category]['sections'][$key_section]['file'] = $this->Wpextend_Section_Pc[$post_type_alias][$cat_section_alias]['sections'][$key_section_alias]['file'];
 						}
 					 }
 				 }
@@ -851,7 +851,7 @@ class Buzzpress_Section_Pc {
 
 		 $tab_alias = array();
 
-		 foreach( $this->Buzzpress_Section_Pc as $post_type => $category ){
+		 foreach( $this->Wpextend_Section_Pc as $post_type => $category ){
 
 			 foreach( $category as $key_category => $data_category ){
 
@@ -905,12 +905,12 @@ class Buzzpress_Section_Pc {
 
 	 	if( isset($id) && is_numeric($id) ){
 
-		 	$instance_post_initial = new Buzzpress_Post( $id );
+		 	$instance_post_initial = new Wpextend_Post( $id );
 			$tab_section_post = $instance_post_initial->get_sections_pc_buzzpress();
 
 			if( is_array($tab_section_post) && count($tab_section_post) > 0 ){
 
-				$instance_post_duplique = new Buzzpress_Post( $new_post_id );
+				$instance_post_duplique = new Wpextend_Post( $new_post_id );
 
 				$tab_new_section_duplicate = array();
 				foreach( $tab_section_post as $section_id ){
@@ -925,7 +925,7 @@ class Buzzpress_Section_Pc {
 
 						$tab_new_section_duplicate[] = $new_section_id;
 
-						$instance_new_section_duplique = new Buzzpress_Post( $new_section_id );
+						$instance_new_section_duplique = new Wpextend_Post( $new_section_id );
 						$tab_section_in_new_section = $instance_new_section_duplique->get_sections_pc_buzzpress();
 
 						if( is_array($tab_section_in_new_section) && count($tab_section_in_new_section) > 0 ){

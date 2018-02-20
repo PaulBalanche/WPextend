@@ -4,7 +4,7 @@
 /**
  *
  */
-class Buzzpress_Render_Admin_Html {
+class Wpextend_Render_Admin_Html {
 
     /**
      * Construct method

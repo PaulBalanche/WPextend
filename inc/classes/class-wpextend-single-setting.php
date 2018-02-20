@@ -133,18 +133,18 @@ class Buzzpress_Single_Setting {
 
 		$retour_html .= '<input type="button" class="add_new_settings button button-primary" value="New setting">';
 
-		$retour_html .= Buzzpress_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'add_settings_buzzpress', '', 'hidden');
+		$retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'add_settings_buzzpress', '', 'hidden');
 
-		$retour_html .= Buzzpress_Render_Admin_Html::table_edit_open();
+		$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
 		$retour_html .= Buzzpress_Type_Field::render_input_text( 'Name', 'name' );
 		$retour_html .= Buzzpress_Type_Field::render_input_text( 'Description', 'description' );
 		$retour_html .= Buzzpress_Type_Field::render_input_select('Type', 'type_field', Buzzpress_Type_Field::get_available_fields() );
-		$retour_html .= Buzzpress_Type_Field::render_input_select('Post type select', 'post_type_options', Buzzpress_Post_Type::getInstance()->get_all_include_base_wordpress() );
+		$retour_html .= Buzzpress_Type_Field::render_input_select('Post type select', 'post_type_options', Wpextend_Post_Type::getInstance()->get_all_include_base_wordpress() );
 		$retour_html .= Buzzpress_Type_Field::render_input_checkbox( 'Repeatable ?', 'repeatable', array( 'true' => 'Ce champ pourra être dupliqué') );
 		$retour_html .= Buzzpress_Type_Field::render_input_select('Catégorie', 'category', $tab_list_category, $key_category );
-		$retour_html .= Buzzpress_Render_Admin_Html::table_edit_close();
+		$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 
-		$retour_html .= Buzzpress_Render_Admin_Html::form_close( 'Add settings' );
+		$retour_html .= Wpextend_Render_Admin_Html::form_close( 'Add settings' );
 
 		$retour_html .= '</div>';
 

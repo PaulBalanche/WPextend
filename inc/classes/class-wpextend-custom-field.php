@@ -91,7 +91,7 @@ class Wpextend_Custom_Field {
 
 
 	/**
- 	* Explore Wpextend_Custom_Field and create Buzzpress_meta_boxes instance
+ 	* Explore Wpextend_Custom_Field and create Wpextend_Meta_Boxes instance
 	*
  	*/
  	public function initialize_metaboxes() {
@@ -101,11 +101,11 @@ class Wpextend_Custom_Field {
 
 		if( is_array( $all_metaboxes ) ){
 
-			// Foreach, create Buzzpress_Meta_Boxes instance
+			// Foreach, create Wpextend_Meta_Boxes instance
 			foreach( $all_metaboxes as $key_matebox => $data_metabox ){
 
 				$post_type = apply_filters( 'set_post_type_before_instance_metabox', $data_metabox['post_type'] );
-				$instance_metabox = new Buzzpress_Meta_Boxes( $post_type, $key_matebox, $data_metabox['name'], $data_metabox['fields'] );
+				$instance_metabox = new Wpextend_Meta_Boxes( $post_type, $key_matebox, $data_metabox['name'], $data_metabox['fields'] );
 			}
 		}
  	}
@@ -133,7 +133,7 @@ class Wpextend_Custom_Field {
  	public function render_admin_page() {
 
 		// If post_type doesn't exists > create it to admin interface
-		$all_custom_post = Buzzpress_Post_Type::getInstance()->get_all_include_base_wordpress();
+		$all_custom_post = Wpextend_Post_Type::getInstance()->get_all_include_base_wordpress();
 		foreach($all_custom_post as $key_post_type => $post_type){
 			if( !array_key_exists($key_post_type, $this->Wpextend_Custom_Field) ){
 				$this->Wpextend_Custom_Field[$key_post_type] = array( 'default' => array( 'default' => array() ) );
@@ -161,7 +161,7 @@ class Wpextend_Custom_Field {
 		$retour_html = '';
 
 		// Header page & open form
- 		$retour_html .= Buzzpress_Render_Admin_Html::header('Custom Fields');
+ 		$retour_html .= Wpextend_Render_Admin_Html::header('Custom Fields');
 
 		// Render actual metabox and custom fields
 		$retour_html .= '<div class="tabs"><ul>';
@@ -175,7 +175,7 @@ class Wpextend_Custom_Field {
 
 			foreach( $list_category_post_type as $post_type => $list_category ) {
 
-				if( $post_type_root == Buzzpress_Section_Pc::$name_section_register_post_type ){
+				if( $post_type_root == Wpextend_Section_Pc::$name_section_register_post_type ){
 					$post_type_temp = $post_type;
 					$name_post_type = ucfirst($post_type);
 					$post_type = $post_type_root.'::'.$post_type;
@@ -246,16 +246,16 @@ class Wpextend_Custom_Field {
 
 							$retour_html .= '<input type="button" class="add_new_metabox button button-primary" value="New metabox">';
 
-					 		$retour_html .= Buzzpress_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'add_metabox_buzzpress', 'add_metabox_buzzpress', 'hidden' );
+					 		$retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'add_metabox_buzzpress', 'add_metabox_buzzpress', 'hidden' );
 
-					 		$retour_html .= Buzzpress_Render_Admin_Html::table_edit_open();
+					 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
 					 		$retour_html .= Buzzpress_Type_Field::render_input_text( 'Name', 'name' );
 							$retour_html .= Buzzpress_Type_Field::render_input_hidden( 'post_type', $post_type );
 							$retour_html .= Buzzpress_Type_Field::render_input_hidden( 'category', $key_category );
 							$retour_html .= Buzzpress_Type_Field::render_input_hidden( 'type', $key_type );
-					 		$retour_html .= Buzzpress_Render_Admin_Html::table_edit_close();
+					 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 
-					 		$retour_html .= Buzzpress_Render_Admin_Html::form_close( 'Add metabox' );
+					 		$retour_html .= Wpextend_Render_Admin_Html::form_close( 'Add metabox' );
 
 							$retour_html .= '</div>';
 							// END Form add metabox

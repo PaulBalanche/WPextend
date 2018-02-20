@@ -4,7 +4,7 @@
 /**
  *
  */
-class Buzzpress_Post {
+class Wpextend_Post {
 
 	public $id;
 	public $instance_WP_Post;
@@ -30,7 +30,7 @@ class Buzzpress_Post {
 	*/
 	public function get_sections_pc_buzzpress(){
 
-		$tab_sections = get_post_meta( $this->instance_WP_Post->ID, Buzzpress_Section_Pc::$key_list_section_in_database, true );
+		$tab_sections = get_post_meta( $this->instance_WP_Post->ID, Wpextend_Section_Pc::$key_list_section_in_database, true );
 		if( !is_array($tab_sections) ){
 			$tab_sections = array();
 		}
@@ -53,7 +53,7 @@ class Buzzpress_Post {
 			$tab_sections[] = $id_section;
 
 			// Save in database
-			update_post_meta( $this->instance_WP_Post->ID, Buzzpress_Section_Pc::$key_list_section_in_database, $tab_sections );
+			update_post_meta( $this->instance_WP_Post->ID, Wpextend_Section_Pc::$key_list_section_in_database, $tab_sections );
 		}
 	}
 
@@ -66,7 +66,7 @@ class Buzzpress_Post {
 	public function update_sections($new_tab_section){
 
 		// Save in database
-		update_post_meta( $this->instance_WP_Post->ID, Buzzpress_Section_Pc::$key_list_section_in_database, $new_tab_section );
+		update_post_meta( $this->instance_WP_Post->ID, Wpextend_Section_Pc::$key_list_section_in_database, $new_tab_section );
 	}
 
 
@@ -77,7 +77,7 @@ class Buzzpress_Post {
 	*/
 	public function get_main_parent_id(){
 
-		$config_section = get_post_meta( $this->instance_WP_Post->ID, Buzzpress_Section_Pc::getInstance()->name_option_in_database . '_config_section', true);
+		$config_section = get_post_meta( $this->instance_WP_Post->ID, Wpextend_Section_Pc::getInstance()->name_option_in_database . '_config_section', true);
 		$main_parent_id = ( is_array($config_section) && isset($config_section['parent_id']) ) ? $config_section['parent_id'] : false;
 
 		return $main_parent_id;
@@ -93,7 +93,7 @@ class Buzzpress_Post {
 	*/
 	public function get_type_section(){
 
-		$config_section = get_post_meta( $this->instance_WP_Post->ID, Buzzpress_Section_Pc::getInstance()->name_option_in_database . '_config_section', true);
+		$config_section = get_post_meta( $this->instance_WP_Post->ID, Wpextend_Section_Pc::getInstance()->name_option_in_database . '_config_section', true);
 		if( is_array($config_section) && array_key_exists( 'type_section', $config_section ) )
 			return $config_section['type_section'];
 		else

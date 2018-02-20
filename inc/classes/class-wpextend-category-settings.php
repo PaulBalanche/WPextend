@@ -40,13 +40,13 @@ class Wpextend_Category_Settings {
 	*/
 	public function render_html() {
 
-		$retour_html = Buzzpress_Render_Admin_Html::table_edit_open();
+		$retour_html = Wpextend_Render_Admin_Html::table_edit_open();
 		foreach( $this->list_settings as $key => $val) {
 
 			$instance_field_setting = new Buzzpress_Single_Setting($key, $this->id);
 			$retour_html .= $instance_field_setting->render_html();
 		}
-		$retour_html .= Buzzpress_Render_Admin_Html::table_edit_close();
+		$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 
 		return $retour_html;
 	}
@@ -60,15 +60,15 @@ class Wpextend_Category_Settings {
 	*/
 	static public function render_form_create(){
 
-		$retour_html = Buzzpress_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'add_category_setting_buzzpress', 'add_category_setting_buzzpress' );
+		$retour_html = Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'add_category_setting_buzzpress', 'add_category_setting_buzzpress' );
 
-		$retour_html .= Buzzpress_Render_Admin_Html::table_edit_open();
+		$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
 		$retour_html .= Buzzpress_Type_Field::render_input_text( 'Name', 'name' );
 		$retour_html .= Buzzpress_Type_Field::render_input_checkbox( 'Traduction ?', 'wpml_compatible', array( 'true' => 'Les champs doivent être traduisible') );
 		$retour_html .= Buzzpress_Type_Field::render_input_select( 'Capabilities', 'capabilities', array( 'administrator' => 'Administrator', 'editor' => 'Editor' ) );
-		$retour_html .= Buzzpress_Render_Admin_Html::table_edit_close();
+		$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 
-		$retour_html .= Buzzpress_Render_Admin_Html::form_close( 'Add Category' );
+		$retour_html .= Wpextend_Render_Admin_Html::form_close( 'Add Category' );
 
 		return $retour_html;
 	}

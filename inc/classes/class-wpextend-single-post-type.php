@@ -4,7 +4,6 @@
 /**
  *
  */
-// class Buzzpress_Single_Post_Type extends Buzzpress_Post {
 class Buzzpress_Single_Post_Type {
 
 	public $slug;
@@ -130,7 +129,7 @@ class Buzzpress_Single_Post_Type {
 		$taxonomy = array('slug' => '', 'label' => '');
 
 		$retour_html = self::render_form( $tab_labels, $slug, $tab_args, $taxonomy );
-		$retour_html .= Buzzpress_Render_Admin_Html::form_close( 'Add post type' );
+		$retour_html .= Wpextend_Render_Admin_Html::form_close( 'Add post type' );
 		return $retour_html;
  	}
 
@@ -149,7 +148,7 @@ class Buzzpress_Single_Post_Type {
 		$taxonomy = $this->taxonomy;
 
 		$retour_html = self::render_form( $tab_labels, $slug, $tab_args, $taxonomy );
-		$retour_html .= Buzzpress_Render_Admin_Html::form_close( 'Edit post type' );
+		$retour_html .= Wpextend_Render_Admin_Html::form_close( 'Edit post type' );
 		return $retour_html;
  	}
 
@@ -166,15 +165,15 @@ class Buzzpress_Single_Post_Type {
 		$tab_args_default = Buzzpress_Single_Post_Type::$default_args;
 
 		$retour_html = '<hr>';
- 		$retour_html .= Buzzpress_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'add_custom_post_type_buzzpress', 'add_custom_post_type_buzzpress' );
+ 		$retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'add_custom_post_type_buzzpress', 'add_custom_post_type_buzzpress' );
 
- 		$retour_html .= Buzzpress_Render_Admin_Html::table_edit_open();
+ 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
 		$retour_html .= Buzzpress_Type_Field::render_input_text( 'Slug', 'slug', $slug);
-		$retour_html .= Buzzpress_Render_Admin_Html::table_edit_close();
+		$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 
 		$retour_html .= '<hr>';
 
-		$retour_html .= Buzzpress_Render_Admin_Html::table_edit_open();
+		$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
 		foreach( $tab_labels_default as $key => $val) {
 			if( is_array($val) ) {
 				if( isAssoc($val) ){
@@ -188,11 +187,11 @@ class Buzzpress_Single_Post_Type {
 				$retour_html .= Buzzpress_Type_Field::render_input_text( $key, 'labels['.$key.']', $tab_labels[$key] );
 			}
 		}
-		$retour_html .= Buzzpress_Render_Admin_Html::table_edit_close();
+		$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 
 		$retour_html .= '<hr>';
 
-		$retour_html .= Buzzpress_Render_Admin_Html::table_edit_open();
+		$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
 		foreach( $tab_args_default as $key => $val) {
 			if( is_array($val) ) {
 				if( isAssoc($val) ){
@@ -208,14 +207,14 @@ class Buzzpress_Single_Post_Type {
 				$retour_html .= Buzzpress_Type_Field::render_input_text( $key, 'args['.$key.']', $tab_args[$key] );
 			}
 		}
- 		$retour_html .= Buzzpress_Render_Admin_Html::table_edit_close();
+ 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 
 		$retour_html .= '<hr>';
 
-		$retour_html .= Buzzpress_Render_Admin_Html::table_edit_open();
+		$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
 		$retour_html .= Buzzpress_Type_Field::render_input_text( 'Taxonomy label', 'taxonomy[label]', $taxonomy['label']);
 		$retour_html .= Buzzpress_Type_Field::render_input_text( 'Taxonomy slug', 'taxonomy[slug]', $taxonomy['slug']);
-		$retour_html .= Buzzpress_Render_Admin_Html::table_edit_close();
+		$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 
  		return $retour_html;
 	}
@@ -244,8 +243,8 @@ class Buzzpress_Single_Post_Type {
 			is_array( $_POST['taxonomy'] )
 		 ) {
 
-			// Get Buzzpress_Post_Type instance
-			$instance_Buzzpress_Post_Type = Buzzpress_Post_Type::getInstance();
+			// Get Wpextend_Post_Type instance
+			$instance_Wpextend_Post_Type = Wpextend_Post_Type::getInstance();
 
 			// Protect data
 			$labels = array();
@@ -279,11 +278,11 @@ class Buzzpress_Single_Post_Type {
 				}
 			}
 
-			// Add in Buzzpress_Post_Type
-			$instance_Buzzpress_Post_Type->add_new( $labels, $slug, $args, $taxonomy );
+			// Add in Wpextend_Post_Type
+			$instance_Wpextend_Post_Type->add_new( $labels, $slug, $args, $taxonomy );
 
 			// Save in Wordpress database
-			$instance_Buzzpress_Post_Type->save();
+			$instance_Wpextend_Post_Type->save();
 
 			if( !isset( $_POST['ajax'] ) ) {
 				$goback = add_query_arg( 'udpate', 'true', wp_get_referer() );
@@ -303,14 +302,14 @@ class Buzzpress_Single_Post_Type {
 
 			$id_post_type = sanitize_text_field( $_GET['id'] );
 
-			// Get Buzzpress_Post_Type instance
-			$instance_Buzzpress_Post_Type = Buzzpress_Post_Type::getInstance();
+			// Get Wpextend_Post_Type instance
+			$instance_Wpextend_Post_Type = Wpextend_Post_Type::getInstance();
 
-			// Add in Buzzpress_Post_Type
- 			$instance_Buzzpress_Post_Type->delete( $id_post_type );
+			// Add in Wpextend_Post_Type
+ 			$instance_Wpextend_Post_Type->delete( $id_post_type );
 
  			// Save in Wordpress database
- 			$instance_Buzzpress_Post_Type->save();
+ 			$instance_Wpextend_Post_Type->save();
 
 			if( !isset( $_POST['ajax'] ) ) {
 	 			$goback = add_query_arg( 'udpate', 'true', wp_get_referer() );

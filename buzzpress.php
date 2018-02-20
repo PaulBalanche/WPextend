@@ -48,5 +48,5 @@
 		Wpextend_Auto_Load::register();
 
 		// Main
-		$instance_buzzpress = Buzzpress_Main::getInstance();
+		$instance_Wpextend_Main = Wpextend_Main::getInstance();
 	}

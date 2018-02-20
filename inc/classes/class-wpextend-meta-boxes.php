@@ -4,7 +4,7 @@
 /**
 *
 */
-class Buzzpress_Meta_Boxes {
+class Wpextend_Meta_Boxes {
 
 
 
@@ -79,7 +79,7 @@ class Buzzpress_Meta_Boxes {
 			// Get current post_meta value
 			$current_value_metabox = get_post_meta( $post->ID, WPEXTEND_PREFIX_DATA_IN_DB . $this->metabox_ID, true );
 
-			$retour_html .= Buzzpress_Render_Admin_Html::table_edit_open();
+			$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
 
 			if( is_array($this->list_fields) ){
 				foreach( $this->list_fields as $key => $val ){
@@ -98,7 +98,7 @@ class Buzzpress_Meta_Boxes {
 				}
 			}
 
-			$retour_html .= Buzzpress_Render_Admin_Html::table_edit_close();
+			$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 		}
 		echo $retour_html;
 	}

@@ -10,7 +10,7 @@
 
 
 	// Récupération des slides
-	$instance_section = new Buzzpress_Post($data_section->ID);
+	$instance_section = new Wpextend_Post($data_section->ID);
 	$slides = $instance_section->get_sections_pc_buzzpress();
 	if( is_array($slides) && count($slides) > 0){
 		foreach( $slides as $slide ){

@@ -56,21 +56,21 @@ class Buzzpress_Single_Custom_Field {
 
 		$retour_html .= '<input type="button" class="add_new_custom_field button button-primary" value="New field">';
 
- 		$retour_html .= Buzzpress_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'add_custom_field_buzzpress', 'add_custom_field_buzzpress', 'hidden' );
+ 		$retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'add_custom_field_buzzpress', 'add_custom_field_buzzpress', 'hidden' );
 
- 		$retour_html .= Buzzpress_Render_Admin_Html::table_edit_open();
+ 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
  		$retour_html .= Buzzpress_Type_Field::render_input_text( 'Name', 'name' );
 		$retour_html .= Buzzpress_Type_Field::render_input_select('Type', 'type_field', Buzzpress_Type_Field::get_available_fields() );
-		$retour_html .= Buzzpress_Type_Field::render_input_select('Post type select', 'post_type_options', Buzzpress_Post_Type::getInstance()->get_all_include_base_wordpress() );
+		$retour_html .= Buzzpress_Type_Field::render_input_select('Post type select', 'post_type_options', Wpextend_Post_Type::getInstance()->get_all_include_base_wordpress() );
 		$retour_html .= Buzzpress_Type_Field::render_input_hidden( 'post_type', $post_type );
 		$retour_html .= Buzzpress_Type_Field::render_input_hidden( 'category', $key_category );
 		$retour_html .= Buzzpress_Type_Field::render_input_hidden( 'type', $key_type );
 		$retour_html .= Buzzpress_Type_Field::render_input_hidden( 'metabox', $key_metabox );
 		$retour_html .= Buzzpress_Type_Field::render_input_checkbox( 'Repeatable ?', 'repeatable', array( 'true' => 'Ce champ pourra être dupliqué') );
 		$retour_html .= Buzzpress_Type_Field::render_input_checkbox( 'Indexable ?', 'indexable', array( 'true' => 'Ce champ pourra faire l\'objet d\'une recherche') );
- 		$retour_html .= Buzzpress_Render_Admin_Html::table_edit_close();
+ 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 
- 		$retour_html .= Buzzpress_Render_Admin_Html::form_close( 'Add field' );
+ 		$retour_html .= Wpextend_Render_Admin_Html::form_close( 'Add field' );
 
 		$retour_html .= '</div>';
 
@@ -238,10 +238,10 @@ class Buzzpress_Single_Custom_Field {
 
 			case 'listing_section':
 
-				$instance_post_parent = new Buzzpress_Post( $this->post_id );
+				$instance_post_parent = new Wpextend_Post( $this->post_id );
 				$default_value_field = $instance_post_parent->get_sections_pc_buzzpress();
 
-				$retour_html .= Buzzpress_Section_Pc::listing_section( $this->post_id, $default_value_field );
+				$retour_html .= Wpextend_Section_Pc::listing_section( $this->post_id, $default_value_field );
 				break;
 		}
 
