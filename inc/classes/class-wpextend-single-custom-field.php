@@ -239,7 +239,7 @@ class Wpextend_Single_Custom_Field {
 			case 'listing_section':
 
 				$instance_post_parent = new Wpextend_Post( $this->post_id );
-				$default_value_field = $instance_post_parent->get_sections_pc_buzzpress();
+				$default_value_field = $instance_post_parent->get_sections_pc_wpextend();
 
 				$retour_html .= Wpextend_Section_Pc::listing_section( $this->post_id, $default_value_field );
 				break;

@@ -18,7 +18,7 @@ class Wpextend_Section_Pc {
 
 
 	/**
-   * Static method which instance section_pc_buzzpress
+   * Static method which instance section_pc_wpextend
 	*
    */
  	public static function getInstance() {
@@ -85,7 +85,7 @@ class Wpextend_Section_Pc {
 		// Update post_type during metabox's instancation to allow showing metabox
 		add_filter( 'set_post_type_before_instance_metabox', array( $this, 'set_post_type_before_instance_metabox' ) );
 		// Filter if metabox must be showed
-		add_filter( 'show_metabox_buzzpress', array( $this, 'check_show_metabox_buzzpress' ), 10, 2 );
+		add_filter( 'show_metabox_wpextend', array( $this, 'check_show_metabox_wpextend' ), 10, 2 );
 		// Filter le main content to add secton HTML
 		add_filter( 'the_content', array( $this, 'filter_the_content' ), 10, 2 );
 
@@ -237,7 +237,7 @@ class Wpextend_Section_Pc {
 		if( $show_sections == true ){
 
 			$instance_post = new Wpextend_Post( $post->ID );
-			$tab_section_post = $instance_post->get_sections_pc_buzzpress();
+			$tab_section_post = $instance_post->get_sections_pc_wpextend();
 
 			if( is_array($tab_section_post) && count($tab_section_post) > 0 ){
 				foreach( $tab_section_post as $section_id ){
@@ -268,10 +268,10 @@ class Wpextend_Section_Pc {
 
 
 	/**
-	* Filter the general "show_metabox_buzzpress" function and test if metabox need to be showed
+	* Filter the general "show_metabox_wpextend" function and test if metabox need to be showed
 	*
 	*/
-	public function check_show_metabox_buzzpress($post, $metabox_ID){
+	public function check_show_metabox_wpextend($post, $metabox_ID){
 
 		$retour = true;
 
@@ -313,7 +313,7 @@ class Wpextend_Section_Pc {
 	 public function show_metabox_listing_sections($post){
 
 		 $instance_post_parent = new Wpextend_Post( $post->ID );
-		 $default_value_field = $instance_post_parent->get_sections_pc_buzzpress();
+		 $default_value_field = $instance_post_parent->get_sections_pc_wpextend();
 
 		 echo self::listing_section( $post->ID, $default_value_field );
 	 }
@@ -906,7 +906,7 @@ class Wpextend_Section_Pc {
 	 	if( isset($id) && is_numeric($id) ){
 
 		 	$instance_post_initial = new Wpextend_Post( $id );
-			$tab_section_post = $instance_post_initial->get_sections_pc_buzzpress();
+			$tab_section_post = $instance_post_initial->get_sections_pc_wpextend();
 
 			if( is_array($tab_section_post) && count($tab_section_post) > 0 ){
 
@@ -926,7 +926,7 @@ class Wpextend_Section_Pc {
 						$tab_new_section_duplicate[] = $new_section_id;
 
 						$instance_new_section_duplique = new Wpextend_Post( $new_section_id );
-						$tab_section_in_new_section = $instance_new_section_duplique->get_sections_pc_buzzpress();
+						$tab_section_in_new_section = $instance_new_section_duplique->get_sections_pc_wpextend();
 
 						if( is_array($tab_section_in_new_section) && count($tab_section_in_new_section) > 0 ){
 

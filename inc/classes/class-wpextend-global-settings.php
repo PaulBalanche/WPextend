@@ -98,7 +98,7 @@ class Wpextend_Global_Settings {
 
 	   	// $_POST traitment if necessary
 	   	add_action( 'admin_post_update_settings_buzzpress', 'Wpextend_Global_Settings::udpate_values' );
-	   	add_action( 'admin_post_add_category_setting_buzzpress', 'Wpextend_Category_Settings::add_new' );
+	   	add_action( 'admin_post_add_category_setting_wpextend', 'Wpextend_Category_Settings::add_new' );
 	   	add_action( 'admin_post_add_settings_buzzpress', 'Wpextend_Single_Setting::add_new' );
 		add_action( 'admin_post_delete_category_setting', 'Wpextend_Category_Settings::delete_category_setting' );
 		add_action( 'admin_post_delete_setting', 'Wpextend_Single_Setting::delete_setting' );
@@ -107,7 +107,7 @@ class Wpextend_Global_Settings {
 
 	   	// AJAX $_POST traitment if necessary
 	   	add_action( 'wp_ajax_update_settings_buzzpress', 'Wpextend_Global_Settings::udpate_values' );
-	   	add_action( 'wp_ajax_add_category_setting_buzzpress', 'Wpextend_Category_Settings::add_new' );
+	   	add_action( 'wp_ajax_add_category_setting_wpextend', 'Wpextend_Category_Settings::add_new' );
 	   	add_action( 'wp_ajax_add_settings_buzzpress', 'Wpextend_Single_Setting::add_new' );
 	}
 

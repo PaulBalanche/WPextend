@@ -1,7 +1,7 @@
 jQuery( document ).ready(function() {
 
 
-   //  jQuery( '#add_category_setting_buzzpress' ).submit( function(event) {
+   //  jQuery( '#add_category_setting_wpextend' ).submit( function(event) {
 	 //
 	// 	 var post_name = jQuery(this).find('#input_name').val();
 	// 	 var post_wpnonce = jQuery(this).find('#_wpnonce').val();
@@ -11,7 +11,7 @@ jQuery( document ).ready(function() {
 	// 	 jQuery.ajax({
 	// 	  method: "POST",
 	// 	  url: OBJECT.ajax_url,
-	// 	  data: { action: 'add_category_setting_buzzpress', name: post_name, _wpnonce: post_wpnonce, ajax: true }
+	// 	  data: { action: 'add_category_setting_wpextend', name: post_name, _wpnonce: post_wpnonce, ajax: true }
 	// 	})
 	//    .done(function( msg ) {
 	 //

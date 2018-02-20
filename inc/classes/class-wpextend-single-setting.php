@@ -22,20 +22,20 @@ class Wpextend_Single_Setting {
 	*/
 	public function __construct($id, $category) {
 
-		$instance_settings_buzzpress = Wpextend_Global_Settings::getInstance();
-		if( array_key_exists($category, $instance_settings_buzzpress->wpextend_global_settings) &&
-			array_key_exists($id, $instance_settings_buzzpress->wpextend_global_settings[$category]['fields'])
+		$instance_settings_wpextend = Wpextend_Global_Settings::getInstance();
+		if( array_key_exists($category, $instance_settings_wpextend->wpextend_global_settings) &&
+			array_key_exists($id, $instance_settings_wpextend->wpextend_global_settings[$category]['fields'])
 		) {
 
 			$this->id = $id;
-			$this->name = $instance_settings_buzzpress->wpextend_global_settings[$category]['fields'][$id]['name'];
-			$this->description = ( array_key_exists('description', $instance_settings_buzzpress->wpextend_global_settings[$category]['fields'][$id]) ) ? $instance_settings_buzzpress->wpextend_global_settings[$category]['fields'][$id]['description'] : '';
+			$this->name = $instance_settings_wpextend->wpextend_global_settings[$category]['fields'][$id]['name'];
+			$this->description = ( array_key_exists('description', $instance_settings_wpextend->wpextend_global_settings[$category]['fields'][$id]) ) ? $instance_settings_wpextend->wpextend_global_settings[$category]['fields'][$id]['description'] : '';
 			$this->placeholder = '';
 			$this->category = $category;
-			$this->type = $instance_settings_buzzpress->wpextend_global_settings[$category]['fields'][$id]['type'];
-			$this->options = ( array_key_exists( 'options', $instance_settings_buzzpress->wpextend_global_settings[$category]['fields'][$id]) ) ? $instance_settings_buzzpress->wpextend_global_settings[$category]['fields'][$id]['options'] : false;
-			$this->value = $instance_settings_buzzpress->get( $id, $category );
-			$this->repeatable = ( array_key_exists('repeatable', $instance_settings_buzzpress->wpextend_global_settings[$category]['fields'][$id]) ) ? $instance_settings_buzzpress->wpextend_global_settings[$category]['fields'][$id]['repeatable'] : false;
+			$this->type = $instance_settings_wpextend->wpextend_global_settings[$category]['fields'][$id]['type'];
+			$this->options = ( array_key_exists( 'options', $instance_settings_wpextend->wpextend_global_settings[$category]['fields'][$id]) ) ? $instance_settings_wpextend->wpextend_global_settings[$category]['fields'][$id]['options'] : false;
+			$this->value = $instance_settings_wpextend->get( $id, $category );
+			$this->repeatable = ( array_key_exists('repeatable', $instance_settings_wpextend->wpextend_global_settings[$category]['fields'][$id]) ) ? $instance_settings_wpextend->wpextend_global_settings[$category]['fields'][$id]['repeatable'] : false;
 
 			// Pour les champs custom post
 			if( $this->type == 'select_post_type' ){

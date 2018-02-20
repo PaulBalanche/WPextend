@@ -21,14 +21,14 @@ class Wpextend_Category_Settings {
 	 */
 	public function __construct($id) {
 
-		$instance_settings_buzzpress = Wpextend_Global_Settings::getInstance();
-		if( array_key_exists($id, $instance_settings_buzzpress->wpextend_global_settings) ) {
+		$instance_settings_Wpextend = Wpextend_Global_Settings::getInstance();
+		if( array_key_exists($id, $instance_settings_Wpextend->wpextend_global_settings) ) {
 
 			$this->id = $id;
-			$this->name = $instance_settings_buzzpress->wpextend_global_settings[$id]['name'];
-			$this->capabilities = ( array_key_exists('capabilities', $instance_settings_buzzpress->wpextend_global_settings[$id]) && !empty($instance_settings_buzzpress->wpextend_global_settings[$id]['capabilities']) && $instance_settings_buzzpress->wpextend_global_settings[$id]['capabilities'] != null ) ? $instance_settings_buzzpress->wpextend_global_settings[$id]['capabilities'] : null;
-			$this->wpml_compatible = ( array_key_exists('wpml_compatible', $instance_settings_buzzpress->wpextend_global_settings[$id]) && !empty($instance_settings_buzzpress->wpextend_global_settings[$id]['wpml_compatible']) && $instance_settings_buzzpress->wpextend_global_settings[$id]['wpml_compatible'] ) ? true : false;
-			$this->list_settings = $instance_settings_buzzpress->wpextend_global_settings[$id]['fields'];
+			$this->name = $instance_settings_Wpextend->wpextend_global_settings[$id]['name'];
+			$this->capabilities = ( array_key_exists('capabilities', $instance_settings_Wpextend->wpextend_global_settings[$id]) && !empty($instance_settings_Wpextend->wpextend_global_settings[$id]['capabilities']) && $instance_settings_Wpextend->wpextend_global_settings[$id]['capabilities'] != null ) ? $instance_settings_Wpextend->wpextend_global_settings[$id]['capabilities'] : null;
+			$this->wpml_compatible = ( array_key_exists('wpml_compatible', $instance_settings_Wpextend->wpextend_global_settings[$id]) && !empty($instance_settings_Wpextend->wpextend_global_settings[$id]['wpml_compatible']) && $instance_settings_Wpextend->wpextend_global_settings[$id]['wpml_compatible'] ) ? true : false;
+			$this->list_settings = $instance_settings_Wpextend->wpextend_global_settings[$id]['fields'];
 		}
 	}
 
@@ -60,7 +60,7 @@ class Wpextend_Category_Settings {
 	*/
 	static public function render_form_create(){
 
-		$retour_html = Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'add_category_setting_buzzpress', 'add_category_setting_buzzpress' );
+		$retour_html = Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'add_category_setting_wpextend', 'add_category_setting_wpextend' );
 
 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
 		$retour_html .= Wpextend_Type_Field::render_input_text( 'Name', 'name' );

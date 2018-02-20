@@ -17,7 +17,7 @@
 
 	// Récupération des lien sociaux
 	$instance_section = new Wpextend_Post($data_section->ID);
-	$socials = $instance_section->get_sections_pc_buzzpress();
+	$socials = $instance_section->get_sections_pc_wpextend();
 	if( is_array($socials) && count($socials) > 0){
 
 		$args_blade['socials'] = array();

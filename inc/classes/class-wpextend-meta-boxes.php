@@ -58,7 +58,7 @@ class Wpextend_Meta_Boxes {
 	public function add_meta_box($post = null){
 
 		$show_metabox = true;
-		$show_metabox = apply_filters( 'show_metabox_buzzpress', $post, $this->metabox_key);
+		$show_metabox = apply_filters( 'show_metabox_wpextend', $post, $this->metabox_key);
 		if( $show_metabox ){
 			add_meta_box( $this->metabox_ID, $this->metabox_name, array($this, 'show_meta_box'), $this->post_type_applied, $this->metabox_context, $this->metabox_priority );
 		}
@@ -111,7 +111,7 @@ class Wpextend_Meta_Boxes {
  	*/
 	public function save_meta_box($post_id){
 
-		$save_metabox = apply_filters( 'show_metabox_buzzpress', get_post($post_id), $this->metabox_key);
+		$save_metabox = apply_filters( 'show_metabox_wpextend', get_post($post_id), $this->metabox_key);
 		if( $save_metabox  && is_array( $this->list_fields ) && array_key_exists( $this->metabox_ID, $_POST ) ){
 
 			// Get current post_meta value

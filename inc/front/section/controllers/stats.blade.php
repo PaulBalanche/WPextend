@@ -18,7 +18,7 @@
 
 	// Stats
 	$instance_section = new Wpextend_Post($data_section->ID);
-	$stats = $instance_section->get_sections_pc_buzzpress();
+	$stats = $instance_section->get_sections_pc_wpextend();
 	if( is_array($stats) && count($stats) > 0){
 
 		$args_blade['stats'] = array();

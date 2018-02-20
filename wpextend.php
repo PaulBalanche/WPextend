@@ -1,10 +1,9 @@
 <?php
 	/**
 	* Plugin Name: "WPextend"
-	* Plugin URI: https://buzzbrothers.ch/
+	* Plugin URI: https://github.com/PaulBalanche/WPextend
 	* Version: 1.0
 	* Author: Paul Balanche
-	* Author URI: https://buzzbrothers.ch/
 	**/
 
 	if ( ! defined( 'ABSPATH' ) ) {
@@ -44,7 +43,7 @@
 		require(WPEXTEND_DIR . '/inc/functions/basic-functions.php');
 
 		// Autoloader
-		require(WPEXTEND_CLASSES_DIR . 'class-buzzpress-autoload.php');
+		require(WPEXTEND_CLASSES_DIR . 'class-wpextend-autoload.php');
 		Wpextend_Auto_Load::register();
 
 		// Main

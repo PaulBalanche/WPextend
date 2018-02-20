@@ -8,7 +8,7 @@ class Wpextend_Post {
 
 	public $id;
 	public $instance_WP_Post;
-	public $list_sections_pc_buzzpress;
+	public $list_sections_pc_wpextend;
 
 
 	/**
@@ -28,7 +28,7 @@ class Wpextend_Post {
 	/**
 	*
 	*/
-	public function get_sections_pc_buzzpress(){
+	public function get_sections_pc_wpextend(){
 
 		$tab_sections = get_post_meta( $this->instance_WP_Post->ID, Wpextend_Section_Pc::$key_list_section_in_database, true );
 		if( !is_array($tab_sections) ){
@@ -46,7 +46,7 @@ class Wpextend_Post {
 	public function add_section($id_section){
 
 		// Get all actual sections
-		$tab_sections = $this->get_sections_pc_buzzpress();
+		$tab_sections = $this->get_sections_pc_wpextend();
 
 		if( !in_array($id_section, $tab_sections) ){
 			// Add new section
