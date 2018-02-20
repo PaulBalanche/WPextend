@@ -10,7 +10,7 @@ jQuery(document).ready(function(){
 
 
 
-	jQuery( '.accordionBuzzpress' ).accordion({
+	jQuery( '.accordion_wpextend' ).accordion({
 		heightStyle: "content",
 		collapsible: true,
 		active: false
@@ -52,10 +52,10 @@ jQuery(document).ready(function(){
 
 
 	var frame,
-		link_upload_img = jQuery('a.link_upload_img_buzzpress'),
-		link_remove_img = jQuery('a.link_remove_img_buzzpress'),
-		link_upload_file = jQuery('a.link_upload_file_buzzpress'),
-		link_remove_file = jQuery('a.link_remove_file_buzzpress');
+		link_upload_img = jQuery('a.link_upload_img_wpextend'),
+		link_remove_img = jQuery('a.link_remove_img_wpextend'),
+		link_upload_file = jQuery('a.link_upload_file_wpextend'),
+		link_remove_file = jQuery('a.link_remove_file_wptexend');
 
 	/**
 	* Ajout d'un média
@@ -91,7 +91,7 @@ jQuery(document).ready(function(){
 					var src_image_uploade = attachment.attributes.url;
 
 				link_upload_img_courant.html('<img src="'+src_image_uploade+'" />');
-				link_upload_img_courant.parents('td').find('.input_upload_img_buzzpress').val(attachment.attributes.id);
+				link_upload_img_courant.parents('td').find('.input_upload_img_wpextend').val(attachment.attributes.id);
 				link_upload_img_courant.parents('td').find(link_remove_img).removeClass('hidden');
 			}
 		});
@@ -110,7 +110,7 @@ jQuery(document).ready(function(){
 
 		event.preventDefault();
 
-		jQuery(this).parents('td').find('.input_upload_img_buzzpress').val(-1);
+		jQuery(this).parents('td').find('.input_upload_img_wpextend').val(-1);
 		jQuery(this).parents('td').find('a.thickbox').html('Ajouter une image');
 		jQuery(this).parent().find(link_remove_img).addClass('hidden');
 	});
@@ -216,7 +216,7 @@ jQuery(document).ready(function(){
 			var attachment = frame.state().get('selection').first();
 
 			link_upload_file_courant.html(attachment.attributes.filename);
-			link_upload_file_courant.parents('td').find('.input_file_buzzpress').val(attachment.attributes.id);
+			link_upload_file_courant.parents('td').find('.input_file_wpextend').val(attachment.attributes.id);
 			link_upload_file_courant.parents('td').find(link_remove_file).removeClass('hidden');
 		});
 
@@ -235,7 +235,7 @@ jQuery(document).ready(function(){
 
 		event.preventDefault();
 
-		jQuery(this).parents('td').find('.input_file_buzzpress').val(-1);
+		jQuery(this).parents('td').find('.input_file_wpextend').val(-1);
 		jQuery(this).parents('td').find('a.thickbox').html('Ajouter un fichier');
 		jQuery(this).parent().find(link_remove_file).addClass('hidden');
 	});

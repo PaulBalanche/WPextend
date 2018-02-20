@@ -414,10 +414,10 @@ class Wpextend_Type_Field {
 		 <th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label></th>
 		 <td>
 			 <p class="hide-if-no-js">
-			   <a href="" class="thickbox link_upload_img_buzzpress">'.$html_image_post_thumbnail.'</a>
+			   <a href="" class="thickbox link_upload_img_wpextend">'.$html_image_post_thumbnail.'</a>
 		   </p>
-	   	<input type="hidden" name="'.$name.'" class="input_upload_img_buzzpress" value="'.$defaut_value.'">
-	   	<a href="" class="link_remove_img_buzzpress '.$class_link_remove.'" >Supprimer l\'image</a>
+	   	<input type="hidden" name="'.$name.'" class="input_upload_img_wpextend" value="'.$defaut_value.'">
+	   	<a href="" class="link_remove_img_wpextend '.$class_link_remove.'" >Supprimer l\'image</a>
 		</td>
 		</tr>';
 
@@ -451,10 +451,10 @@ class Wpextend_Type_Field {
       <th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label></th>
       <td>
          <p class="hide-if-no-js">
-           <a href="" class="thickbox link_upload_file_buzzpress">'.$html_file.'</a>
+           <a href="" class="thickbox link_upload_file_wpextend">'.$html_file.'</a>
         </p>
-        <input type="hidden" name="'.$name.'" class="input_file_buzzpress" value="'.$defaut_value.'">
-        <a href="" class="link_remove_file_buzzpress '.$class_link_remove.'" >Supprimer le fichier</a>
+        <input type="hidden" name="'.$name.'" class="input_file_wpextend" value="'.$defaut_value.'">
+        <a href="" class="link_remove_file_wptexend '.$class_link_remove.'" >Supprimer le fichier</a>
      </td>
      </tr>';
 

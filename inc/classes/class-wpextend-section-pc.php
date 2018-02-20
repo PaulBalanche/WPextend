@@ -81,7 +81,7 @@ class Wpextend_Section_Pc {
 		add_action( 'add_meta_boxes', array($this, 'add_meta_boxes') );
 
 		// Create section post_type
-		add_filter( 'load_custom_post_type_buzzpress', array( $this, 'load_custom_post_type' ) );
+		add_filter( 'load_custom_post_type_wpextend', array( $this, 'load_custom_post_type' ) );
 		// Update post_type during metabox's instancation to allow showing metabox
 		add_filter( 'set_post_type_before_instance_metabox', array( $this, 'set_post_type_before_instance_metabox' ) );
 		// Filter if metabox must be showed
@@ -145,7 +145,7 @@ class Wpextend_Section_Pc {
 
 
 	/**
-	* Filter the general "load_custom_post_type_buzzpress" function and add section post_type
+	* Filter the general "load_custom_post_type_wpextend" function and add section post_type
 	*
 	*/
 	public function load_custom_post_type($initial_custom_post_type){

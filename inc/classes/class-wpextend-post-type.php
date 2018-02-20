@@ -10,7 +10,7 @@ class Wpextend_Post_Type {
 
 	 private static $_instance;
 	 public $intial_post_type;
-	 public $custom_post_type_buzzpress;
+	 public $custom_post_type_wpextend;
 	 public $name_option_in_database = '_custom_post_type_buzzpress';
 	 static public $admin_url = 'buzzpress_custom_post_type';
 	 static public $list_base_post_type = array('post' => 'Post', 'page' => 'Page');
@@ -37,9 +37,9 @@ class Wpextend_Post_Type {
 	private function __construct() {
 
 		// Get option from database
-		$this->custom_post_type_buzzpress = get_option( $this->name_option_in_database );
-		if( !is_array( $this->custom_post_type_buzzpress ) ) {
-			$this->custom_post_type_buzzpress = array();
+		$this->custom_post_type_wpextend = get_option( $this->name_option_in_database );
+		if( !is_array( $this->custom_post_type_wpextend ) ) {
+			$this->custom_post_type_wpextend = array();
 		}
 
 		// Load initial custom post type
@@ -57,7 +57,7 @@ class Wpextend_Post_Type {
 	*/
 	public function load_custom_post_defaut(){
 
-		$this->custom_post_type_buzzpress = apply_filters( 'load_custom_post_type_buzzpress', $this->custom_post_type_buzzpress );
+		$this->custom_post_type_wpextend = apply_filters( 'load_custom_post_type_wpextend', $this->custom_post_type_wpextend );
 	}
 
 
@@ -70,8 +70,8 @@ class Wpextend_Post_Type {
 	*/
 	public function initialize() {
 
-		if( is_array($this->custom_post_type_buzzpress) ){
-			foreach( $this->custom_post_type_buzzpress as $slug => $val ) {
+		if( is_array($this->custom_post_type_wpextend) ){
+			foreach( $this->custom_post_type_wpextend as $slug => $val ) {
 				$custom_post = new Wpextend_Single_Post_Type( $slug, $val );
 				$custom_post->register_custom_post_type();
 			}
@@ -118,7 +118,7 @@ class Wpextend_Post_Type {
 		// Add custom psot type form
 		if(isset($_GET['id'])){
 
-			$custom_post = new Wpextend_Single_Post_Type( $_GET['id'], $this->custom_post_type_buzzpress[ $_GET['id'] ] );
+			$custom_post = new Wpextend_Single_Post_Type( $_GET['id'], $this->custom_post_type_wpextend[ $_GET['id'] ] );
 			$retour_html .= $custom_post->render_form_edit();
 		}
 		else{
@@ -138,7 +138,7 @@ class Wpextend_Post_Type {
  	*/
  	public function save() {
 
- 		return update_option( $this->name_option_in_database , $this->custom_post_type_buzzpress);
+ 		return update_option( $this->name_option_in_database , $this->custom_post_type_wpextend);
  	}
 
 
@@ -155,7 +155,7 @@ class Wpextend_Post_Type {
 			( !empty( $taxonomy ) && is_array( $taxonomy ) )
 		) {
 
-			$this->custom_post_type_buzzpress[$slug] = array( 'labels' => $labels, 'args' => $args, 'taxonomy' => $taxonomy );
+			$this->custom_post_type_wpextend[$slug] = array( 'labels' => $labels, 'args' => $args, 'taxonomy' => $taxonomy );
 		}
 	}
 
@@ -165,8 +165,8 @@ class Wpextend_Post_Type {
 	*/
 	public function delete($slug){
 
-		if( array_key_exists( $slug, $this->custom_post_type_buzzpress ) ){
-			unset( $this->custom_post_type_buzzpress[$slug] );
+		if( array_key_exists( $slug, $this->custom_post_type_wpextend ) ){
+			unset( $this->custom_post_type_wpextend[$slug] );
 		}
 	}
 
@@ -177,16 +177,16 @@ class Wpextend_Post_Type {
     */
 	 public function get_all(){
 
-		 $all_custom_post_buzzpress = array();
-		 if( is_array($this->custom_post_type_buzzpress) ){
-			 foreach($this->custom_post_type_buzzpress as $slug => $val) {
-				 $all_custom_post_buzzpress[$slug] = $val['labels']['name'];
+		 $all_custom_post_wpextend = array();
+		 if( is_array($this->custom_post_type_wpextend) ){
+			 foreach($this->custom_post_type_wpextend as $slug => $val) {
+				 $all_custom_post_wpextend[$slug] = $val['labels']['name'];
 			 }
 		}
 
-		 $return_all_custom_post_buzzpress = apply_filters( 'Wpextend_Post_Type_get_all', $all_custom_post_buzzpress );
+		 $return_all_custom_post_wpextend = apply_filters( 'Wpextend_Post_Type_get_all', $all_custom_post_wpextend );
 
-		 return $return_all_custom_post_buzzpress;
+		 return $return_all_custom_post_wpextend;
     }
 
 
@@ -211,21 +211,21 @@ class Wpextend_Post_Type {
 		$action_nonce = ( isset($_GET['action']) ) ? $_GET['action'] : $_POST['action'];
 		check_admin_referer($action_nonce);
 
-		if( isset( $_POST['buzzpress_custom_post_type_to_import'] ) && !empty($_POST['buzzpress_custom_post_type_to_import']) ) {
+		if( isset( $_POST['wpextend_custom_post_type_to_import'] ) && !empty($_POST['wpextend_custom_post_type_to_import']) ) {
 
-			$this->custom_post_type_buzzpress = json_decode( stripslashes($_POST['buzzpress_custom_post_type_to_import']), true );
+			$this->custom_post_type_wpextend = json_decode( stripslashes($_POST['wpextend_custom_post_type_to_import']), true );
 		}
 		elseif( isset($_GET['file']) && file_exists( WPEXTEND_DIR . '/inc/import/' . $_GET['file'] . '.json' ) ){
 
 			$data_json_file = file_get_contents( WPEXTEND_DIR . '/inc/import/' . $_GET['file'] . '.json' );
-			$this->custom_post_type_buzzpress = json_decode( $data_json_file, true );
+			$this->custom_post_type_wpextend = json_decode( $data_json_file, true );
 		}
 		else{
 			exit;
 		}
 
 		// Save in Wordpress database
-		if( is_array($this->custom_post_type_buzzpress) ){
+		if( is_array($this->custom_post_type_wpextend) ){
 
 			$this->save();
 

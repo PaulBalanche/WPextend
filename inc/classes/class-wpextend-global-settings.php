@@ -236,7 +236,7 @@ class Wpextend_Global_Settings {
 		 // Header page & open form
 		 $retour_html = Wpextend_Render_Admin_Html::header('Site settings');
 
-		 $retour_html .= '<div class="accordionBuzzpress">';
+		 $retour_html .= '<div class="accordion_wpextend">';
 
 		 // Get all categories to create fieldset
 		 $all_category = $this->get_all_category();

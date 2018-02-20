@@ -114,7 +114,7 @@ class Wpextend_Main {
 
 		// Custom post type
 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
-		$retour_html .= Wpextend_Type_Field::render_input_textarea( 'WP Extend Custom Post Type', 'buzzpress_custom_post_type_export', stripslashes( json_encode( Wpextend_Post_Type::getInstance()->custom_post_type_buzzpress, JSON_UNESCAPED_UNICODE ) ) );
+		$retour_html .= Wpextend_Type_Field::render_input_textarea( 'WP Extend Custom Post Type', 'buzzpress_custom_post_type_export', stripslashes( json_encode( Wpextend_Post_Type::getInstance()->custom_post_type_wpextend, JSON_UNESCAPED_UNICODE ) ) );
 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 
 	 	// Custom field
@@ -174,7 +174,7 @@ class Wpextend_Main {
 		$retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'import_buzzpress_custom_post_type', 'import_buzzpress_custom_post_type' );
 
 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
-		$retour_html .= Wpextend_Type_Field::render_input_textarea( 'WP Extend Custom Post Type to import', 'buzzpress_custom_post_type_to_import' );
+		$retour_html .= Wpextend_Type_Field::render_input_textarea( 'WP Extend Custom Post Type to import', 'wpextend_custom_post_type_to_import' );
 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 
 		$retour_html .= Wpextend_Render_Admin_Html::form_close( 'Import' );

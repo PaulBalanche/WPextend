@@ -171,7 +171,7 @@ class Wpextend_Custom_Field {
 
 		foreach( $tab_final_to_show as $post_type_root => $list_category_post_type ){
 
-			$retour_html .= '<div id="'.$post_type_root.'" class="accordionBuzzpress">';
+			$retour_html .= '<div id="'.$post_type_root.'" class="accordion_wpextend">';
 
 			foreach( $list_category_post_type as $post_type => $list_category ) {
 
@@ -201,7 +201,7 @@ class Wpextend_Custom_Field {
 					foreach( $list_category as $key_category => $list_type ){
 
 						if( $key_category != 'default' )
-							$retour_html .= '<div id="tab_'.$key_category.'" class="li_subPostType '.$key_category.' accordionBuzzpress">';
+							$retour_html .= '<div id="tab_'.$key_category.'" class="li_subPostType '.$key_category.' accordion_wpextend">';
 
 						// Each Type : default = default
 						foreach( $list_type as $key_type => $list_metabox ){
