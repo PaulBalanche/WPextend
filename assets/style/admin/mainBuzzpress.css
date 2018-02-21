@@ -1,6 +1,6 @@
 .clear{ clear: both; }
 
-ul.ulBuzzpressAdmin{
+ul.ulWpextendAdmin{
 
 }
 	ul li.li_postType{
@@ -29,7 +29,7 @@ ul.ulBuzzpressAdmin{
 
 
 
-.fieldset_buzzpress{
+.fieldset_wpextend{
 	margin: 0 0.5% 0.5% 0;
 	background: white;
 	border: 1px solid #ddd;
@@ -38,7 +38,7 @@ ul.ulBuzzpressAdmin{
 }
 
 
-.form_add_elt_buzzpress{
+.form_add_elt_wpextend{
 	border: 1px dashed rgb(220,220,220);
 	background: rgb(245,245,245);
 	padding: 1rem;
@@ -132,15 +132,15 @@ table tr.tr_input_hidden th, table tr.tr_input_hidden td{
 /**
 * Table
 */
-body.wp-admin table.table_buzzpress tbody tr th{ text-align: right; }
-body.wp-admin table.table_buzzpress tbody tr th i.description{ display: block; font-weight: 400; }
+body.wp-admin table.table_wpextend tbody tr th{ text-align: right; }
+body.wp-admin table.table_wpextend tbody tr th i.description{ display: block; font-weight: 400; }
 
 
 /**
 * input
 */
-body.wp-admin .input_text_buzzpress{ padding: 10px 0; text-indent: 10px; width: 100%; }
-body.wp-admin .input_link_buzzpress{ padding: 10px 0; text-indent: 10px; }
+body.wp-admin .input_text_wpextend{ padding: 10px 0; text-indent: 10px; width: 100%; }
+body.wp-admin .input_link_wpextend{ padding: 10px 0; text-indent: 10px; }
 
 
 

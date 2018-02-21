@@ -97,18 +97,18 @@ class Wpextend_Global_Settings {
 		add_action('admin_enqueue_scripts', array( __CLASS__, 'script_admin' ) );
 
 	   	// $_POST traitment if necessary
-	   	add_action( 'admin_post_update_settings_buzzpress', 'Wpextend_Global_Settings::udpate_values' );
+	   	add_action( 'admin_post_update_settings_wpextend', 'Wpextend_Global_Settings::udpate_values' );
 	   	add_action( 'admin_post_add_category_setting_wpextend', 'Wpextend_Category_Settings::add_new' );
-	   	add_action( 'admin_post_add_settings_buzzpress', 'Wpextend_Single_Setting::add_new' );
+	   	add_action( 'admin_post_add_settings_wpextend', 'Wpextend_Single_Setting::add_new' );
 		add_action( 'admin_post_delete_category_setting', 'Wpextend_Category_Settings::delete_category_setting' );
 		add_action( 'admin_post_delete_setting', 'Wpextend_Single_Setting::delete_setting' );
 		add_action( 'admin_post_import_wpextend_global_settings', array($this, 'import') );
 		add_action( 'admin_post_import_wpextend_global_settings_values', array($this, 'import_values') );
 
 	   	// AJAX $_POST traitment if necessary
-	   	add_action( 'wp_ajax_update_settings_buzzpress', 'Wpextend_Global_Settings::udpate_values' );
+	   	add_action( 'wp_ajax_update_settings_wpextend', 'Wpextend_Global_Settings::udpate_values' );
 	   	add_action( 'wp_ajax_add_category_setting_wpextend', 'Wpextend_Category_Settings::add_new' );
-	   	add_action( 'wp_ajax_add_settings_buzzpress', 'Wpextend_Single_Setting::add_new' );
+	   	add_action( 'wp_ajax_add_settings_wpextend', 'Wpextend_Single_Setting::add_new' );
 	}
 
 
@@ -257,7 +257,7 @@ class Wpextend_Global_Settings {
 			 	$retour_html .= '</h2><div>';
 
 			 	if($current_screen->parent_base != 'buzzpress'){
-					$retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'update_settings_buzzpress');
+					$retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'update_settings_wpextend');
 				}
 				
 				$retour_html .= Wpextend_Type_Field::render_input_hidden( 'category', $key );
@@ -283,7 +283,7 @@ class Wpextend_Global_Settings {
 
 		// Add catergory form & add setting form
 		if($current_screen->parent_base == 'buzzpress'){
-			$retour_html .= '<fieldset class="fieldset_buzzpress"><h2>New settings category</h2>';
+			$retour_html .= '<fieldset class="fieldset_wpextend"><h2>New settings category</h2>';
 			$retour_html .= Wpextend_Category_Settings::render_form_create();
 			$retour_html .= '</fieldset>';
 		}

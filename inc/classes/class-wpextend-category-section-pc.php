@@ -26,11 +26,11 @@ class Wpextend_Category_Section_Pc {
 	*/
   static public function render_form_create($post_type = false){
 
-	  $retour_html = '<div class="form_add_category_section form_add_elt_buzzpress">';
+	  $retour_html = '<div class="form_add_category_section form_add_elt_wpextend">';
 
 	  $retour_html .= '<input type="button" class="add_new_category_section button button-primary" value="New category">';
 
-	  $retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'add_category_section_buzzpress', 'add_category_section_buzzpress', 'hidden' );
+	  $retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'add_category_section_wpextend', 'add_category_section_wpextend', 'hidden' );
 
 	  $retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
 	  $retour_html .= Wpextend_Type_Field::render_input_text( 'Name', 'name' );

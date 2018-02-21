@@ -59,7 +59,7 @@ class Wpextend_Render_Admin_Html {
      */
 	 static public function table_edit_open(){
 
-		 return '<table class="form-table table_buzzpress"><tbody>';
+		 return '<table class="form-table table_wpextend"><tbody>';
 	 }
 
 

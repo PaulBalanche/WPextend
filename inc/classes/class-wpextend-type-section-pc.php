@@ -37,11 +37,11 @@ class Wpextend_Type_Section_Pc {
 	*/
   static public function render_form_create($category = false){
 
-	  $retour_html = '<div class="form_add_section form_add_elt_buzzpress">';
+	  $retour_html = '<div class="form_add_section form_add_elt_wpextend">';
 
 	  $retour_html .= '<input type="button" class="add_new_section button button-primary" value="New section">';
 
-	  $retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'add_type_section_buzzpress', 'add_type_section_buzzpress', 'hidden' );
+	  $retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'add_type_section_wpextend', 'add_type_section_wpextend', 'hidden' );
 
 	  $retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
 	  $retour_html .= Wpextend_Type_Field::render_input_text( 'Name', 'name' );
@@ -67,7 +67,7 @@ class Wpextend_Type_Section_Pc {
  public function render_form_edit(){
 
 	 $retour_html = '<hr>';
-	 $retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'update_type_section_buzzpress', 'update_type_section_buzzpress' );
+	 $retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'update_type_section_wpextend', 'update_type_section_wpextend' );
 
 	 $retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
 	 $retour_html .= Wpextend_Type_Field::render_input_hidden( 'id', $this->id );

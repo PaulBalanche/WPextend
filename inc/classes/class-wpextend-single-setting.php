@@ -133,7 +133,7 @@ class Wpextend_Single_Setting {
 
 		$retour_html .= '<input type="button" class="add_new_settings button button-primary" value="New setting">';
 
-		$retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'add_settings_buzzpress', '', 'hidden');
+		$retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'add_settings_wpextend', '', 'hidden');
 
 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
 		$retour_html .= Wpextend_Type_Field::render_input_text( 'Name', 'name' );

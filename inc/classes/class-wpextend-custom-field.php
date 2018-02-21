@@ -63,10 +63,10 @@ class Wpextend_Custom_Field {
 		add_action('admin_enqueue_scripts', array( __CLASS__, 'script_admin' ) );
 
 		// $_POST or $_GET traitment if necessary
-		add_action( 'admin_post_add_metabox_buzzpress', array( $this, 'add_new_metabox') );
-		add_action( 'admin_post_add_custom_field_buzzpress', array( $this, 'add_new_custom_field') );
-		add_action( 'admin_post_delete_metabox_buzzpress', array( $this, 'delete_metabox' ) );
-		add_action( 'admin_post_delete_custom_field_buzzpress', array( $this, 'delete_custom_field') );
+		add_action( 'admin_post_add_metabox_wpextend', array( $this, 'add_new_metabox') );
+		add_action( 'admin_post_add_custom_field_wpextend', array( $this, 'add_new_custom_field') );
+		add_action( 'admin_post_delete_metabox_wpextend', array( $this, 'delete_metabox' ) );
+		add_action( 'admin_post_delete_custom_field_wpextend', array( $this, 'delete_custom_field') );
 
 		add_action( 'admin_post_import_wpextend_custom_field', array($this, 'import') );
 
@@ -216,7 +216,7 @@ class Wpextend_Custom_Field {
 								foreach( $list_metabox as $key_metabox => $data_metabox ){
 
 									if( is_array($data_metabox) && array_key_exists('name', $data_metabox) && array_key_exists('fields', $data_metabox) ){
-										$retour_html .= '<li class="liMetabox"><h4>'.$data_metabox['name'].' (<a href="'.add_query_arg( array( 'action' => 'delete_metabox_buzzpress', 'post_type' => $post_type, 'category' => $key_category, 'type' => $key_type, 'metabox' => $key_metabox, '_wpnonce' => wp_create_nonce( 'delete_metabox_buzzpress' ) ), admin_url( 'admin-post.php' ) ).'">Delete</a>)</h4><ul>';
+										$retour_html .= '<li class="liMetabox"><h4>'.$data_metabox['name'].' (<a href="'.add_query_arg( array( 'action' => 'delete_metabox_wpextend', 'post_type' => $post_type, 'category' => $key_category, 'type' => $key_type, 'metabox' => $key_metabox, '_wpnonce' => wp_create_nonce( 'delete_metabox_wpextend' ) ), admin_url( 'admin-post.php' ) ).'">Delete</a>)</h4><ul>';
 
 										// Each fields
 										foreach( $data_metabox['fields'] as $key => $val ){
@@ -229,7 +229,7 @@ class Wpextend_Custom_Field {
 											if( array_key_exists('repeatable', $val) && $val['repeatable'] == 1 )
 												$retour_html .= ' <i>repeatable</i>';
 
-											$retour_html .=' (<a href="'.add_query_arg( array( 'action' => 'delete_custom_field_buzzpress', 'post_type' => $post_type, 'category' => $key_category, 'type' => $key_type, 'metabox' => $key_metabox, 'id' => $key, '_wpnonce' => wp_create_nonce( 'delete_custom_field_buzzpress' ) ), admin_url( 'admin-post.php' ) ).'">Delete</a>)</li>';
+											$retour_html .=' (<a href="'.add_query_arg( array( 'action' => 'delete_custom_field_wpextend', 'post_type' => $post_type, 'category' => $key_category, 'type' => $key_type, 'metabox' => $key_metabox, 'id' => $key, '_wpnonce' => wp_create_nonce( 'delete_custom_field_wpextend' ) ), admin_url( 'admin-post.php' ) ).'">Delete</a>)</li>';
 										}
 
 										$retour_html .= Wpextend_Single_Custom_Field::render_form_create( $post_type, $key_category, $key_type, $key_metabox );
@@ -242,11 +242,11 @@ class Wpextend_Custom_Field {
 							}
 
 							// Form add metabox
-							$retour_html .= '<div class="form_add_metabox form_add_elt_buzzpress">';
+							$retour_html .= '<div class="form_add_metabox form_add_elt_wpextend">';
 
 							$retour_html .= '<input type="button" class="add_new_metabox button button-primary" value="New metabox">';
 
-					 		$retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'add_metabox_buzzpress', 'add_metabox_buzzpress', 'hidden' );
+					 		$retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'add_metabox_wpextend', 'add_metabox_wpextend', 'hidden' );
 
 					 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
 					 		$retour_html .= Wpextend_Type_Field::render_input_text( 'Name', 'name' );

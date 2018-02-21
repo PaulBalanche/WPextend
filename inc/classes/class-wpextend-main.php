@@ -58,8 +58,8 @@ class Wpextend_Main {
     */
     public static function define_admin_menu() {
 
-		add_menu_page(WPEXTEND_NAME_MENU_SETTINGS_EDITOR, WPEXTEND_NAME_MENU_SETTINGS_EDITOR, 'edit_posts', 'buzzpress_site_settings', array( Wpextend_Global_Settings::getInstance(), 'render_admin_page' ), '', 3 );
-		add_submenu_page('buzzpress_site_settings', 'Site settings', 'Site settings', 'edit_posts', 'buzzpress_site_settings', array( Wpextend_Global_Settings::getInstance(), 'render_admin_page' ) );
+		add_menu_page(WPEXTEND_NAME_MENU_SETTINGS_EDITOR, WPEXTEND_NAME_MENU_SETTINGS_EDITOR, 'edit_posts', 'wpextend_site_settings', array( Wpextend_Global_Settings::getInstance(), 'render_admin_page' ), '', 3 );
+		add_submenu_page('wpextend_site_settings', 'Site settings', 'Site settings', 'edit_posts', 'wpextend_site_settings', array( Wpextend_Global_Settings::getInstance(), 'render_admin_page' ) );
 
 		add_menu_page('WP Extend', 'WP Extend', 'manage_options', 'wpextend', array( Wpextend_Global_Settings::getInstance(), 'render_admin_page' ) );
 		add_submenu_page('wpextend', 'WP Extend - Site settings', 'Site settings', 'manage_options', Wpextend_Global_Settings::$admin_url, array( Wpextend_Global_Settings::getInstance(), 'render_admin_page' ) );

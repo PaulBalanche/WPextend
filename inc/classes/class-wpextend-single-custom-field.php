@@ -52,11 +52,11 @@ class Wpextend_Single_Custom_Field {
  	*/
  	static public function render_form_create($post_type, $key_category, $key_type, $key_metabox){
 
-		$retour_html = '<div class="form_add_custom_field form_add_elt_buzzpress">';
+		$retour_html = '<div class="form_add_custom_field form_add_elt_wpextend">';
 
 		$retour_html .= '<input type="button" class="add_new_custom_field button button-primary" value="New field">';
 
- 		$retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'add_custom_field_buzzpress', 'add_custom_field_buzzpress', 'hidden' );
+ 		$retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'add_custom_field_wpextend', 'add_custom_field_wpextend', 'hidden' );
 
  		$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
  		$retour_html .= Wpextend_Type_Field::render_input_text( 'Name', 'name' );

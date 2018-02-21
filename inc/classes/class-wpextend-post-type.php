@@ -91,7 +91,7 @@ class Wpextend_Post_Type {
 		add_action( 'init', array( $this, 'initialize') );
 	  	add_action( 'admin_post_add_custom_post_type_buzzpress', 'Wpextend_Single_Post_Type::add_new' );
 	  	add_action( 'admin_post_delete_custom_post_type', 'Wpextend_Single_Post_Type::delete' );
-	  	add_action( 'admin_post_import_buzzpress_custom_post_type', array($this, 'import') );
+	  	add_action( 'admin_post_import_wpextend_custom_post_type', array($this, 'import') );
 	}
 
 

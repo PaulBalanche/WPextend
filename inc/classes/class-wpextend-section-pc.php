@@ -68,9 +68,9 @@ class Wpextend_Section_Pc {
 		add_action('admin_enqueue_scripts', array( __CLASS__, 'script_admin' ) );
 
 	   // $_POST traitment if necessary
-	   	add_action( 'admin_post_add_category_section_buzzpress', 'Wpextend_Category_Section_Pc::add_new' );
-		add_action( 'admin_post_add_type_section_buzzpress', 'Wpextend_Type_Section_Pc::add_new' );
-		add_action( 'admin_post_update_type_section_buzzpress', 'Wpextend_Type_Section_Pc::update' );
+	   	add_action( 'admin_post_add_category_section_wpextend', 'Wpextend_Category_Section_Pc::add_new' );
+		add_action( 'admin_post_add_type_section_wpextend', 'Wpextend_Type_Section_Pc::add_new' );
+		add_action( 'admin_post_update_type_section_wpextend', 'Wpextend_Type_Section_Pc::update' );
 
 		add_action( 'admin_post_delete_section_buzzpress', 'Wpextend_Type_Section_Pc::delete' );
 		add_action( 'admin_post_delete_category_section_buzzpress', 'Wpextend_Type_Section_Pc::delete' );
@@ -400,7 +400,7 @@ class Wpextend_Section_Pc {
 	  $retour_html .= Wpextend_Render_Admin_Html::header('Sections');
 
 	  // Render actual metabox and custom fields
-	  $retour_html .= '<ul class="ulBuzzpressAdmin">';
+	  $retour_html .= '<ul class="ulWpextendAdmin">';
 	  foreach( $this->Wpextend_Section_Pc as $post_type => $list_category ) {
 
 		  $retour_html .= '<li class="li_postType"><h2>'.$post_type.'</h2><ul>';
