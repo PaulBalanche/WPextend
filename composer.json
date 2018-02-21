@@ -3,7 +3,7 @@
     "type": "wordpress-plugin",
     "description": "Extend default Wordpress functionalities",
     "keywords": ["wordpress", "plugin", "wpextend"],
-    "homepage": "https://github.com/PaulBalanche/WPextend",
+    "homepage": "https://github.com/PaulBalanche/WPextend/",
     "license": "MIT",
     "authors": [
         {
