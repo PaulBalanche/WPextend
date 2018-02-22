@@ -165,7 +165,7 @@ class Wpextend_Single_Post_Type {
 		$tab_args_default = self::$default_args;
 
 		$retour_html = '<hr>';
- 		$retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'add_custom_post_type_buzzpress', 'add_custom_post_type_buzzpress' );
+ 		$retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'add_custom_post_type_wpextend', 'add_custom_post_type_wpextend' );
 
  		$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
 		$retour_html .= Wpextend_Type_Field::render_input_text( 'Slug', 'slug', $slug);

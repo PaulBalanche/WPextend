@@ -110,7 +110,7 @@ class Wpextend_Single_Setting {
 
 		}
 
-		if($current_screen->parent_base == 'buzzpress'){
+		if($current_screen->parent_base == WPEXTEND_MAIN_SLUG_ADMIN_PAGE){
 			$retour_html .= '<tr><td><a href="'.add_query_arg( array( 'action' => 'delete_setting', 'category' => $this->category, 'key' => $this->id, '_wpnonce' => wp_create_nonce( 'delete_setting' ) ), admin_url( 'admin-post.php' ) ).'">Delete</a></td></tr>';
 		}
 
@@ -129,7 +129,7 @@ class Wpextend_Single_Setting {
 	*/
 	static public function render_form_create( $tab_list_category = array(), $key_category = false ){
 
-		$retour_html = '<div class="form_add_setting_buzzpress">';
+		$retour_html = '<div class="form_add_setting_wpextend">';
 
 		$retour_html .= '<input type="button" class="add_new_settings button button-primary" value="New setting">';
 

@@ -11,7 +11,7 @@ class Wpextend_Section_Pc {
 	public $name_option_in_database = '_buzzpress_sections';
 
 	static public $name_section_register_post_type = 'section-buzzpress';
-	static public $admin_url = 'buzzpress_sections';
+	static public $admin_url = '_sections';
 	static public $name_input_hidden_list_section_in_database = 'input_hidden_listing_sections';
 	static public $key_list_section_in_database = 'meta_buzzpress_list_sections';
 
@@ -72,8 +72,8 @@ class Wpextend_Section_Pc {
 		add_action( 'admin_post_add_type_section_wpextend', 'Wpextend_Type_Section_Pc::add_new' );
 		add_action( 'admin_post_update_type_section_wpextend', 'Wpextend_Type_Section_Pc::update' );
 
-		add_action( 'admin_post_delete_section_buzzpress', 'Wpextend_Type_Section_Pc::delete' );
-		add_action( 'admin_post_delete_category_section_buzzpress', 'Wpextend_Type_Section_Pc::delete' );
+		add_action( 'admin_post_delete_section_wpextend', 'Wpextend_Type_Section_Pc::delete' );
+		add_action( 'admin_post_delete_category_section_wpextend', 'Wpextend_Type_Section_Pc::delete' );
 
 		add_action( 'admin_post_import_wpextend_section_pc', array($this, 'import') );
 
@@ -406,11 +406,11 @@ class Wpextend_Section_Pc {
 		  $retour_html .= '<li class="li_postType"><h2>'.$post_type.'</h2><ul>';
 		  if( is_array($list_category) ){
 			  foreach($list_category as $key_category => $list_section){
-				  $retour_html .= '<li class="li_subPostType"><h4>'.$list_section['name'].' (<a href="'.add_query_arg( array( 'action' => 'delete_category_section_buzzpress', 'post_type' => $post_type, 'category' => $key_category), admin_url( 'admin-post.php' ) ).'">Delete</a>)</h4><ul>';
+				  $retour_html .= '<li class="li_subPostType"><h4>'.$list_section['name'].' (<a href="'.add_query_arg( array( 'action' => 'delete_category_section_wpextend', 'post_type' => $post_type, 'category' => $key_category), admin_url( 'admin-post.php' ) ).'">Delete</a>)</h4><ul>';
 				  foreach( $list_section['sections'] as $key =>$val ){
 					  $retour_html .= '<li class="liCustomField">';
 					  if( array_key_exists( 'alias', $val ) && $val['alias'] != 'none' ){ $retour_html .= '<i>'; }
-					  $retour_html .= str_replace('\"', '&quot;', $val['name']).' ('.$val['file'].') <a href="'.add_query_arg( array('type_post	' => $post_type, 'category' => $key_category, 'id' => $key ) ).'" >edit</a> | <a href="'.add_query_arg( array( 'action' => 'delete_section_buzzpress', 'post_type' => $post_type, 'category' => $key_category, 'id' => $key ), admin_url( 'admin-post.php' ) ).'">Delete</a></li>';
+					  $retour_html .= str_replace('\"', '&quot;', $val['name']).' ('.$val['file'].') <a href="'.add_query_arg( array('type_post	' => $post_type, 'category' => $key_category, 'id' => $key ) ).'" >edit</a> | <a href="'.add_query_arg( array( 'action' => 'delete_section_wpextend', 'post_type' => $post_type, 'category' => $key_category, 'id' => $key ), admin_url( 'admin-post.php' ) ).'">Delete</a></li>';
 					  if( array_key_exists( 'alias', $val ) && $val['alias'] != 'none' ){ $retour_html .= '</i>'; }
 				  }
 

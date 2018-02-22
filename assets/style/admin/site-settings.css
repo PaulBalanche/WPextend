@@ -1,4 +1,4 @@
-.form_add_setting_buzzpress .tr_category th, .form_add_setting_buzzpress .tr_category td,
-.form_add_setting_buzzpress .tr_post_type_options th, .form_add_setting_buzzpress .tr_post_type_options td{
+.form_add_setting_wpextend .tr_category th, .form_add_setting_wpextend .tr_category td,
+.form_add_setting_wpextend .tr_post_type_options th, .form_add_setting_wpextend .tr_post_type_options td{
 	display: none;
 }

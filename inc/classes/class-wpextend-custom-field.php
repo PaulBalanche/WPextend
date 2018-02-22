@@ -11,7 +11,7 @@ class Wpextend_Custom_Field {
 	private static $_instance;
 	public $Wpextend_Custom_Field;
 	public $name_option_in_database = '_buzzpress_custom_field';
-	static public $admin_url = 'wpextend_custom_field';
+	static public $admin_url = '_custom_fields';
 
 
 

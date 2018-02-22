@@ -15,7 +15,7 @@ class Wpextend_Global_Settings {
 	 public $WPML_default_langage = 'all';
 	 public $WPML_current_langage = null;
 	 public $WPML_langage;
-	 static public $admin_url = 'buzzpress';
+	 static public $admin_url = '';
 
 
 
@@ -60,7 +60,7 @@ class Wpextend_Global_Settings {
 		foreach( $this->wpextend_global_settings as $key => $val){
 			$value_in_database = get_option( $this->name_option_value_in_database . $key );
 
-			$this->wpextend_global_settings[$key] = $value_in_database;
+			$this->wpextend_global_settings_values_to_export[$key] = $value_in_database;
 
 			if(is_array($value_in_database)){
 				foreach($value_in_database as $key2 => $val2){
@@ -256,23 +256,23 @@ class Wpextend_Global_Settings {
 			 	}
 			 	$retour_html .= '</h2><div>';
 
-			 	if($current_screen->parent_base != 'buzzpress'){
+			 	if($current_screen->parent_base != WPEXTEND_MAIN_SLUG_ADMIN_PAGE){
 					$retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'update_settings_wpextend');
 				}
 				
 				$retour_html .= Wpextend_Type_Field::render_input_hidden( 'category', $key );
 
-				if($current_screen->parent_base == 'buzzpress'){
+				if($current_screen->parent_base == WPEXTEND_MAIN_SLUG_ADMIN_PAGE){
 					$retour_html .= '<h2>'.$val.' (<a href="'.add_query_arg( array( 'action' => 'delete_category_setting', 'category' => $key, '_wpnonce' => wp_create_nonce( 'delete_setting' ) ), admin_url( 'admin-post.php' ) ).'">Delete</a>)</h2>';
 				}
 
 				$retour_html .= $instance_category->render_html();
 
-				if($current_screen->parent_base != 'buzzpress'){
+				if($current_screen->parent_base != WPEXTEND_MAIN_SLUG_ADMIN_PAGE){
 					$retour_html .= Wpextend_Render_Admin_Html::form_close();
 				}
 
-				if($current_screen->parent_base == 'buzzpress'){
+				if($current_screen->parent_base == WPEXTEND_MAIN_SLUG_ADMIN_PAGE){
 				 	$retour_html .= '<hr>'.Wpextend_Single_Setting::render_form_create( $this->get_all_category(), $key );
 			 	}
 				$retour_html .= '</div>';
@@ -282,7 +282,7 @@ class Wpextend_Global_Settings {
 		$retour_html .= '</div>';
 
 		// Add catergory form & add setting form
-		if($current_screen->parent_base == 'buzzpress'){
+		if($current_screen->parent_base == WPEXTEND_MAIN_SLUG_ADMIN_PAGE){
 			$retour_html .= '<fieldset class="fieldset_wpextend"><h2>New settings category</h2>';
 			$retour_html .= Wpextend_Category_Settings::render_form_create();
 			$retour_html .= '</fieldset>';

@@ -32,6 +32,8 @@
 
 	define( 'WPEXTEND_NAME_MENU_SETTINGS_EDITOR'	, 'WP Extend' );
 
+	define( 'WPEXTEND_MAIN_SLUG_ADMIN_PAGE'			, 'wpextend' );
+
 	/**
 	* Initialize WPextend plugin
 	*

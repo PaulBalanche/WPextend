@@ -12,13 +12,13 @@ class Wpextend_Post_Type {
 	 public $intial_post_type;
 	 public $custom_post_type_wpextend;
 	 public $name_option_in_database = '_custom_post_type_buzzpress';
-	 static public $admin_url = 'buzzpress_custom_post_type';
+	 static public $admin_url = '_custom_post_type';
 	 static public $list_base_post_type = array('post' => 'Post', 'page' => 'Page');
 
 
 
 	/**
-	* Static method which instance post_type_buzzpress
+	* Static method which instance post_type_wpextend
  	*/
 	public static function getInstance() {
 		 if (is_null(self::$_instance)) {
@@ -89,7 +89,7 @@ class Wpextend_Post_Type {
 
 		// Initialise les customs posts
 		add_action( 'init', array( $this, 'initialize') );
-	  	add_action( 'admin_post_add_custom_post_type_buzzpress', 'Wpextend_Single_Post_Type::add_new' );
+	  	add_action( 'admin_post_add_custom_post_type_wpextend', 'Wpextend_Single_Post_Type::add_new' );
 	  	add_action( 'admin_post_delete_custom_post_type', 'Wpextend_Single_Post_Type::delete' );
 	  	add_action( 'admin_post_import_wpextend_custom_post_type', array($this, 'import') );
 	}
