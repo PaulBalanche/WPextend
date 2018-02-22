@@ -20,6 +20,12 @@ jQuery(document).ready(function(){
 
 
 
+	if(jQuery(".contner_list_images .sortable").length > 0){
+		jQuery(".contner_list_images .sortable").sortable();
+	}
+
+
+
 
 	/**
 	* Repeatable field
@@ -118,6 +124,137 @@ jQuery(document).ready(function(){
 
 
 
+	/**
+	* Ajout d'un fichier
+	*
+	*/
+	link_upload_file.on('click', function( event ){
+
+		link_upload_file_courant = jQuery(this);
+
+		if(frame){
+		  frame.open();
+		  return false;
+		}
+
+		frame = wp.media({
+			title: 'Sélectionnez un fichier',
+			button: {
+				text: 'Ajouter !'
+			},
+			multiple: false  // Set to true to allow multiple files to be selected
+		});
+
+		frame.on('select', function(){
+
+			// Get media attachment details from the frame state
+			var attachment = frame.state().get('selection').first();
+
+			link_upload_file_courant.html(attachment.attributes.filename);
+			link_upload_file_courant.parents('td').find('.input_file_wpextend').val(attachment.attributes.id);
+			link_upload_file_courant.parents('td').find(link_remove_file).removeClass('hidden');
+		});
+
+		frame.open();
+
+		return false;
+	});
+
+
+
+	/**
+	* Suppression d'un fichier
+	*
+	*/
+	link_remove_file.on('click', function( event ){
+
+		event.preventDefault();
+
+		jQuery(this).parents('td').find('.input_file_wpextend').val(-1);
+		jQuery(this).parents('td').find('a.thickbox').html('Ajouter un fichier');
+		jQuery(this).parent().find(link_remove_file).addClass('hidden');
+	});
+
+
+
+
+
+
+
+
+
+
+
+
+	var frame,
+		link_upload_multiple_img = jQuery('a.link_upload_multiple_img_wpextend'),
+		link_remove_multiple_img = jQuery('.remove_image_gallery');
+
+	/**
+	* Ajout d'un ou plusieurs média
+	*
+	*/
+	link_upload_multiple_img.on('click', function( event ){
+
+		link_upload_img_courant = jQuery(this);
+		name_input_courant = link_upload_img_courant.attr('data-name_input');
+		contner_list_image = link_upload_img_courant.parent().prev('.contner_list_images');
+
+		if(frame){
+		  frame.open();
+		  return false;
+		}
+
+		frame = wp.media({
+			title: 'Sélectionnez une ou plusieurs images',
+			button: {
+				text: 'Ajouter !'
+			},
+			multiple: false  // Set to true to allow multiple files to be selected
+		});
+
+		frame.on('select', function(){
+
+			// Get media attachment details from the frame state
+			var attachment = frame.state().get('selection').first();
+
+			if( attachment.attributes.type == 'image' ){
+
+				if( attachment.attributes.sizes )
+					var src_image_uploade = attachment.attributes.sizes.thumbnail.url;
+				else
+					var src_image_uploade = attachment.attributes.url;
+
+				contner_list_image.find('.sortable').append('<li class="ui-state-default"><img src="' + src_image_uploade + '" ><input type="hidden" name="' + name_input_courant + '[]" class="input_upload_multiple_img_wpextend" value="' + attachment.attributes.id + '" /></li>');
+			}
+		});
+
+		frame.open();
+
+		return false;
+	});
+	
+
+	/**
+	* Suppression d'une image dans un bloc gallery
+	*
+	*/
+	link_remove_multiple_img.on('click', function( event ){
+
+		link_remove_img_courant = jQuery(this);
+		contner_list_image = link_remove_img_courant.parent().parent();
+		name_input_courant = link_remove_img_courant.attr('data-name_input');
+		
+		link_remove_img_courant.parent().remove();
+
+		if( contner_list_image.find('li').length == 0 ){
+			contner_list_image.append('<li class="ui-state-default"><input type="hidden" name="' + name_input_courant + '" class="input_upload_multiple_img_wpextend" value="" /></li>');
+		}
+
+	});
+
+
+
 
 
 	/**
@@ -185,60 +322,6 @@ jQuery(document).ready(function(){
 	});
 
 
-
-
-
-
-	/**
-	* Ajout d'un fichier
-	*
-	*/
-	link_upload_file.on('click', function( event ){
-
-		link_upload_file_courant = jQuery(this);
-
-		if(frame){
-		  frame.open();
-		  return false;
-		}
-
-		frame = wp.media({
-			title: 'Sélectionnez un fichier',
-			button: {
-				text: 'Ajouter !'
-			},
-			multiple: false  // Set to true to allow multiple files to be selected
-		});
-
-		frame.on('select', function(){
-
-			// Get media attachment details from the frame state
-			var attachment = frame.state().get('selection').first();
-
-			link_upload_file_courant.html(attachment.attributes.filename);
-			link_upload_file_courant.parents('td').find('.input_file_wpextend').val(attachment.attributes.id);
-			link_upload_file_courant.parents('td').find(link_remove_file).removeClass('hidden');
-		});
-
-		frame.open();
-
-		return false;
-	});
-
-
-
-	/**
-	* Suppression d'un fichier
-	*
-	*/
-	link_remove_file.on('click', function( event ){
-
-		event.preventDefault();
-
-		jQuery(this).parents('td').find('.input_file_wpextend').val(-1);
-		jQuery(this).parents('td').find('a.thickbox').html('Ajouter un fichier');
-		jQuery(this).parent().find(link_remove_file).addClass('hidden');
-	});
 
 
 });

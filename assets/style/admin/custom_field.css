@@ -1,19 +1,19 @@
-body.wpextend_page_wpextend_custom_field .form_add_custom_field .tr_metabox th, body.wpextend_page_wpextend_custom_field .form_add_custom_field .tr_metabox td,
-body.wpextend_page_wpextend_custom_field .form_add_custom_field .tr_post_type th, body.wpextend_page_wpextend_custom_field .form_add_custom_field .tr_post_type td,
-body.wpextend_page_wpextend_custom_field .form_add_custom_field .tr_post_type_options th, body.wpextend_page_wpextend_custom_field .form_add_custom_field .tr_post_type_options td,
-body.wpextend_page_wpextend_custom_field .form_add_metabox .tr_post_type th, body.wpextend_page_wpextend_custom_field .form_add_metabox .tr_post_type td{
+body.wp-extend_page_wpextend_custom_fields .form_add_custom_field .tr_metabox th, body.wp-extend_page_wpextend_custom_fields .form_add_custom_field .tr_metabox td,
+body.wp-extend_page_wpextend_custom_fields .form_add_custom_field .tr_post_type th, body.wp-extend_page_wpextend_custom_fields .form_add_custom_field .tr_post_type td,
+body.wp-extend_page_wpextend_custom_fields .form_add_custom_field .tr_post_type_options th, body.wp-extend_page_wpextend_custom_fields .form_add_custom_field .tr_post_type_options td,
+body.wp-extend_page_wpextend_custom_fields .form_add_metabox .tr_post_type th, body.wp-extend_page_wpextend_custom_fields .form_add_metabox .tr_post_type td{
 	display: none;
 }
 
-body.wpextend_page_wpextend_custom_field .li_postType.section-buzzpress th, body.wpextend_page_wpextend_custom_field .li_postType.section-buzzpress td{
+body.wp-extend_page_wpextend_custom_fields .li_postType.section-buzzpress th, body.wp-extend_page_wpextend_custom_fields .li_postType.section-buzzpress td{
 	display: table-cell;
 }
 
-body.wpextend_page_wpextend_custom_field .ulMetabox{
+body.wp-extend_page_wpextend_custom_fields .ulMetabox{
 	list-style: none;
 }
 
-body.wpextend_page_wpextend_custom_field .liMetabox{
+body.wp-extend_page_wpextend_custom_fields .liMetabox{
 	border: 1px solid rgb(220,220,220);
 	background: rgb(245,245,245);
 	float: left;
@@ -22,11 +22,11 @@ body.wpextend_page_wpextend_custom_field .liMetabox{
 	padding: 1rem;
 	box-sizing: border-box;
 }
-body.wpextend_page_wpextend_custom_field .liMetabox:nth-child(3n){
+body.wp-extend_page_wpextend_custom_fields .liMetabox:nth-child(3n){
 	margin-right: 0;
 }
 
-body.wpextend_page_wpextend_custom_field .liCustomField{
+body.wp-extend_page_wpextend_custom_fields .liCustomField{
 	border: 1px solid rgb(220,220,220);
 	background: rgb(235,235,235);
    padding: 1rem;
@@ -38,3 +38,28 @@ body.wpextend_page_wpextend_custom_field .liCustomField{
 
 .container_sliderange{ display: table; }
 .container_sliderange .div_sliderrange{ margin-bottom: 10px; }
+
+
+
+/**
+* Module gestionnaire-image-admin
+**/
+.contner_list_images ul li{
+	position: relative;
+	display: inline-block;
+	margin: 0 10px 10px 0;
+	border: none;
+    background: none;
+    cursor: move;
+}
+.remove_image_gallery{
+	display:none;
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	background: #f1f1f1;
+	cursor: pointer;
+}
+.contner_list_images ul li:hover > .remove_image_gallery{
+	display: inline-block;
+}

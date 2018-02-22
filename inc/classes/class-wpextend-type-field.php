@@ -33,6 +33,7 @@ class Wpextend_Type_Field {
 	 		'checkbox' 				=> 'Checkbox',
 			'link' 					=> 'Link',
 	 		'image' 				=> 'Image',
+	 		'gallery_image'			=> 'Image gallery',
 	 		'file' 					=> 'File',
 	 		'daterange'				=> 'Datepicker range',
 	 		'sliderrange'			=> 'Slider range'
@@ -411,17 +412,50 @@ class Wpextend_Type_Field {
 		 }
 
 		 $retour_html = '<tr class="tr_'.$name.'">
-		 <th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label></th>
-		 <td>
-			 <p class="hide-if-no-js">
-			   <a href="" class="thickbox link_upload_img_wpextend">'.$html_image_post_thumbnail.'</a>
-		   </p>
-	   	<input type="hidden" name="'.$name.'" class="input_upload_img_wpextend" value="'.$defaut_value.'">
-	   	<a href="" class="link_remove_img_wpextend '.$class_link_remove.'" >Supprimer l\'image</a>
-		</td>
+			<th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label></th>
+			<td>
+				<p class="hide-if-no-js">
+					<a href="" class="thickbox link_upload_img_wpextend">'.$html_image_post_thumbnail.'</a>
+				</p>
+		   		<input type="hidden" name="'.$name.'" class="input_upload_img_wpextend" value="'.$defaut_value.'">
+		   		<a href="" class="link_remove_img_wpextend '.$class_link_remove.'" >Supprimer l\'image</a>
+			</td>
 		</tr>';
 
 		return $retour_html;
+    }
+
+
+
+    /**
+    *
+    */
+    public static function render_input_image_gallery( $label, $name, $value ) {
+
+    	if( !is_array($value) ){
+    		$value = [];
+    	}
+
+		 $retour_html = '<tr class="tr_'.$name.'">
+		 <th scope="row"><label>'.stripslashes($label).'</label></th>
+		 <td>
+		 	<div class="contner_list_images">
+				<ul class="sortable">';
+				if( count($value) > 0 ){
+					foreach($value as $val){
+						$src_thumbnail_image = wp_get_attachment_image_src($val, 'thumbnail');
+						$retour_html .= '<li class="ui-state-default"><img src="'.$src_thumbnail_image[0].'" ><input type="hidden" name="'.$name.'[]" class="input_upload_multiple_img_wpextend" value="'.$val.'" /><span class="remove_image_gallery dashicons dashicons-no" data-name_input="'.$name.'"></span></li>';
+					}
+				}
+				$retour_html .= '</ul>
+			</div>
+			<p class="hide-if-no-js">
+				<a href="" class="thickbox link_upload_multiple_img_wpextend" data-name_input="'.$name.'" >Ajouter une ou plusieurs images</a>
+			</p>
+			</td>
+		 </tr>';
+
+		 return $retour_html;
     }
 
 
@@ -518,6 +552,7 @@ class Wpextend_Type_Field {
 
 		return $retour_html;
     }
+
 
 
 }

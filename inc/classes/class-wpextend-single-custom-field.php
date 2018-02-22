@@ -222,6 +222,10 @@ class Wpextend_Single_Custom_Field {
 				$retour_html .= Wpextend_Type_Field::render_input_image( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->default_value_field );
 				break;
 
+			case 'gallery_image':
+				$retour_html .= Wpextend_Type_Field::render_input_image_gallery( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->default_value_field );
+				break;
+
 			case 'file':
 				$retour_html .= Wpextend_Type_Field::render_input_file( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->default_value_field );
 				break;
