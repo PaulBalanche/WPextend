@@ -74,6 +74,25 @@ class Wpextend_Type_Field {
 
 
 
+
+    /**
+     *
+     */
+    public static function render_disable_input_text( $label, $name, $value = '') {
+
+		$retour_html = '<tr class="tr_'.$name.'">
+		<th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label></th>
+			<td>
+		 		<input type="text" id="input_'.$name.'" class="input_'.$name.' '.self::$class_input_text.'" value="'.str_replace('"', '&quot;', $value).'" class="regular-text ltr" disabled >
+		 		<input name="'.$name.'" type="hidden" value="'.str_replace('"', '&quot;', $value).'" />
+			</td>
+		</tr>';
+
+		return $retour_html;
+    }
+
+
+
 	 /**
      *
      */

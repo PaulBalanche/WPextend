@@ -14,6 +14,7 @@ class Wpextend_Post_Type {
 	 public $name_option_in_database = '_custom_post_type_buzzpress';
 	 static public $admin_url = '_custom_post_type';
 	 static public $list_base_post_type = array('post' => 'Post', 'page' => 'Page');
+	 static public $list_reserved_post_types = array('post', 'page', 'attachment', 'revision', 'nav_menu_item', 'custom_css', 'customize_changeset', 'action', 'author', 'order', 'theme');
 
 
 
@@ -41,6 +42,7 @@ class Wpextend_Post_Type {
 		if( !is_array( $this->custom_post_type_wpextend ) ) {
 			$this->custom_post_type_wpextend = array();
 		}
+		// pre($this->custom_post_type_wpextend);die;
 
 		// Load initial custom post type
 		$this->load_custom_post_defaut();
@@ -62,6 +64,22 @@ class Wpextend_Post_Type {
 
 
 
+	/**
+	* Register some Hooks
+	*
+	* @return void
+	*/
+	public function create_hooks() {
+
+		// Initialise les customs posts
+		add_action( 'init', array( $this, 'initialize') );
+		add_action( 'init', array( $this, 'initialize_multiple_post_thumbnails') );
+	  	add_action( 'admin_post_add_custom_post_type_wpextend', 'Wpextend_Single_Post_Type::add_new' );
+	  	add_action( 'admin_post_delete_custom_post_type', 'Wpextend_Single_Post_Type::delete' );
+	  	add_action( 'admin_post_import_wpextend_custom_post_type', array($this, 'import') );
+	}
+
+
 
 	/**
 	*
@@ -72,26 +90,38 @@ class Wpextend_Post_Type {
 
 		if( is_array($this->custom_post_type_wpextend) ){
 			foreach( $this->custom_post_type_wpextend as $slug => $val ) {
-				$custom_post = new Wpextend_Single_Post_Type( $slug, $val );
-				$custom_post->register_custom_post_type();
+				if( !in_array($slug, self::$list_reserved_post_types) ){
+					$custom_post = new Wpextend_Single_Post_Type( $slug, $val );
+					$custom_post->register_custom_post_type();
+				}
 			}
 		}
 	}
 
 
 
-	/**
-	* Register some Hooks
-	*
-	* @return void
-	*/
-	public function create_hooks() {
 
-		// Initialise les customs posts
-		add_action( 'init', array( $this, 'initialize') );
-	  	add_action( 'admin_post_add_custom_post_type_wpextend', 'Wpextend_Single_Post_Type::add_new' );
-	  	add_action( 'admin_post_delete_custom_post_type', 'Wpextend_Single_Post_Type::delete' );
-	  	add_action( 'admin_post_import_wpextend_custom_post_type', array($this, 'import') );
+
+	public function initialize_multiple_post_thumbnails(){
+
+		if( class_exists('MultiPostThumbnails') && is_array($this->custom_post_type_wpextend) ){
+			foreach( $this->custom_post_type_wpextend as $slug => $val ) {
+
+				if( isset($val['annex_args']) && isset($val['annex_args']['multiple_post_thumbnails']) && is_numeric($val['annex_args']['multiple_post_thumbnails']) && $val['annex_args']['multiple_post_thumbnails'] > 0 ){
+
+					for( $i = 1; $i <= $val['annex_args']['multiple_post_thumbnails']; $i++ ){
+						$indice_featured_image = $i + 1;
+						new MultiPostThumbnails(
+					        array(
+					            'label' => 'Featured Image (' . $indice_featured_image . ')',
+					            'id' => 'featured-image-' . $indice_featured_image,
+					            'post_type' => $slug
+					        )
+				    )	;
+					}
+				}
+			}
+		}
 	}
 
 
@@ -107,18 +137,21 @@ class Wpextend_Post_Type {
 		$retour_html = Wpextend_Render_Admin_Html::header('Custom Post Type');
 
 		// Get all custom type to create fieldset
-		$all_custom_post_type = $this->get_all();
+		$all_custom_post_type = $this->get_all_include_base_wordpress();
 		$retour_html .= '<ul>';
 		foreach( $all_custom_post_type as $key => $val) {
 
-			$retour_html .= '<li>'.$val.' <a href="'.add_query_arg( 'id', $key ).'" >edit</a> | <a href="'.add_query_arg( array( 'action' => 'delete_custom_post_type', 'id' => $key ), admin_url( 'admin-post.php' ) ).'" >delete</a></li>';
+			$retour_html .= '<li>'.$val.' <a href="'.add_query_arg( 'id', $key ).'" >edit</a>';
+			if( !in_array($key, self::$list_reserved_post_types) ){
+				$retour_html .= ' | <a href="'.add_query_arg( array( 'action' => 'delete_custom_post_type', 'id' => $key ), admin_url( 'admin-post.php' ) ).'" >delete</a></li>';
+			}
 		}
 		$retour_html .= '</ul>';
 
 		// Add custom psot type form
 		if(isset($_GET['id'])){
 
-			$custom_post = new Wpextend_Single_Post_Type( $_GET['id'], $this->custom_post_type_wpextend[ $_GET['id'] ] );
+			$custom_post = ( isset($this->custom_post_type_wpextend[ $_GET['id'] ]) ) ? new Wpextend_Single_Post_Type( $_GET['id'], $this->custom_post_type_wpextend[ $_GET['id'] ] ) : new Wpextend_Single_Post_Type($_GET['id']);
 			$retour_html .= $custom_post->render_form_edit();
 		}
 		else{
@@ -146,16 +179,16 @@ class Wpextend_Post_Type {
 	/**
  	* Update private variable Wpextend_Post_Type to add new setting
 	*/
-	public function add_new( $labels, $slug, $args, $taxonomy ){
+	public function add_new( $labels, $slug, $args, $taxonomy, $annex_args ){
 
 		if(
-			( !empty( $labels ) && is_array( $labels ) ) &&
+			is_array( $labels ) &&
 			!empty( $slug ) &&
-			( !empty( $args ) && is_array( $args ) ) &&
-			( !empty( $taxonomy ) && is_array( $taxonomy ) )
+			is_array( $args ) &&
+			is_array( $taxonomy ) &&
+			is_array( $annex_args )
 		) {
-
-			$this->custom_post_type_wpextend[$slug] = array( 'labels' => $labels, 'args' => $args, 'taxonomy' => $taxonomy );
+			$this->custom_post_type_wpextend[$slug] = array( 'labels' => $labels, 'args' => $args, 'taxonomy' => $taxonomy, 'annex_args' => $annex_args );
 		}
 	}
 
@@ -177,11 +210,13 @@ class Wpextend_Post_Type {
     */
 	 public function get_all(){
 
-		 $all_custom_post_wpextend = array();
-		 if( is_array($this->custom_post_type_wpextend) ){
-			 foreach($this->custom_post_type_wpextend as $slug => $val) {
-				 $all_custom_post_wpextend[$slug] = $val['labels']['name'];
-			 }
+		$all_custom_post_wpextend = array();
+		if( is_array($this->custom_post_type_wpextend) ){
+			foreach($this->custom_post_type_wpextend as $slug => $val) {
+			 	if( !in_array($slug, self::$list_reserved_post_types) ){
+					$all_custom_post_wpextend[$slug] = $val['labels']['name'];
+				}
+			}
 		}
 
 		 $return_all_custom_post_wpextend = apply_filters( 'Wpextend_Post_Type_get_all', $all_custom_post_wpextend );
