@@ -2,7 +2,7 @@
 	/**
 	* Plugin Name: "WPextend"
 	* Plugin URI: https://github.com/PaulBalanche/WPextend
-	* Version: 1.0.7
+	* Version: 1.0.8
 	* Author: Paul Balanche
 	**/
 

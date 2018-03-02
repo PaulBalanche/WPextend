@@ -385,7 +385,7 @@ class Wpextend_Global_Settings {
 
 		check_admin_referer($_POST['action']);
 
-		if( isset( $_POST['category'], $_POST['fields'] ) && is_array( $_POST['fields'] ) ){
+		if( isset( $_POST['category'] ) ){
 
 			// Get Wpextend_Global_Settings instance
 			$instance_global_settings = Wpextend_Global_Settings::getInstance();
@@ -401,69 +401,71 @@ class Wpextend_Global_Settings {
 				}
 			}
 
-			foreach( $_POST['fields'] as $key_category => $category ) {
+			if( isset( $_POST['fields'] ) && is_array( $_POST['fields'] ) ){
+				foreach( $_POST['fields'] as $key_category => $category ) {
 
-				// First test if category exists
-				if( array_key_exists( $key_category, $all_category ) && is_array( $category ) ){
+					// First test if category exists
+					if( array_key_exists( $key_category, $all_category ) && is_array( $category ) ){
 
-					foreach( $category as $key_field => $value ){
+						foreach( $category as $key_field => $value ){
 
-						// Second test if setting exists
-						if( array_key_exists( $key_field, $instance_global_settings->wpextend_global_settings[$key_category]['fields'] ) ){
+							// Second test if setting exists
+							if( array_key_exists( $key_field, $instance_global_settings->wpextend_global_settings[$key_category]['fields'] ) ){
 
-							if( $instance_global_settings->wpextend_global_settings[$key_category]['wpml_compatible'] == 1 ){
+								if( $instance_global_settings->wpextend_global_settings[$key_category]['wpml_compatible'] == 1 ){
 
-								if( is_array($value) ){
+									if( is_array($value) ){
 
-									// Cleanning repeatble variable
-									if($instance_global_settings->wpextend_global_settings[$key_category]['fields'][$key_field]['repeatable'] == 1){
-										if($instance_global_settings->wpextend_global_settings[$key_category]['fields'][$key_field]['type'] == 'link'){
-											foreach($value as $key_tab_link => $val_tab_link){
-												if(count($value) > 1 && $val_tab_link['link'] == '' && $val_tab_link['label'] == ''){ unset($value[$key_tab_link]); }
+										// Cleanning repeatble variable
+										if($instance_global_settings->wpextend_global_settings[$key_category]['fields'][$key_field]['repeatable'] == 1){
+											if($instance_global_settings->wpextend_global_settings[$key_category]['fields'][$key_field]['type'] == 'link'){
+												foreach($value as $key_tab_link => $val_tab_link){
+													if(count($value) > 1 && $val_tab_link['link'] == '' && $val_tab_link['label'] == ''){ unset($value[$key_tab_link]); }
+												}
 											}
 										}
-									}
 
-									$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_langage] = $value;
-									if( $instance_global_settings->WPML_current_langage != null && $instance_global_settings->WPML_langage != $instance_global_settings->WPML_current_langage )
-										$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_current_langage] = $value;
-								}
-								elseif( $instance_global_settings->wpextend_global_settings[$key_category]['fields'][$key_field]['type'] == 'textarea' ){
-									$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_langage] = $value;
-									if( $instance_global_settings->WPML_current_langage != null && $instance_global_settings->WPML_langage != $instance_global_settings->WPML_current_langage )
-										$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_current_langage] = $value;
+										$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_langage] = $value;
+										if( $instance_global_settings->WPML_current_langage != null && $instance_global_settings->WPML_langage != $instance_global_settings->WPML_current_langage )
+											$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_current_langage] = $value;
+									}
+									elseif( $instance_global_settings->wpextend_global_settings[$key_category]['fields'][$key_field]['type'] == 'textarea' ){
+										$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_langage] = $value;
+										if( $instance_global_settings->WPML_current_langage != null && $instance_global_settings->WPML_langage != $instance_global_settings->WPML_current_langage )
+											$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_current_langage] = $value;
+									}
+									else{
+										$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_langage] = sanitize_text_field($value);
+										if( $instance_global_settings->WPML_current_langage != null && $instance_global_settings->WPML_langage != $instance_global_settings->WPML_current_langage )
+											$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_current_langage] = sanitize_text_field($value);
+									}
 								}
 								else{
-									$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_langage] = sanitize_text_field($value);
-									if( $instance_global_settings->WPML_current_langage != null && $instance_global_settings->WPML_langage != $instance_global_settings->WPML_current_langage )
-										$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_current_langage] = sanitize_text_field($value);
-								}
-							}
-							else{
 
-								if( is_array($value) ){
+									if( is_array($value) ){
 
-									// Cleanning repeatble variable
-									if($instance_global_settings->wpextend_global_settings[$key_category]['fields'][$key_field]['repeatable'] == 1){
-										if($instance_global_settings->wpextend_global_settings[$key_category]['fields'][$key_field]['type'] == 'link'){
-											foreach($value as $key_tab_link => $val_tab_link){
-												if(count($value) > 1 && $val_tab_link['link'] == '' && $val_tab_link['label'] == ''){ unset($value[$key_tab_link]); }
+										// Cleanning repeatble variable
+										if($instance_global_settings->wpextend_global_settings[$key_category]['fields'][$key_field]['repeatable'] == 1){
+											if($instance_global_settings->wpextend_global_settings[$key_category]['fields'][$key_field]['type'] == 'link'){
+												foreach($value as $key_tab_link => $val_tab_link){
+													if(count($value) > 1 && $val_tab_link['link'] == '' && $val_tab_link['label'] == ''){ unset($value[$key_tab_link]); }
+												}
 											}
 										}
-									}
 
-									$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_default_langage] = $value;
-								}
-								elseif( $instance_global_settings->wpextend_global_settings[$key_category]['fields'][$key_field]['type'] == 'textarea' ){
-									$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_default_langage] = $value;
-								}
-								else{
-									$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_default_langage] = sanitize_text_field($value);
+										$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_default_langage] = $value;
+									}
+									elseif( $instance_global_settings->wpextend_global_settings[$key_category]['fields'][$key_field]['type'] == 'textarea' ){
+										$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_default_langage] = $value;
+									}
+									else{
+										$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_default_langage] = sanitize_text_field($value);
+									}
 								}
 							}
 						}
-					}
 
+					}
 				}
 			}
 
