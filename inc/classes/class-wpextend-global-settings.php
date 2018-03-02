@@ -392,6 +392,15 @@ class Wpextend_Global_Settings {
 
 			$all_category = $instance_global_settings->get_all_category();
 
+			// Textarea Traitement to include them in related fields
+			foreach( $_POST as $key => $val ){
+				if( preg_match( '/textarea__fields__cat__(.*)__id__(.*)/', $key, $matches ) ){
+					if( is_array($matches) && count($matches) == 3){
+						$_POST['fields'][ $matches[1] ][ $matches[2] ] = $val;
+					}
+				}
+			}
+
 			foreach( $_POST['fields'] as $key_category => $category ) {
 
 				// First test if category exists

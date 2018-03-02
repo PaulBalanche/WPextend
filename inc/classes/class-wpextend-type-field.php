@@ -174,7 +174,19 @@ class Wpextend_Type_Field {
 		<td>';
 
 		ob_start();
-		wp_editor( stripslashes($value), $name, [ 'editor_height' => 120 ] );
+		wp_editor( stripslashes($value), $name, [
+			'wpautop'             	=> true,
+			'media_buttons'       	=> true,
+			'default_editor'      	=> '',
+			'drag_drop_upload'    	=> false,
+			'textarea_rows'       	=> 20,
+			'teeny'               	=> false,
+			'dfw'                 	=> false,
+			'_content_editor_dfw' 	=> false,
+			'tinymce'             	=> true,
+			'quicktags'           	=> true,
+			'editor_height'			=> 120
+		]);
 		$retour_html .= ob_get_contents();
 		ob_end_clean();
 

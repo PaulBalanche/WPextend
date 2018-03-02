@@ -46,8 +46,6 @@ class Wpextend_Custom_Field {
 
 		// Initialisation des metaboxes
 		$this->initialize_metaboxes();
-		//
-		// update_option( $this->name_option_in_database, false );
 	}
 
 

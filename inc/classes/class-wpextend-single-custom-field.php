@@ -195,7 +195,7 @@ class Wpextend_Single_Custom_Field {
 				break;
 
 			case 'textarea':
-				$retour_html .= Wpextend_Type_Field::render_input_textarea( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->default_value_field );
+				$retour_html .= Wpextend_Type_Field::render_input_textarea( $this->data['name'], 'textarea__cat__'.$this->key_metabox.'__id__'.$this->key, $this->default_value_field );
 				break;
 
 			case 'select':

@@ -77,7 +77,7 @@ class Wpextend_Single_Setting {
 				break;
 
 			case 'textarea':
-				$retour_html .= Wpextend_Type_Field::render_input_textarea( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->value, $this->repeatable, $this->description );
+				$retour_html .= Wpextend_Type_Field::render_input_textarea( $this->name, 'textarea__fields__cat__'.$this->category.'__id__'.$this->id, $this->value, $this->repeatable, $this->description );
 				break;
 
 			case 'select':

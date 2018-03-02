@@ -114,11 +114,20 @@ class Wpextend_Meta_Boxes {
 		$save_metabox = apply_filters( 'show_metabox_wpextend', get_post($post_id), $this->metabox_key);
 		if( $save_metabox  && is_array( $this->list_fields ) && array_key_exists( $this->metabox_ID, $_POST ) ){
 
+			// Textarea Traitement to include them in related fields
+			foreach( $_POST as $key => $val ){
+				if( preg_match( '/textarea__cat__(.*)__id__(.*)/', $key, $matches ) ){
+					if( is_array($matches) && count($matches) == 3){
+						$_POST[ $matches[1] ][ $matches[2] ] = $val;
+					}
+				}
+			}
+
 			// Get current post_meta value
 			$current_value_in_database = get_post_meta( $post_id, WPEXTEND_PREFIX_DATA_IN_DB . $this->metabox_ID, true );
 			$new_value_to_save = ( is_array( $current_value_in_database ) ) ? $current_value_in_database : array();
 
-		   foreach( $this->list_fields as $key => $val ){
+		   	foreach( $this->list_fields as $key => $val ){
 
 				if( array_key_exists( $key, $_POST[ $this->metabox_ID ] ) ){
 
