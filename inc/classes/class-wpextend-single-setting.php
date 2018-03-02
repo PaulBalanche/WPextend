@@ -107,7 +107,6 @@ class Wpextend_Single_Setting {
 			case 'file':
 				$retour_html .= Wpextend_Type_Field::render_input_file( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->value );
 				break;
-
 		}
 
 		if($current_screen->parent_base == WPEXTEND_MAIN_SLUG_ADMIN_PAGE){
