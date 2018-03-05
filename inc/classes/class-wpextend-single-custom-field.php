@@ -5,30 +5,32 @@
 class Wpextend_Single_Custom_Field {
 
 	public $post_id;
-	public $kez_metabox;
+	public $key_metabox;
     public $key;
 	public $data;
     public $default_value_field;
 	public $options;
 	public $repeatable;
+	public $description;
 
 
 	/**
 	*
 	*/
-	 public function __construct($post_ID, $key_metabox, $key, $val, $default_value_field, $repeatable = false){
+	 public function __construct($post_ID, $key_metabox, $key, $val, $default_value_field, $repeatable = false, $description = false){
 
-		 $this->post_id = $post_ID;
-		 $this->key_metabox = $key_metabox;
-		 $this->key=  $key;
-		 $this->data = $val;
-		 $this->default_value_field = $default_value_field;
-		 $this->options = ( array_key_exists( 'options', $val ) ) ? $val['options'] : false;
-		 $this->repeatable = $repeatable;
+		$this->post_id = $post_ID;
+		$this->key_metabox = $key_metabox;
+		$this->key =  $key;
+		$this->data = $val;
+		$this->default_value_field = $default_value_field;
+		$this->options = ( array_key_exists( 'options', $val ) ) ? $val['options'] : false;
+		$this->repeatable = $repeatable;
+		$this->description = $description;
 
-		 // Pour les champs custom post
-		 if( $this->data['type'] == 'select_post_type' ){
-			 $list_custom_post = get_posts( array(
+		// Pour les champs custom post
+		if( $this->data['type'] == 'select_post_type' ){
+			$list_custom_post = get_posts( array(
 				'posts_per_page'   => -1,
 				'orderby'          => 'title',
 				'order'            => 'ASC',
@@ -40,7 +42,7 @@ class Wpextend_Single_Custom_Field {
 			foreach( $list_custom_post as $custom_post ){
 				$this->options[$custom_post->ID] = $custom_post->post_title;
 			}
-		 }
+		}
 	 }
 
 
@@ -191,11 +193,11 @@ class Wpextend_Single_Custom_Field {
 		switch( $this->data['type'] ){
 
 			case 'text':
-				$retour_html .= Wpextend_Type_Field::render_input_text( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->default_value_field, '', $this->repeatable );
+				$retour_html .= Wpextend_Type_Field::render_input_text( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->default_value_field, '', $this->repeatable, $this->description );
 				break;
 
 			case 'textarea':
-				$retour_html .= Wpextend_Type_Field::render_input_textarea( $this->data['name'], 'textarea__cat__'.$this->key_metabox.'__id__'.$this->key, $this->default_value_field );
+				$retour_html .= Wpextend_Type_Field::render_input_textarea( $this->data['name'], 'textarea__cat__'.$this->key_metabox.'__id__'.$this->key, $this->default_value_field, $this->description );
 				break;
 
 			case 'select':
@@ -215,7 +217,7 @@ class Wpextend_Single_Custom_Field {
 				break;
 
 			case 'link':
-				$retour_html .= Wpextend_Type_Field::render_input_cta( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->default_value_field, $this->repeatable );
+				$retour_html .= Wpextend_Type_Field::render_input_cta( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->default_value_field, $this->repeatable, $this->description );
 				break;
 
 			case 'image':

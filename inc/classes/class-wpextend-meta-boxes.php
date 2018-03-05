@@ -93,7 +93,10 @@ class Wpextend_Meta_Boxes {
 					// If field is repeatable
 					$repeatable = ( array_key_exists( 'repeatable', $val ) && $val['repeatable'] == 1 ) ? true : false;
 
-					$instance_single_custom_field = new Wpextend_Single_Custom_Field( $post->ID, $this->metabox_ID, $key, $val, $default_value_field, $repeatable );
+					// Field description
+					$description = ( array_key_exists( 'description', $val ) ) ? $val['description'] : '';
+
+					$instance_single_custom_field = new Wpextend_Single_Custom_Field( $post->ID, $this->metabox_ID, $key, $val, $default_value_field, $repeatable, $description );
 					$retour_html .= $instance_single_custom_field->render_html_in_metabox();
 				}
 			}
