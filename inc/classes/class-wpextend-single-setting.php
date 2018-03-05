@@ -81,15 +81,15 @@ class Wpextend_Single_Setting {
 				break;
 
 			case 'select':
-				$retour_html .= Wpextend_Type_Field::render_input_select( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->options, $this->value, $this->repeatable );
+				$retour_html .= Wpextend_Type_Field::render_input_select( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->options, $this->value, $this->repeatable, $this->description );
 				break;
 
 			case 'select_post_type':
-				$retour_html .= Wpextend_Type_Field::render_input_select( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->options, $this->value, $this->repeatable );
+				$retour_html .= Wpextend_Type_Field::render_input_select( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->options, $this->value, $this->repeatable, $this->description );
 				break;
 
 			case 'radio':
-				$retour_html .= Wpextend_Type_Field::render_input_radio( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->options, $this->value );
+				$retour_html .= Wpextend_Type_Field::render_input_radio( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->options, $this->value, $this->repeatable, $this->description );
 				break;
 
 			case 'link':
@@ -97,15 +97,15 @@ class Wpextend_Single_Setting {
 				break;
 
 			case 'checkbox':
-				$retour_html .= Wpextend_Type_Field::render_input_checkbox( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->options, $this->value );
+				$retour_html .= Wpextend_Type_Field::render_input_checkbox( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->options, $this->value, $this->repeatable, $this->description );
 				break;
 
 			case 'image':
-				$retour_html .= Wpextend_Type_Field::render_input_image( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->value );
+				$retour_html .= Wpextend_Type_Field::render_input_image( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->value, $this->repeatable, $this->description );
 				break;
 
 			case 'file':
-				$retour_html .= Wpextend_Type_Field::render_input_file( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->value );
+				$retour_html .= Wpextend_Type_Field::render_input_file( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->value, $this->repeatable, $this->description );
 				break;
 		}
 

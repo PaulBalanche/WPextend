@@ -78,10 +78,10 @@ class Wpextend_Type_Field {
     /**
      *
      */
-    public static function render_disable_input_text( $label, $name, $value = '') {
+    public static function render_disable_input_text( $label, $name, $value = '', $description = '' ) {
 
 		$retour_html = '<tr class="tr_'.$name.'">
-		<th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label></th>
+		<th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label><i class="description">'.$description.'</i></th>
 			<td>
 		 		<input type="text" id="input_'.$name.'" class="input_'.$name.' '.self::$class_input_text.'" value="'.str_replace('"', '&quot;', $value).'" class="regular-text ltr" disabled >
 		 		<input name="'.$name.'" type="hidden" value="'.str_replace('"', '&quot;', $value).'" />
@@ -167,7 +167,7 @@ class Wpextend_Type_Field {
     /**
      *
      */
-    public static function render_input_textarea( $label, $name, $value = '', $repeatable = false, $description = ''  ){
+    public static function render_input_textarea( $label, $name, $value = '', $repeatable = false, $description = '' ){
 
 		$retour_html = '<tr class="tr_'.$name.'">
 		<th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label><i class="description">'.$description.'</i></th>
@@ -203,12 +203,12 @@ class Wpextend_Type_Field {
     /**
      *
      */
-    public static function render_input_select( $label, $name, $list_option = array(), $defaut_value = false, $repeatable = false ) {
+    public static function render_input_select( $label, $name, $list_option = array(), $defaut_value = false, $repeatable = false, $description = '' ) {
 
 		if( $repeatable ){
 			
 			$retour_html = '<tr class="tr_'.$name.'">
-			 	<th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label></th>
+			 	<th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label><i class="description">'.$description.'</i></th>
 			 	<td>';
 
 			if( is_array($defaut_value) && count($defaut_value) > 0 ){
@@ -346,10 +346,10 @@ class Wpextend_Type_Field {
     /**
      *
      */
-    public static function render_input_radio( $label, $name, $list_option = array(), $defaut_value = false, $repeatable = false ) {
+    public static function render_input_radio( $label, $name, $list_option = array(), $defaut_value = false, $repeatable = false, $description = '' ) {
 
 		$retour_html = '<tr class="tr_'.$name.'">
-		<th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label></th>
+		<th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label><i class="description">'.$description.'</i></th>
 		<td>';
 		if( is_array($list_option) && count($list_option) > 0 ) {
 
@@ -388,10 +388,10 @@ class Wpextend_Type_Field {
     /**
      *
      */
-    public static function render_input_checkbox( $label, $name, $list_option = array(), $defaut_value = false, $repeatable = false ) {
+    public static function render_input_checkbox( $label, $name, $list_option = array(), $defaut_value = false, $repeatable = false, $description = '' ) {
 
 		 $retour_html = '<tr class="tr_'.$name.'">
-		 <th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label></th>
+		 <th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label><i class="description">'.$description.'</i></th>
 		 <td>';
 		 if( is_array($list_option) && count($list_option) > 0 ) {
 
@@ -424,7 +424,7 @@ class Wpextend_Type_Field {
     /**
      *
      */
-    public static function render_input_image( $label, $name, $defaut_value = false, $repeatable = false ){
+    public static function render_input_image( $label, $name, $defaut_value = false, $repeatable = false, $description = '' ){
 
 		 $no_image = true;
 
@@ -443,7 +443,7 @@ class Wpextend_Type_Field {
 		 }
 
 		 $retour_html = '<tr class="tr_'.$name.'">
-			<th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label></th>
+			<th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label><i class="description">'.$description.'</i></th>
 			<td>
 				<p class="hide-if-no-js">
 					<a href="" class="thickbox link_upload_img_wpextend">'.$html_image_post_thumbnail.'</a>
@@ -461,14 +461,14 @@ class Wpextend_Type_Field {
     /**
     *
     */
-    public static function render_input_image_gallery( $label, $name, $value ) {
+    public static function render_input_image_gallery( $label, $name, $value, $description = '' ) {
 
     	if( !is_array($value) ){
     		$value = [];
     	}
 
 		 $retour_html = '<tr class="tr_'.$name.'">
-		 <th scope="row"><label>'.stripslashes($label).'</label></th>
+		 <th scope="row"><label>'.stripslashes($label).'</label><i class="description">'.$description.'</i></th>
 		 <td>
 		 	<div class="contner_list_images">
 				<ul class="sortable">';
@@ -494,7 +494,7 @@ class Wpextend_Type_Field {
     /**
      *
      */
-    public static function render_input_file( $label, $name, $defaut_value = false, $repeatable = false ){
+    public static function render_input_file( $label, $name, $defaut_value = false, $repeatable = false, $description = '' ){
 
       $no_file = true;
 
@@ -513,7 +513,7 @@ class Wpextend_Type_Field {
       }
 
       $retour_html = '<tr class="tr_'.$name.'">
-      <th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label></th>
+      <th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label><i class="description">'.$description.'</i></th>
       <td>
          <p class="hide-if-no-js">
            <a href="" class="thickbox link_upload_file_wpextend">'.$html_file.'</a>
@@ -531,7 +531,7 @@ class Wpextend_Type_Field {
     /**
     *
     */
-    public static function render_input_daterange( $label, $name, $value = array('from' => '', 'to' => ''), $placeholder = '' ) {
+    public static function render_input_daterange( $label, $name, $value = array('from' => '', 'to' => ''), $placeholder = '', $description = '' ) {
 
     	if( !is_array($value) ||
     		( !array_key_exists('from', $value) || !array_key_exists('to', $value) )
@@ -540,7 +540,7 @@ class Wpextend_Type_Field {
     	}
 
 		 $retour_html = '<tr class="tr_'.$name.'">
-		 <th scope="row"><label>'.stripslashes($label).'</label></th>
+		 <th scope="row"><label>'.stripslashes($label).'</label><i class="description">'.$description.'</i></th>
 		 <td>';
 			$retour_html .= '
 			<label for="input_'.$name.'_from">From </label><input name="'.$name.'[from]" type="text" id="input_'.$name.'_from" class="input_'.$name.' input_daterange_from" value="'.str_replace('"', '&quot;', $value['from']).'" placeholder="'.$placeholder.'" class="regular-text ltr">

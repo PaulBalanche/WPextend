@@ -197,23 +197,23 @@ class Wpextend_Single_Custom_Field {
 				break;
 
 			case 'textarea':
-				$retour_html .= Wpextend_Type_Field::render_input_textarea( $this->data['name'], 'textarea__cat__'.$this->key_metabox.'__id__'.$this->key, $this->default_value_field, $this->description );
+				$retour_html .= Wpextend_Type_Field::render_input_textarea( $this->data['name'], 'textarea__cat__'.$this->key_metabox.'__id__'.$this->key, $this->default_value_field, $this->repeatable, $this->description );
 				break;
 
 			case 'select':
-				$retour_html .= Wpextend_Type_Field::render_input_select( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->options, $this->default_value_field, $this->repeatable );
+				$retour_html .= Wpextend_Type_Field::render_input_select( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->options, $this->default_value_field, $this->repeatable, $this->description );
 				break;
 
 			case 'select_post_type':
-				$retour_html .= Wpextend_Type_Field::render_input_select( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->options, $this->default_value_field, $this->repeatable );
+				$retour_html .= Wpextend_Type_Field::render_input_select( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->options, $this->default_value_field, $this->repeatable, $this->description );
 				break;
 
 			case 'radio':
-				$retour_html .= Wpextend_Type_Field::render_input_radio( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->options, $this->default_value_field );
+				$retour_html .= Wpextend_Type_Field::render_input_radio( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->options, $this->default_value_field, $this->repeatable, $this->description );
 				break;
 
 			case 'checkbox':
-				$retour_html .= Wpextend_Type_Field::render_input_checkbox( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->options, $this->default_value_field );
+				$retour_html .= Wpextend_Type_Field::render_input_checkbox( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->options, $this->default_value_field, $this->repeatable, $this->description );
 				break;
 
 			case 'link':
@@ -221,15 +221,15 @@ class Wpextend_Single_Custom_Field {
 				break;
 
 			case 'image':
-				$retour_html .= Wpextend_Type_Field::render_input_image( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->default_value_field );
+				$retour_html .= Wpextend_Type_Field::render_input_image( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->default_value_field, $this->repeatable, $this->description );
 				break;
 
 			case 'gallery_image':
-				$retour_html .= Wpextend_Type_Field::render_input_image_gallery( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->default_value_field );
+				$retour_html .= Wpextend_Type_Field::render_input_image_gallery( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->default_value_field, $this->description );
 				break;
 
 			case 'file':
-				$retour_html .= Wpextend_Type_Field::render_input_file( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->default_value_field );
+				$retour_html .= Wpextend_Type_Field::render_input_file( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->default_value_field, $this->repeatable, $this->description );
 				break;
 
 			case 'daterange':
