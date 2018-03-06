@@ -12,16 +12,16 @@ class Wpextend_Single_Post_Type {
 	public $taxonomy;
 	public static $default_labels = array(
 		'name'						=> 'New custom post',
-		'singular_name'			=> 'New custom post',
+		'singular_name'				=> 'New custom post',
 		'add_new'					=> 'Add',
 		'add_new_item'				=> 'Add new item',
 		'new_item'					=> 'New',
-		'edit_item'				=> 'Edit custom post',
-		'view_item'				=> 'View custom post',
-		'all_items'				=> 'All custom post',
+		'edit_item'					=> 'Edit custom post',
+		'view_item'					=> 'View custom post',
+		'all_items'					=> 'All custom post',
 		'search_items'				=> 'Search custom post',
-		'parent_item_colon'		=> 'Custom post parent',
-		'not_found'				=> 'None custom post',
+		'parent_item_colon'			=> 'Custom post parent',
+		'not_found'					=> 'None custom post',
 		'not_found_in_trash'		=> 'None custom post deleted'
 	);
 
@@ -218,7 +218,11 @@ class Wpextend_Single_Post_Type {
 		$retour_html .= '<hr>';
 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
 		foreach( self::$default_annex_args as $key => $val) {
-			$retour_html .= Wpextend_Type_Field::render_input_text( $key, 'annex_args['.$key.']', $annex_args[$key] );
+
+			if( $key == 'multiple_post_thumbnails' )
+				$retour_html .= Wpextend_Type_Field::render_input_text( $key, 'annex_args['.$key.']', $annex_args[$key], '', false, 'Require "Multiple Post Thumbnails" plugin' );
+			else
+				$retour_html .= Wpextend_Type_Field::render_input_text( $key, 'annex_args['.$key.']', $annex_args[$key] );
 		}
 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 		

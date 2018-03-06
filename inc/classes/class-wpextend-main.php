@@ -105,28 +105,29 @@ class Wpextend_Main {
 
 	 	// Global settings
 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
-		$retour_html .= Wpextend_Type_Field::render_input_textarea( 'WP Extend Global settings', 'wpextend_global_settings_export', stripslashes( json_encode( Wpextend_Global_Settings::getInstance()->wpextend_global_settings, JSON_UNESCAPED_UNICODE ) ) );
+		$retour_html .= Wpextend_Type_Field::render_input_textarea( 'WP Extend Global settings', 'wpextend_global_settings_export', stripslashes( json_encode( Wpextend_Global_Settings::getInstance()->wpextend_global_settings, JSON_UNESCAPED_UNICODE ) ), false, '', false );
 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 
 		// Global settings values
 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
-		$retour_html .= Wpextend_Type_Field::render_input_textarea( 'WP Extend Global settings values', 'wpextend_global_settings_value_export', stripslashes( json_encode( Wpextend_Global_Settings::getInstance()->wpextend_global_settings_values_to_export, JSON_UNESCAPED_UNICODE ) ) );
+		$retour_html .= Wpextend_Type_Field::render_input_textarea( 'WP Extend Global settings values', 'wpextend_global_settings_value_export', Wpextend_Global_Settings::getInstance()->prepare_values_to_export(), false, '', false );
+		// $retour_html .= Wpextend_Type_Field::render_input_text( 'WP Extend Global settings values', 'wpextend_global_settings_value_export', Wpextend_Global_Settings::getInstance()->prepare_values_to_export(), '', false, '');
 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 
 		// Custom post type
 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
-		$retour_html .= Wpextend_Type_Field::render_input_textarea( 'WP Extend Custom Post Type', 'wpextend_custom_post_type_export', stripslashes( json_encode( Wpextend_Post_Type::getInstance()->custom_post_type_wpextend, JSON_UNESCAPED_UNICODE ) ) );
+		$retour_html .= Wpextend_Type_Field::render_input_textarea( 'WP Extend Custom Post Type', 'wpextend_custom_post_type_export', stripslashes( json_encode( Wpextend_Post_Type::getInstance()->custom_post_type_wpextend, JSON_UNESCAPED_UNICODE ) ), false, '', false );
 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 
 	 	// Custom field
 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
-		$retour_html .= Wpextend_Type_Field::render_input_textarea( 'WP Extend Custom Field', 'wpextend_custom_field_value_export', stripslashes( json_encode( Wpextend_Custom_Field::getInstance()->Wpextend_Custom_Field, JSON_UNESCAPED_UNICODE ) ) );
+		$retour_html .= Wpextend_Type_Field::render_input_textarea( 'WP Extend Custom Field', 'wpextend_custom_field_value_export', stripslashes( json_encode( Wpextend_Custom_Field::getInstance()->Wpextend_Custom_Field, JSON_UNESCAPED_UNICODE ) ), false, '', false );
 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 
 		if( WPEXTEND_ENABLE_SECTION ){ 
 			// WP Extend Section Pc
 			$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
-			$retour_html .= Wpextend_Type_Field::render_input_textarea( 'WP Extend Section Pc', 'wpextend_section_pc_value_export', stripslashes( json_encode( Wpextend_Section_Pc::getInstance()->Wpextend_Section_Pc, JSON_UNESCAPED_UNICODE ) ) );
+			$retour_html .= Wpextend_Type_Field::render_input_textarea( 'WP Extend Section Pc', 'wpextend_section_pc_value_export', stripslashes( json_encode( Wpextend_Section_Pc::getInstance()->Wpextend_Section_Pc, JSON_UNESCAPED_UNICODE ) ), false, '', false );
 			$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 		}
 
@@ -147,7 +148,7 @@ class Wpextend_Main {
 		$retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'import_wpextend_global_settings', 'import_wpextend_global_settings' );
 
 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
-		$retour_html .= Wpextend_Type_Field::render_input_textarea( 'WP Extend Global settings to import', 'wpextend_global_settings_to_import' );
+		$retour_html .= Wpextend_Type_Field::render_input_textarea( 'WP Extend Global settings to import', 'wpextend_global_settings_to_import', '', false, '', false );
 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 
 		$retour_html .= Wpextend_Render_Admin_Html::form_close( 'Import' );
@@ -161,7 +162,7 @@ class Wpextend_Main {
 		$retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'import_wpextend_global_settings_values', 'import_wpextend_global_settings_values' );
 
 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
-		$retour_html .= Wpextend_Type_Field::render_input_textarea( 'WP Extend Global settings values to import', 'wpextend_global_settings_values_to_import' );
+		$retour_html .= Wpextend_Type_Field::render_input_textarea( 'WP Extend Global settings values to import', 'wpextend_global_settings_values_to_import', '', false, '', false );
 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 
 		$retour_html .= Wpextend_Render_Admin_Html::form_close( 'Import' );
@@ -175,7 +176,7 @@ class Wpextend_Main {
 		$retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'import_wpextend_custom_post_type', 'import_wpextend_custom_post_type' );
 
 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
-		$retour_html .= Wpextend_Type_Field::render_input_textarea( 'WP Extend Custom Post Type to import', 'wpextend_custom_post_type_to_import' );
+		$retour_html .= Wpextend_Type_Field::render_input_textarea( 'WP Extend Custom Post Type to import', 'wpextend_custom_post_type_to_import', '', false, '', false );
 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 
 		$retour_html .= Wpextend_Render_Admin_Html::form_close( 'Import' );
@@ -190,7 +191,7 @@ class Wpextend_Main {
 		$retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'import_wpextend_custom_field', 'import_wpextend_custom_field' );
 
 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
-		$retour_html .= Wpextend_Type_Field::render_input_textarea( 'WP Extend Custom Field to import', 'wpextend_custom_field_to_import' );
+		$retour_html .= Wpextend_Type_Field::render_input_textarea( 'WP Extend Custom Field to import', 'wpextend_custom_field_to_import', '', false, '', false );
 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 
 		$retour_html .= Wpextend_Render_Admin_Html::form_close( 'Import' );
@@ -206,7 +207,7 @@ class Wpextend_Main {
 			$retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'import_wpextend_section_pc', 'import_wpextend_section_pc' );
 
 			$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
-			$retour_html .= Wpextend_Type_Field::render_input_textarea( 'WP Extend Section Pc to import', 'wpextend_section_pc_to_import' );
+			$retour_html .= Wpextend_Type_Field::render_input_textarea( 'WP Extend Section Pc to import', 'wpextend_section_pc_to_import', '', false, '', false );
 			$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 
 			$retour_html .= Wpextend_Render_Admin_Html::form_close( 'Import' );

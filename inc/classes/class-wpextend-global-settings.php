@@ -9,7 +9,6 @@ class Wpextend_Global_Settings {
 	 private static $_instance;
 	 public $wpextend_global_settings;
 	 public $wpextend_global_settings_values = array();
-	 public $wpextend_global_settings_values_to_export = array();
 	 public $name_option_in_database = '_buzzpress_global_settings';
 	 public $name_option_value_in_database = '_buzzpress_global_settings_value_';
 	 public $WPML_default_langage = 'all';
@@ -57,10 +56,10 @@ class Wpextend_Global_Settings {
 		}
 
 
+
+		// Get value in database and assign to $wpextend_global_settings_values
 		foreach( $this->wpextend_global_settings as $key => $val){
 			$value_in_database = get_option( $this->name_option_value_in_database . $key );
-
-			$this->wpextend_global_settings_values_to_export[$key] = $value_in_database;
 
 			if(is_array($value_in_database)){
 				foreach($value_in_database as $key2 => $val2){
@@ -75,9 +74,6 @@ class Wpextend_Global_Settings {
 			$this->wpextend_global_settings_values[$key] = $value_in_database;
 			if( !is_array($this->wpextend_global_settings_values[$key]) )
 				$this->wpextend_global_settings_values[$key] = array();
-
-			if( !is_array($this->wpextend_global_settings_values_to_export[$key]) )
-				$this->wpextend_global_settings_values_to_export[$key] = array();
 		}
 
 		// Configure hooks
@@ -574,6 +570,39 @@ class Wpextend_Global_Settings {
 			}
 			exit;
 		}
+	}
+
+
+
+	public function prepare_values_to_export(){
+
+		$values_to_export = $this->wpextend_global_settings_values;
+
+		foreach($values_to_export as $key => $val){
+			foreach($val as $key2 => $val2){
+				foreach($val2 as $key3 => $val3){
+
+					$val3_temp = $val3;
+					$val3_temp = apply_filters('the_content', $val3 );
+					$val3_temp = preg_replace('/\n/', '', $val3_temp);
+					
+					$val3_temp = html_entity_decode($val3_temp, ENT_NOQUOTES | ENT_HTML5, 'UTF-8');
+
+					$val3_temp = str_replace('“', '"', $val3_temp);
+					$val3_temp = str_replace('”', '"', $val3_temp);
+					$val3_temp = str_replace('’', '\'', $val3_temp);
+					$val3_temp = str_replace('"', '\"', $val3_temp);
+
+					$values_to_export[$key][$key2][$key3] = $val3_temp;
+				}
+			}
+		}
+
+		// pre($values_to_export);
+
+		$values_to_export = json_encode( $values_to_export, JSON_UNESCAPED_UNICODE );
+
+		return $values_to_export;
 	}
 
 }

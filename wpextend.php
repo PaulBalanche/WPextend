@@ -34,6 +34,8 @@
 
 	define( 'WPEXTEND_MAIN_SLUG_ADMIN_PAGE'			, 'wpextend' );
 
+	define( 'WPEXTEND_MultiPostThumbnails'			, ( class_exists('MultiPostThumbnails') ) ? TRUE : FALSE );
+
 	/**
 	* Initialize WPextend plugin
 	*

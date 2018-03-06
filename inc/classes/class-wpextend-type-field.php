@@ -167,7 +167,7 @@ class Wpextend_Type_Field {
     /**
      *
      */
-    public static function render_input_textarea( $label, $name, $value = '', $repeatable = false, $description = '' ){
+    public static function render_input_textarea( $label, $name, $value = '', $repeatable = false, $description = '', $tinymce = 'true'){
 
 		$retour_html = '<tr class="tr_'.$name.'">
 		<th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label><i class="description">'.$description.'</i></th>
@@ -183,7 +183,7 @@ class Wpextend_Type_Field {
 			'teeny'               	=> false,
 			'dfw'                 	=> false,
 			'_content_editor_dfw' 	=> false,
-			'tinymce'             	=> true,
+			'tinymce'             	=> $tinymce,
 			'quicktags'           	=> true,
 			'editor_height'			=> 120
 		]);
@@ -438,7 +438,7 @@ class Wpextend_Type_Field {
 		 }
 
 		 if( $no_image ){
-			 $html_image_post_thumbnail = 'Ajouter une image';
+			 $html_image_post_thumbnail = 'Add image';
 			 $class_link_remove = 'hidden';
 		 }
 
@@ -446,10 +446,10 @@ class Wpextend_Type_Field {
 			<th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label><i class="description">'.$description.'</i></th>
 			<td>
 				<p class="hide-if-no-js">
-					<a href="" class="thickbox link_upload_img_wpextend">'.$html_image_post_thumbnail.'</a>
+					<a href="" class="button button-primary thickbox link_upload_img_wpextend">'.$html_image_post_thumbnail.'</a>
 				</p>
 		   		<input type="hidden" name="'.$name.'" class="input_upload_img_wpextend" value="'.$defaut_value.'">
-		   		<a href="" class="link_remove_img_wpextend '.$class_link_remove.'" >Supprimer l\'image</a>
+		   		<a href="" class="link_remove_img_wpextend '.$class_link_remove.'" >Remove image</a>
 			</td>
 		</tr>';
 
@@ -481,7 +481,7 @@ class Wpextend_Type_Field {
 				$retour_html .= '</ul>
 			</div>
 			<p class="hide-if-no-js">
-				<a href="" class="thickbox link_upload_multiple_img_wpextend" data-name_input="'.$name.'" >Ajouter une ou plusieurs images</a>
+				<a href="" class="button button-primary thickbox link_upload_multiple_img_wpextend" data-name_input="'.$name.'" >Add one or more images</a>
 			</p>
 			</td>
 		 </tr>';
@@ -502,13 +502,15 @@ class Wpextend_Type_Field {
          $name_file = basename( get_attached_file( $defaut_value ) );
          if( !empty( $name_file ) ){
            $html_file = $name_file;
+           $class_link_upload_file_wpextend = '';
            $class_link_remove = '';
            $no_file  = false;
          }
       }
 
       if( $no_file ){
-         $html_file = 'Ajouter un fichier';
+         $html_file = 'Add file';
+         $class_link_upload_file_wpextend = 'button button-primary';
          $class_link_remove = 'hidden';
       }
 
@@ -516,10 +518,10 @@ class Wpextend_Type_Field {
       <th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label><i class="description">'.$description.'</i></th>
       <td>
          <p class="hide-if-no-js">
-           <a href="" class="thickbox link_upload_file_wpextend">'.$html_file.'</a>
+           <a href="" class="'.$class_link_upload_file_wpextend.' thickbox link_upload_file_wpextend">'.$html_file.'</a>
         </p>
         <input type="hidden" name="'.$name.'" class="input_file_wpextend" value="'.$defaut_value.'">
-        <a href="" class="link_remove_file_wptexend '.$class_link_remove.'" >Supprimer le fichier</a>
+        <a href="" class="link_remove_file_wptexend '.$class_link_remove.'" >Remove file</a>
      </td>
      </tr>';
 

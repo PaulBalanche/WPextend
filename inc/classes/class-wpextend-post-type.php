@@ -104,7 +104,7 @@ class Wpextend_Post_Type {
 
 	public function initialize_multiple_post_thumbnails(){
 
-		if( class_exists('MultiPostThumbnails') && is_array($this->custom_post_type_wpextend) ){
+		if( WPEXTEND_MultiPostThumbnails && is_array($this->custom_post_type_wpextend) ){
 			foreach( $this->custom_post_type_wpextend as $slug => $val ) {
 
 				if( isset($val['annex_args']) && isset($val['annex_args']['multiple_post_thumbnails']) && is_numeric($val['annex_args']['multiple_post_thumbnails']) && $val['annex_args']['multiple_post_thumbnails'] > 0 ){
