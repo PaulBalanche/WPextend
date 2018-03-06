@@ -432,6 +432,7 @@ class Wpextend_Type_Field {
 			 $attachment_image_src = wp_get_attachment_image_src( $defaut_value );
 			 if( $attachment_image_src ){
 				 $html_image_post_thumbnail = '<img src="'.$attachment_image_src[0].'" />';
+				 $class_link_upload_file_wpextend = '';
 				 $class_link_remove = '';
 				 $no_image  = false;
 			 }
@@ -439,6 +440,7 @@ class Wpextend_Type_Field {
 
 		 if( $no_image ){
 			 $html_image_post_thumbnail = 'Add image';
+			 $class_link_upload_file_wpextend = 'button button-primary';
 			 $class_link_remove = 'hidden';
 		 }
 
@@ -481,7 +483,7 @@ class Wpextend_Type_Field {
 				$retour_html .= '</ul>
 			</div>
 			<p class="hide-if-no-js">
-				<a href="" class="button button-primary thickbox link_upload_multiple_img_wpextend" data-name_input="'.$name.'" >Add one or more images</a>
+				<a href="" class="'.$class_link_upload_file_wpextend.' thickbox link_upload_multiple_img_wpextend" data-name_input="'.$name.'" >Add one or more images</a>
 			</p>
 			</td>
 		 </tr>';
