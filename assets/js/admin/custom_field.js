@@ -59,7 +59,7 @@ jQuery(document).ready(function(){
 
 	var frame,
 		link_upload_img = jQuery('a.link_upload_img_wpextend'),
-		link_remove_img = jQuery('a.link_remove_img_wpextend'),
+		link_remove_img = jQuery('span.link_remove_img_wpextend'),
 		link_upload_file = jQuery('a.link_upload_file_wpextend'),
 		link_remove_file = jQuery('a.link_remove_file_wptexend');
 
@@ -95,8 +95,8 @@ jQuery(document).ready(function(){
 					var src_image_uploade = attachment.url;
 
 				link_upload_img_courant.html('<img src="'+src_image_uploade+'" />').removeClass('button button-primary');
-				link_upload_img_courant.parents('td').find('.input_upload_img_wpextend').val(attachment.id);
-				link_upload_img_courant.parents('td').find(link_remove_img).removeClass('hidden');
+				link_upload_img_courant.parent().find('.input_upload_img_wpextend').val(attachment.id);
+				link_upload_img_courant.parent().find(link_remove_img).removeClass('hidden');
 			}
 		});
 
@@ -112,11 +112,10 @@ jQuery(document).ready(function(){
 	*/
 	link_remove_img.on('click', function( event ){
 
-		event.preventDefault();
-
-		jQuery(this).parents('td').find('.input_upload_img_wpextend').val(-1);
-		jQuery(this).parents('td').find('a.thickbox').html('Ajouter une image').addClass('button button-primary');
-		jQuery(this).parent().find(link_remove_img).addClass('hidden');
+		link_remove_img_courant = jQuery(this);
+		link_remove_img_courant.parent().find('.input_upload_img_wpextend').val(-1);
+		link_remove_img_courant.addClass('hidden');
+		link_remove_img_courant.parent().find('a.thickbox').html('Ajouter une image').addClass('button button-primary');
 	});
 
 
@@ -146,10 +145,10 @@ jQuery(document).ready(function(){
 		frame.on('select', function(){
 
 			// Get media attachment details from the frame state
-			var attachment = frame.state().get('selection').first();
+			var attachment = frame.state().get('selection').first().toJSON();
 
-			link_upload_file_courant.html(attachment.attributes.filename).removeClass('button button-primary');
-			link_upload_file_courant.parents('td').find('.input_file_wpextend').val(attachment.attributes.id);
+			link_upload_file_courant.html(attachment.filename).removeClass('button button-primary');
+			link_upload_file_courant.parents('td').find('.input_file_wpextend').val(attachment.id);
 			link_upload_file_courant.parents('td').find(link_remove_file).removeClass('hidden');
 		});
 
@@ -169,7 +168,7 @@ jQuery(document).ready(function(){
 		event.preventDefault();
 
 		jQuery(this).parents('td').find('.input_file_wpextend').val(-1);
-		jQuery(this).parents('td').find('a.thickbox').html('Ajouter un fichier').addClass('button button-primary');
+		jQuery(this).parent().html('Ajouter un fichier').addClass('button button-primary');
 		jQuery(this).parent().find(link_remove_file).addClass('hidden');
 	});
 

@@ -41,9 +41,21 @@ body.wp-extend_page_wpextend_custom_fields .liCustomField{
 
 
 
+
+
+
+
 /**
 * Module gestionnaire-image-admin
 **/
+.link_upload_img_wpextend{
+	position: relative;
+	display: inline-block;
+	outline: 0;	
+}
+	.link_upload_img_wpextend:focus{
+		box-shadow: none;
+	}
 .contner_list_images ul li{
 	position: relative;
 	display: inline-block;
@@ -52,14 +64,26 @@ body.wp-extend_page_wpextend_custom_fields .liCustomField{
     background: none;
     cursor: move;
 }
+.link_remove_img_wpextend,
 .remove_image_gallery{
 	display:none;
 	position: absolute;
 	top: 10px;
 	right: 10px;
+	color: #0085ba;
 	background: #f1f1f1;
 	cursor: pointer;
 }
+.contner_list_images ul li:hover > .link_remove_img_wpextend,
 .contner_list_images ul li:hover > .remove_image_gallery{
 	display: inline-block;
+	text-decoration: none;
 }
+.contner_list_images ul li:hover > .link_remove_img_wpextend.hidden{
+	display: none;
+}
+	.contner_list_images ul li .link_remove_img_wpextend:hover,
+	.contner_list_images ul li .remove_image_gallery:hover{
+		color: #006799;
+		background: white;
+	}

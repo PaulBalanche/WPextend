@@ -447,11 +447,15 @@ class Wpextend_Type_Field {
 		 $retour_html = '<tr class="tr_'.$name.'">
 			<th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label><i class="description">'.$description.'</i></th>
 			<td>
-				<p class="hide-if-no-js">
-					<a href="" class="button button-primary thickbox link_upload_img_wpextend">'.$html_image_post_thumbnail.'</a>
-				</p>
-		   		<input type="hidden" name="'.$name.'" class="input_upload_img_wpextend" value="'.$defaut_value.'">
-		   		<a href="" class="link_remove_img_wpextend '.$class_link_remove.'" >Remove image</a>
+				<div class="contner_list_images">
+					<ul class="sortable">
+						<li>
+							<a href="" class="'.$class_link_upload_file_wpextend.' thickbox link_upload_img_wpextend">'.$html_image_post_thumbnail.'</a>
+							<span class="link_remove_img_wpextend dashicons dashicons-no '.$class_link_remove.'"></span>
+							<input type="hidden" name="'.$name.'" class="input_upload_img_wpextend" value="'.$defaut_value.'">
+						</li>
+					</ul>
+				</div>
 			</td>
 		</tr>';
 
@@ -477,13 +481,17 @@ class Wpextend_Type_Field {
 				if( count($value) > 0 ){
 					foreach($value as $val){
 						$src_thumbnail_image = wp_get_attachment_image_src($val, 'thumbnail');
-						$retour_html .= '<li class="ui-state-default"><img src="'.$src_thumbnail_image[0].'" ><input type="hidden" name="'.$name.'[]" class="input_upload_multiple_img_wpextend" value="'.$val.'" /><span class="remove_image_gallery dashicons dashicons-no" data-name_input="'.$name.'"></span></li>';
+						$retour_html .= '<li class="ui-state-default">
+							<img src="'.$src_thumbnail_image[0].'" >
+							<input type="hidden" name="'.$name.'[]" class="input_upload_multiple_img_wpextend" value="'.$val.'" />
+							<span class="remove_image_gallery dashicons dashicons-no" data-name_input="'.$name.'"></span>
+						</li>';
 					}
 				}
 				$retour_html .= '</ul>
 			</div>
 			<p class="hide-if-no-js">
-				<a href="" class="'.$class_link_upload_file_wpextend.' thickbox link_upload_multiple_img_wpextend" data-name_input="'.$name.'" >Add one or more images</a>
+				<a href="" class="button button-primary thickbox link_upload_multiple_img_wpextend" data-name_input="'.$name.'" >Add one or more images</a>
 			</p>
 			</td>
 		 </tr>';
