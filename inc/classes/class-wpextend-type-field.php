@@ -481,11 +481,13 @@ class Wpextend_Type_Field {
 				if( count($value) > 0 ){
 					foreach($value as $val){
 						$src_thumbnail_image = wp_get_attachment_image_src($val, 'thumbnail');
-						$retour_html .= '<li class="ui-state-default">
-							<img src="'.$src_thumbnail_image[0].'" >
-							<input type="hidden" name="'.$name.'[]" class="input_upload_multiple_img_wpextend" value="'.$val.'" />
-							<span class="remove_image_gallery dashicons dashicons-no" data-name_input="'.$name.'"></span>
-						</li>';
+						if( $src_thumbnail_image ){
+							$retour_html .= '<li class="ui-state-default">
+								<img src="'.$src_thumbnail_image[0].'" >
+								<input type="hidden" name="'.$name.'[]" class="input_upload_multiple_img_wpextend" value="'.$val.'" />
+								<span class="remove_image_gallery dashicons dashicons-no" data-name_input="'.$name.'"></span>
+							</li>';
+						}
 					}
 				}
 				$retour_html .= '</ul>
