@@ -168,7 +168,7 @@ jQuery(document).ready(function(){
 		event.preventDefault();
 
 		jQuery(this).parents('td').find('.input_file_wpextend').val(-1);
-		jQuery(this).parent().html('Ajouter un fichier').addClass('button button-primary');
+		jQuery(this).parent().find('p').html('Ajouter un fichier').addClass('button button-primary');
 		jQuery(this).parent().find(link_remove_file).addClass('hidden');
 	});
 
