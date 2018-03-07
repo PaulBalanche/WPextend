@@ -115,7 +115,7 @@ jQuery(document).ready(function(){
 		link_remove_img_courant = jQuery(this);
 		link_remove_img_courant.parent().find('.input_upload_img_wpextend').val(-1);
 		link_remove_img_courant.addClass('hidden');
-		link_remove_img_courant.parent().find('a.thickbox').html('Ajouter une image').addClass('button button-primary');
+		link_remove_img_courant.parent().find('a.thickbox').html('Add image').addClass('button button-primary');
 	});
 
 
@@ -168,7 +168,7 @@ jQuery(document).ready(function(){
 		event.preventDefault();
 
 		jQuery(this).parents('td').find('.input_file_wpextend').val(-1);
-		jQuery(this).parent().find('p').html('Ajouter un fichier').addClass('button button-primary');
+		jQuery(this).parent().find('p').html('Add file').addClass('button button-primary');
 		jQuery(this).parent().find(link_remove_file).addClass('hidden');
 	});
 
