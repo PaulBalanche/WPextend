@@ -234,7 +234,7 @@ class Wpextend_Section_Pc {
 	public function filter_the_content( $content, $show_sections = true ){
 
 		$post = get_post();
-		if( $show_sections == true ){
+		if( !is_admin() && $show_sections == true ){
 
 			$instance_post = new Wpextend_Post( $post->ID );
 			$tab_section_post = $instance_post->get_sections_pc_wpextend();
