@@ -101,6 +101,8 @@ class Wpextend_Section_Pc {
 
 		// Hook current_screen to show element in section page edition
 		add_action( 'current_screen', array($this, 'section_page_edition') );
+
+		add_action( 'admin_post_edit_section', array($this, 'show_edit_section') );
 	 }
 
 
@@ -234,7 +236,7 @@ class Wpextend_Section_Pc {
 	public function filter_the_content( $content, $show_sections = true ){
 
 		$post = get_post();
-		if( $show_sections == true ){
+		if( !is_admin() && $show_sections == true ){
 
 			$instance_post = new Wpextend_Post( $post->ID );
 			$tab_section_post = $instance_post->get_sections_pc_wpextend();
@@ -700,7 +702,19 @@ class Wpextend_Section_Pc {
 					$title_section = get_the_title($val);
 					if( empty($title_section) ){ $title_section = 'No title...'; }
 
-					$link_add_thickbox = '<a href="'.admin_url().'post.php?post='.$val.'&action=edit&iframe&TB_iframe=true&width=1000&height=550" class="thickbox">'.$title_section.'</a>';
+					// $link_add_thickbox = '<a href="'.admin_url().'post.php?post='.$val.'&action=edit&iframe&TB_iframe=true&width=1000&height=550" class="thickbox">'.$title_section.'</a>';
+
+					$url_thickbox = add_query_arg( [
+						'action' => 'edit_section',
+						'post_ID' => $val,
+						'post_referer' => $post_id,
+						'iframe' => '',
+						'TB_iframe' => true,
+						'width' => 1000,
+						'height' => 550
+					], wp_nonce_url( admin_url('admin-post.php'), 'edit_section' ) );
+					$link_add_thickbox = '<a href="'. $url_thickbox . '" class="thickbox">'.$title_section.'</a>';
+
 					// $retour_html .= '<li class="ui-state-default" attr_id_sortable="'.$val.'"><a href="post.php?post='.$val.'&action=edit" >'.get_the_title($val).'</a>';
 					$retour_html .= '<li class="ui-state-default" attr_id_sortable="'.$val.'">'.$link_add_thickbox;
 					$retour_html .= '<span class="delete_panneau_in_config dashicons dashicons-no" onclick="remove_elt_sortable(this);"></span></li>';
@@ -964,10 +978,108 @@ class Wpextend_Section_Pc {
     	$screen = get_current_screen();
     	if( is_object($screen) && $screen->base == 'post' && $screen->post_type == self::$name_section_register_post_type ){
 
-    		
     	}
 		
 	}
+
+
+
+	public function show_edit_section(){
+
+		// Check valid nonce
+		check_admin_referer($_REQUEST['action']);
+
+		if( isset($_REQUEST['post_referer'], $_REQUEST['post_ID']) && is_numeric($_REQUEST['post_referer']) && is_numeric($_REQUEST['post_ID']) ){
+		
+			$wp_db_version = get_option('db_version');
+			require_once( ABSPATH . 'wp-admin/admin.php' );
+			wp_enqueue_script('inline-edit-post');
+			wp_enqueue_script('heartbeat');
+			require_once( ABSPATH . 'wp-admin/admin-header.php' );
+			// require( ABSPATH . '/wp-admin/load-scripts.php' );
+			require_once( ABSPATH . 'wp-admin/admin-footer.php' );
+
+			// iframe_header();
+			// wp_enqueue_media();
+
+			echo '<div id="wpwrap">
+				<div id="wpcontent">
+					<div id="wpbody" role="main">
+						<div id="wpbody-content" aria-label="Main content" tabindex="0" style="overflow: hidden;">';
+							echo Wpextend_Render_Admin_Html::header('Update section');
+
+								$section = new Wpextend_Post($_REQUEST['post_ID']);
+								$section_type = $section->get_type_section();
+								if( preg_match ('/(.*)__(.*)/', $section_type, $matches_section_type ) && is_array($matches_section_type) && count($matches_section_type) == 3 ){
+
+									$section_category = $matches_section_type[1];
+									$section_type = $matches_section_type[2];
+
+									$instance_Wpextend_Custom_Field = Wpextend_Custom_Field::getInstance();
+									$all_metaboxes = apply_filters( 'get_all_metabox_before_initialize_it', $instance_Wpextend_Custom_Field->get_all_metabox() );
+
+									echo Wpextend_Render_Admin_Html::form_open( admin_url('admin-post.php'), 'edit_section' );
+
+										/**
+										* Post update
+										*/
+										if( isset($_REQUEST['post_update']) && ($_REQUEST['post_title'] != $section->instance_WP_Post->post_title || $_REQUEST['post_content'] != $section->instance_WP_Post->post_content ) ){
+											wp_update_post([
+												'ID'           => $section->instance_WP_Post->ID,
+												'post_title'   => $_REQUEST['post_title'],
+												'post_content' => $_REQUEST['post_content']
+											]);
+
+											$section = new Wpextend_Post($section->instance_WP_Post->ID);
+										}
+
+										echo Wpextend_Type_Field::render_input_text( 'Title', 'post_title', $section->instance_WP_Post->post_title );
+										echo Wpextend_Type_Field::render_input_textarea( 'Content', 'post_content', $section->instance_WP_Post->post_content );
+
+										foreach( $all_metaboxes as $key => $val ){
+											if(
+												(
+													$val['post_type'] == self::$name_section_register_post_type &&
+													$val['key_category'] == 'default' &&
+													$val['key_type'] == 'default'
+												)
+												||
+												(
+													$val['post_type'] == self::$name_section_register_post_type . '::' . get_post_type($_REQUEST['post_referer']) &&
+													$val['key_category'] == $section_category &&
+													$val['key_type'] == $section_type
+												)
+											){
+
+												$post_type = apply_filters( 'set_post_type_before_instance_metabox', $val['post_type'] );
+												$instance_metabox = new Wpextend_Meta_Boxes( $post_type, $key, $val['name'], $val['fields'] );
+												
+												if( isset($_REQUEST['post_update']) ){
+													$instance_metabox->save_meta_box($section->instance_WP_Post->ID);
+												}
+
+												$instance_metabox->show_meta_box( $section->instance_WP_Post );
+											}
+										}
+
+										echo Wpextend_Type_Field::render_input_hidden('post_referer', $_REQUEST['post_referer']);
+										echo Wpextend_Type_Field::render_input_hidden('post_ID', $section->instance_WP_Post->ID);
+										echo Wpextend_Type_Field::render_input_hidden('post_update', 'true');
+									echo Wpextend_Render_Admin_Html::form_close();
+
+									// exit;
+								}
+
+						echo '</div>
+						</div>
+					</div>
+				</div>
+			</div>';
+		}
+
+		exit;
+	}
+
 
 
 }
