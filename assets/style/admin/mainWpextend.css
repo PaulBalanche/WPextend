@@ -101,30 +101,32 @@ body.wp-admin .accordionPostType, .accordionKeyType{
 /**
 * ThickBox
 */
-#TB_window{ width: 80% !important; left: 10%; margin-left: 0 !important; }
+#TB_window{ width: 80% !important; left: 10% !important; margin-left: 0 !important; }
 #TB_window iframe{ width: 100% !important; }
 
-body.iframe .page-title-action,
-body.iframe .edit-slug-box,
-body.iframe #metabox_config_buzzpress_sections table tr:first-child th, body.iframe #metabox_config_buzzpress_sections table tr:first-child td,
-body.iframe .submitbox #minor-publishing-actions, body.iframe .submitbox #misc-publishing-actions,
-body.iframe #adminmenumain,
-body.iframe #wpfooter{
+/*body.TB_iframe .page-title-action,
+body.TB_iframe .edit-slug-box,
+body.TB_iframe #metabox_config_buzzpress_sections table tr:first-child th, body.TB_iframe #metabox_config_buzzpress_sections table tr:first-child td,
+body.TB_iframe .submitbox #minor-publishing-actions, body.TB_iframe .submitbox #misc-publishing-actions,
+body.TB_iframe #adminmenumain,
+body.TB_iframe #wpfooter{
 	display: none;
-}
-body.iframe #wpcontent{
+}*/
+body.TB_iframe #wpcontent, body.TB_iframe #wpfooter{
 	margin: 0;
+	padding: 0 20px;
 }
-body.iframe #wpadminbar{
+body.TB_iframe #wpfooter{ display: none; }
+/*body.TB_iframe #wpadminbar{
 	display: none;
 }
-body.iframe{
+body.TB_iframe{
 	margin-top: -32px;
 }
 
 table tr.tr_input_hidden th, table tr.tr_input_hidden td{
 	display: none;
-}
+}*/
 
 
 

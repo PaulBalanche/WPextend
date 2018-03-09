@@ -101,6 +101,8 @@ class Wpextend_Section_Pc {
 
 		// Hook current_screen to show element in section page edition
 		add_action( 'current_screen', array($this, 'section_page_edition') );
+
+		add_action( 'admin_post_edit_section', array($this, 'show_edit_section') );
 	 }
 
 
@@ -111,8 +113,8 @@ class Wpextend_Section_Pc {
 	 */
 	 public function update_admin_body_class($class){
 
-		 if(isset($_GET['iframe']))
-		 	return 'iframe';
+		 if(isset($_REQUEST['iframe']))
+		 	return 'TB_iframe';
 	 }
 
 
@@ -685,7 +687,7 @@ class Wpextend_Section_Pc {
 
 
 
-	 /**
+	/**
     * Show listing sections
     */
 	 public static function listing_section($post_id, $tab_sections){
@@ -700,13 +702,25 @@ class Wpextend_Section_Pc {
 					$title_section = get_the_title($val);
 					if( empty($title_section) ){ $title_section = 'No title...'; }
 
-					$link_add_thickbox = '<a href="'.admin_url().'post.php?post='.$val.'&action=edit&iframe&TB_iframe=true&width=1000&height=550" class="thickbox">'.$title_section.'</a>';
+					// $link_add_thickbox = '<a href="'.admin_url().'post.php?post='.$val.'&action=edit&iframe&TB_iframe=true&width=1000&height=550" class="thickbox">'.$title_section.'</a>';
+
+					$url_thickbox = add_query_arg( [
+						'action' => 'edit_section',
+						'post_ID' => $val,
+						'post_referer' => $post_id,
+						'iframe' => true,
+						'TB_iframe' => true,
+						'width' => 1000,
+						'height' => 550
+					], wp_nonce_url( admin_url('admin-post.php'), 'edit_section' ) );
+					$link_add_thickbox = '<a href="'. $url_thickbox . '" class="thickbox">'.$title_section.'</a>';
+
 					// $retour_html .= '<li class="ui-state-default" attr_id_sortable="'.$val.'"><a href="post.php?post='.$val.'&action=edit" >'.get_the_title($val).'</a>';
 					$retour_html .= '<li class="ui-state-default" attr_id_sortable="'.$val.'">'.$link_add_thickbox;
 					$retour_html .= '<span class="delete_panneau_in_config dashicons dashicons-no" onclick="remove_elt_sortable(this);"></span></li>';
 				}
 			}
-		$retour_html .= '<li class="ui-state-default ui-state-disabled add_new_post"><a href="'.admin_url().'post-new.php?post_type='.self::$name_section_register_post_type.'&parent_id='.$post_id.'&iframe&TB_iframe=true&width=600&height=550" class="thickbox button button-primary">+ Nouvelle section</a></li>
+		$retour_html .= '<li class="ui-state-default add_new_post"><a href="'.admin_url().'post-new.php?post_type='.self::$name_section_register_post_type.'&parent_id='.$post_id.'" class="button button-primary" target="_blank" >+ Nouvelle section</a></li>
 		<li class="ui-state-default ui-state-disabled">BAS DE PAGE</li>
 		</ul>
 		<input type="hidden" name="'.self::$name_input_hidden_list_section_in_database.'" class="input_hidden_list_elt_sortable" value="'.json_encode($tab_sections, JSON_NUMERIC_CHECK).'" />';
@@ -964,10 +978,141 @@ class Wpextend_Section_Pc {
     	$screen = get_current_screen();
     	if( is_object($screen) && $screen->base == 'post' && $screen->post_type == self::$name_section_register_post_type ){
 
-    		
     	}
 		
 	}
+
+
+
+	/**
+	* Hooked with admin_post and called in Iframe to edit section
+	*
+	*/
+	public function show_edit_section(){
+
+		// Check valid nonce
+		check_admin_referer($_REQUEST['action']);
+
+		if( isset($_REQUEST['post_referer'], $_REQUEST['post_ID']) && is_numeric($_REQUEST['post_referer']) && is_numeric($_REQUEST['post_ID']) ){
+
+			require_once( dirname(__DIR__) . '/include/admin-header-iframe.php' );
+			echo Wpextend_Render_Admin_Html::form_open( admin_url('admin-post.php'), 'edit_section' );
+
+			$section = new Wpextend_Post($_REQUEST['post_ID']);
+			$section_type = $section->get_type_section();
+
+
+
+			/**
+			* Post update
+			*/
+			if( isset($_REQUEST['post_update'], $_REQUEST['section_type'], $_REQUEST['post_title'], $_REQUEST['post_content']) ){
+
+				if( $section->update_config_section($_REQUEST['post_referer'], $_REQUEST['section_type']) ){
+					$section_type = $_REQUEST['section_type'];
+				}
+				else{
+					wp_update_post([
+						'ID'           => $section->instance_WP_Post->ID,
+						'post_title'   => $_REQUEST['post_title'],
+						'post_content' => $_REQUEST['post_content']
+					]);
+					$section = new Wpextend_Post($section->instance_WP_Post->ID);
+
+					if( isset($_REQUEST['_thumbnail_id']) ){
+						set_post_thumbnail( $section->instance_WP_Post->ID, $_REQUEST['_thumbnail_id']);
+					}
+				}
+			}
+
+
+
+			/**
+			* Select section type
+			*/
+			$options = $this->get_all_sections_by_post_type(get_post_type( $_REQUEST['post_referer'] ));
+			echo Wpextend_Type_Field::render_input_select( 'Type', 'section_type', $options, $section_type );
+
+
+
+			echo '<div class="accordion_wpextend">';
+
+				/**
+				* Basic content : Title / Content / Thumbnail
+				*/
+				echo '<h2>Basic fields</h2><div>';
+					echo Wpextend_Render_Admin_Html::table_edit_open();
+						echo Wpextend_Type_Field::render_input_text( 'Title', 'post_title', $section->instance_WP_Post->post_title );
+						echo Wpextend_Type_Field::render_input_textarea( 'Content', 'post_content', $section->instance_WP_Post->post_content );
+						echo Wpextend_Type_Field::render_input_image( 'Featured Image', '_thumbnail_id', get_post_thumbnail_id($section->instance_WP_Post->ID) );
+					echo Wpextend_Render_Admin_Html::table_edit_close();
+				echo '</div>';
+			
+
+				/**
+				* Select section type
+				*/
+				if( preg_match ('/(.*)__(.*)/', $section_type, $matches_section_type ) && is_array($matches_section_type) && count($matches_section_type) == 3 ){
+
+					$section_category = $matches_section_type[1];
+					$section_type = $matches_section_type[2];
+
+					$instance_Wpextend_Custom_Field = Wpextend_Custom_Field::getInstance();
+					$all_metaboxes = apply_filters( 'get_all_metabox_before_initialize_it', $instance_Wpextend_Custom_Field->get_all_metabox() );
+
+
+						/**
+						* Listing sections
+						*/
+						echo '<h2>Includes</h2><div id="metabox_buzzpress_sections"><div class="contner_listing_sections_sortable">';
+							echo self::listing_section( $section->instance_WP_Post->ID, $section->get_sections_pc_wpextend() );
+						echo '</div></div>';
+
+
+		 				/**
+						* Metaboxes
+						*/
+						if( $all_metaboxes && is_array($all_metaboxes) ){
+							foreach( $all_metaboxes as $key => $val ){
+								if(
+									(
+										$val['post_type'] == self::$name_section_register_post_type &&
+										$val['key_category'] == 'default' &&
+										$val['key_type'] == 'default'
+									)
+									||
+									(
+										$val['post_type'] == self::$name_section_register_post_type . '::' . get_post_type($_REQUEST['post_referer']) &&
+										$val['key_category'] == $section_category &&
+										$val['key_type'] == $section_type
+									)
+								){
+
+									$post_type = apply_filters( 'set_post_type_before_instance_metabox', $val['post_type'] );
+									$instance_metabox = new Wpextend_Meta_Boxes( $post_type, $key, $val['name'], $val['fields'] );
+
+									echo '<h2>' . $val['name'] . '</h2><div>';
+										$instance_metabox->show_meta_box( $section->instance_WP_Post );
+									echo '</div>';
+								}
+							}
+						}
+
+					echo Wpextend_Type_Field::render_input_hidden('post_ID', $section->instance_WP_Post->ID);
+					echo Wpextend_Type_Field::render_input_hidden('post_referer', $_REQUEST['post_referer']);
+					echo Wpextend_Type_Field::render_input_hidden('iframe', $_REQUEST['iframe']);
+					
+					echo Wpextend_Type_Field::render_input_hidden('post_update', 'true');
+				}
+
+			echo '</div>';
+
+			echo Wpextend_Render_Admin_Html::form_close();
+			require_once( ABSPATH . 'wp-admin/admin-footer.php' );
+		}
+		exit;
+	}
+
 
 
 }

@@ -28,7 +28,7 @@
 
 	define( 'WPEXTEND_PREFIX_DATA_IN_DB'			, 'meta_buzzpress_' );
 
-	define( 'WPEXTEND_ENABLE_SECTION'				, FALSE );
+	define( 'WPEXTEND_ENABLE_SECTION'				, TRUE );
 
 	define( 'WPEXTEND_NAME_MENU_SETTINGS_EDITOR'	, 'WP Extend' );
 
