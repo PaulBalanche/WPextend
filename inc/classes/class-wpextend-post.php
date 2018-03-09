@@ -102,4 +102,18 @@ class Wpextend_Post {
 
 
 
+
+	public function update_config_section($parent_id, $type_section){
+
+		if( $parent_id && $type_section && is_numeric($parent_id) && !empty($type_section) ){
+
+			$new_config_section['parent_id'] = $parent_id;
+			$new_config_section['type_section'] = $type_section;
+
+			return update_post_meta( $this->instance_WP_Post->ID, Wpextend_Section_Pc::getInstance()->name_option_in_database . '_config_section', $new_config_section );
+		}
+	}
+
+
+
 }
