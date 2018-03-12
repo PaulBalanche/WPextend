@@ -149,6 +149,28 @@ class Wpextend_Type_Field {
     }
 
 
+    public static function get_link_object( $data_link ){
+
+		$object_link = [
+			'target' => null
+		];
+
+		if( $data_link && is_array($data_link) ){
+
+			if( isset($data_link['label']) ){
+				$object_link['label'] = $data_link['label'];
+				$object_link['title'] = $data_link['label'];
+			}
+
+			if( isset($data_link['link']) ){
+				$object_link['url'] = $data_link['link'];
+			}
+		}
+
+		return (object) $data_link;
+	}
+
+
 
 	 public static function render_input_hidden( $name, $value = '', $repeatable = false ) {
 

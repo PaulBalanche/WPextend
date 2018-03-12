@@ -758,36 +758,17 @@ class Wpextend_Section_Pc {
 	 */
 	 public function render_front_html( $instance_section_courante ){
 
-		 $post_type_parent = get_post_type( $instance_section_courante->get_main_parent_id() );
-		 $type_section_temp = explode( '__', $instance_section_courante->get_type_section(), 2 );
-		 $category_type_section = $type_section_temp[0];
-		 $type_section = $type_section_temp[1];
+		$file_to_load = $instance_section_courante->get_file_to_load();
+		$data_section = $instance_section_courante->instance_WP_Post;
 
-		 $file_to_load = $this->Wpextend_Section_Pc[$post_type_parent][$category_type_section]['sections'][$type_section]['file'];
+		// Get all metadata & all metadata post parent
+		$data_section->post_parent_meta_data = (object) array();
+		$data_section->post_parent_meta_data->ID = $instance_section_courante->get_main_parent_id();
+		$data_parent = new Wpextend_Post( $data_section->post_parent_meta_data->ID );
+		$data_section->post_parent_meta_data = $data_parent->instance_WP_Post->meta_data;
 
-		 $data_section = get_post( $instance_section_courante->id );
-
-		 // Get all metadata
-		 $data_section->meta_data = (object) array();
-		 $meta_data_section = get_metadata( 'post', $instance_section_courante->id );
-		 foreach( $meta_data_section as $key_data => $val_data ){
-			if( strpos( $key_data, WPEXTEND_PREFIX_DATA_IN_DB ) !== false ){
-				$data_section->meta_data->{str_replace( WPEXTEND_PREFIX_DATA_IN_DB, '', $key_data )} = get_post_meta( $instance_section_courante->id, $key_data, true );
-			}
-		 }
-
-		 // Get all metadata post parent
-		 $data_section->post_parent_meta_data = (object) array();
-		 $data_section->post_parent_meta_data->ID = $instance_section_courante->get_main_parent_id();
-		 $meta_data_section_post_parent = get_metadata( 'post', $data_section->post_parent_meta_data->ID );
-		 foreach( $meta_data_section_post_parent as $key_data => $val_data ){
-		   if( strpos( $key_data, WPEXTEND_PREFIX_DATA_IN_DB ) !== false ){
-		 	  $data_section->post_parent_meta_data->{str_replace( WPEXTEND_PREFIX_DATA_IN_DB, '', $key_data )} = get_post_meta( $data_section->post_parent_meta_data->ID, $key_data, true );
-		   }
-		 }
-
-		 include( WPEXTEND_SECTION_CONTROLLERS_DIR . $file_to_load );
-		//  include( WPEXTEND_SECTION_VIEWS_DIR . $file_to_load );
+		include( WPEXTEND_SECTION_CONTROLLERS_DIR . $file_to_load );
+		// include( WPEXTEND_SECTION_VIEWS_DIR . $file_to_load );
 	 }
 
 
