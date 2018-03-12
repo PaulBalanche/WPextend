@@ -250,9 +250,9 @@ class Wpextend_Post_Type {
 
 			$this->custom_post_type_wpextend = json_decode( stripslashes($_POST['wpextend_custom_post_type_to_import']), true );
 		}
-		elseif( isset($_GET['file']) && file_exists( WPEXTEND_DIR . '/inc/import/' . $_GET['file'] . '.json' ) ){
+		elseif( isset($_GET['file']) && file_exists( WPEXTEND_IMPORT_DIR . $_GET['file'] . '.json' ) ){
 
-			$data_json_file = file_get_contents( WPEXTEND_DIR . '/inc/import/' . $_GET['file'] . '.json' );
+			$data_json_file = file_get_contents( WPEXTEND_IMPORT_DIR . $_GET['file'] . '.json' );
 			$this->custom_post_type_wpextend = json_decode( $data_json_file, true );
 		}
 		else{

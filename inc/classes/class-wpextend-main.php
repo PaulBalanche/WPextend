@@ -152,7 +152,7 @@ class Wpextend_Main {
 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 
 		$retour_html .= Wpextend_Render_Admin_Html::form_close( 'Import' );
-		if( file_exists( WPEXTEND_DIR . '/inc/import/global_settings.json' ) ){
+		if( file_exists( WPEXTEND_IMPORT_DIR . 'global_settings.json' ) ){
 			$retour_html .= '<p><a href="' . add_query_arg( ['action' => 'import_wpextend_global_settings', 'file' => 'global_settings'] , wp_nonce_url(admin_url( 'admin-post.php' ), 'import_wpextend_global_settings')) . '" class="button" >Import JSON file</a></p>';
 		}
 
@@ -166,7 +166,7 @@ class Wpextend_Main {
 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 
 		$retour_html .= Wpextend_Render_Admin_Html::form_close( 'Import' );
-		if( file_exists( WPEXTEND_DIR . '/inc/import/global_settings_value.json' ) ){
+		if( file_exists( WPEXTEND_IMPORT_DIR . 'global_settings_value.json' ) ){
 			$retour_html .= '<p><a href="' . add_query_arg( ['action' => 'import_wpextend_global_settings_values', 'file' => 'global_settings_value'] , wp_nonce_url(admin_url( 'admin-post.php' ), 'import_wpextend_global_settings_values')) . '" class="button" >Import JSON file</a></p>';
 		}
 
@@ -180,7 +180,7 @@ class Wpextend_Main {
 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 
 		$retour_html .= Wpextend_Render_Admin_Html::form_close( 'Import' );
-		if( file_exists( WPEXTEND_DIR . '/inc/import/custom_post_type.json' ) ){
+		if( file_exists( WPEXTEND_IMPORT_DIR . 'custom_post_type.json' ) ){
 			$retour_html .= '<p><a href="' . add_query_arg( ['action' => 'import_wpextend_custom_post_type', 'file' => 'custom_post_type'] , wp_nonce_url(admin_url( 'admin-post.php' ), 'import_wpextend_custom_post_type')) . '" class="button" >Import JSON file</a></p>';
 		}
 
@@ -195,7 +195,7 @@ class Wpextend_Main {
 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 
 		$retour_html .= Wpextend_Render_Admin_Html::form_close( 'Import' );
-		if( file_exists( WPEXTEND_DIR . '/inc/import/custom_field.json' ) ){
+		if( file_exists( WPEXTEND_IMPORT_DIR . 'custom_field.json' ) ){
 			$retour_html .= '<p><a href="' . add_query_arg( ['action' => 'import_wpextend_custom_field', 'file' => 'custom_field'] , wp_nonce_url(admin_url( 'admin-post.php' ), 'import_wpextend_custom_field')) . '" class="button" >Import JSON file</a></p>';
 		}
 

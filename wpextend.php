@@ -2,7 +2,7 @@
 	/**
 	* Plugin Name: "WPextend"
 	* Plugin URI: https://github.com/PaulBalanche/WPextend
-	* Version: 1.1.8
+	* Version: 1.2.1
 	* Author: Paul Balanche
 	**/
 
@@ -21,8 +21,10 @@
 
 	define( 'WPEXTEND_PLUGIN_URL'					, plugins_url('', __FILE__) . '/' );
 	define( 'WPEXTEND_ASSETS_URL'					, WPEXTEND_PLUGIN_URL . 'assets' . '/' );
-	define( 'WPEXTEND_SECTION_CONTROLLERS_DIR'		, realpath( WPEXTEND_DIR . '/inc/front/section/controllers' ) . '/' );
-	define( 'WPEXTEND_SECTION_VIEWS_DIR'			, realpath( WPEXTEND_DIR . '/../../themes/buzzbrothers/app/views/components' ) . '/' );
+	define( 'WPEXTEND_SECTION_CONTROLLERS_DIR'		, get_template_directory() . '/wpextend/section/controllers/' );
+	define( 'WPEXTEND_SECTION_VIEWS_DIR'			, get_template_directory() . '/app/views/components/' );
+
+	define( 'WPEXTEND_IMPORT_DIR'					, get_template_directory() . '/wpextend/import/' );
 
 	define( 'WPEXTEND_PREFIX_FILE_CLASS'			, 'class-' );
 

@@ -513,9 +513,9 @@ class Wpextend_Global_Settings {
 
 			$this->wpextend_global_settings = json_decode( stripslashes($_POST['wpextend_global_settings_to_import']), true );
 		}
-		elseif( isset($_GET['file']) && file_exists( WPEXTEND_DIR . '/inc/import/' . $_GET['file'] . '.json' ) ){
+		elseif( isset($_GET['file']) && file_exists( WPEXTEND_IMPORT_DIR . $_GET['file'] . '.json' ) ){
 
-			$data_json_file = file_get_contents( WPEXTEND_DIR . '/inc/import/' . $_GET['file'] . '.json' );
+			$data_json_file = file_get_contents( WPEXTEND_IMPORT_DIR . $_GET['file'] . '.json' );
 			$this->wpextend_global_settings = json_decode( $data_json_file, true );
 		}
 		else{
@@ -548,9 +548,9 @@ class Wpextend_Global_Settings {
 
 			$this->wpextend_global_settings_values = json_decode( stripslashes($_POST['wpextend_global_settings_values_to_import']), true );
 		}
-		elseif( isset($_GET['file']) && file_exists( WPEXTEND_DIR . '/inc/import/' . $_GET['file'] . '.json' ) ){
+		elseif( isset($_GET['file']) && file_exists( WPEXTEND_IMPORT_DIR . $_GET['file'] . '.json' ) ){
 
-			$data_json_file = file_get_contents( WPEXTEND_DIR . '/inc/import/' . $_GET['file'] . '.json' );
+			$data_json_file = file_get_contents( WPEXTEND_IMPORT_DIR . $_GET['file'] . '.json' );
 			$this->wpextend_global_settings_values = json_decode( $data_json_file, true );
 		}
 		else{
