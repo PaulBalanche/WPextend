@@ -362,7 +362,7 @@ class Wpextend_Section_Pc {
  			if( isset($_POST['config_section']['parent_id']) || isset($_POST['config_section']['type_section']) ){
 
 				$config_actuelle_section = get_post_meta( $post_id, $this->name_option_in_database . '_config_section', true );
-				$new_config_section = $config_actuelle_section;
+				$new_config_section = ( is_array($config_actuelle_section) ) ? $config_actuelle_section : [];
 
 				if( isset($_POST['config_section']['parent_id']) ){
 					$instance_post_parent = new Wpextend_Post($_POST['config_section']['parent_id']);
@@ -1042,52 +1042,52 @@ class Wpextend_Section_Pc {
 					$all_metaboxes = apply_filters( 'get_all_metabox_before_initialize_it', $instance_Wpextend_Custom_Field->get_all_metabox() );
 
 
-						/**
-						* Listing sections
-						*/
-						echo '<h2>Includes</h2><div id="metabox_buzzpress_sections"><div class="contner_listing_sections_sortable">';
-							echo self::listing_section( $section->instance_WP_Post->ID, $section->get_sections_pc_wpextend() );
-						echo '</div></div>';
+					/**
+					* Listing sections
+					*/
+					echo '<h2>Includes</h2><div id="metabox_buzzpress_sections"><div class="contner_listing_sections_sortable">';
+						echo self::listing_section( $section->instance_WP_Post->ID, $section->get_sections_pc_wpextend() );
+					echo '</div></div>';
 
 
-		 				/**
-						* Metaboxes
-						*/
-						if( $all_metaboxes && is_array($all_metaboxes) ){
-							foreach( $all_metaboxes as $key => $val ){
-								if(
-									(
-										$val['post_type'] == self::$name_section_register_post_type &&
-										$val['key_category'] == 'default' &&
-										$val['key_type'] == 'default'
-									)
-									||
-									(
-										$val['post_type'] == self::$name_section_register_post_type . '::' . get_post_type($_REQUEST['post_referer']) &&
-										$val['key_category'] == $section_category &&
-										$val['key_type'] == $section_type
-									)
-								){
+	 				/**
+					* Metaboxes
+					*/
+					if( $all_metaboxes && is_array($all_metaboxes) ){
+						foreach( $all_metaboxes as $key => $val ){
+							if(
+								(
+									$val['post_type'] == self::$name_section_register_post_type &&
+									$val['key_category'] == 'default' &&
+									$val['key_type'] == 'default'
+								)
+								||
+								(
+									$val['post_type'] == self::$name_section_register_post_type . '::' . get_post_type($_REQUEST['post_referer']) &&
+									$val['key_category'] == $section_category &&
+									$val['key_type'] == $section_type
+								)
+							){
 
-									$post_type = apply_filters( 'set_post_type_before_instance_metabox', $val['post_type'] );
-									$instance_metabox = new Wpextend_Meta_Boxes( $post_type, $key, $val['name'], $val['fields'] );
+								$post_type = apply_filters( 'set_post_type_before_instance_metabox', $val['post_type'] );
+								$instance_metabox = new Wpextend_Meta_Boxes( $post_type, $key, $val['name'], $val['fields'] );
 
-									echo '<h2>' . $val['name'] . '</h2><div>';
-										$instance_metabox->show_meta_box( $section->instance_WP_Post );
-									echo '</div>';
-								}
+								echo '<h2>' . $val['name'] . '</h2><div>';
+									$instance_metabox->show_meta_box( $section->instance_WP_Post );
+								echo '</div>';
 							}
 						}
-
-					echo Wpextend_Type_Field::render_input_hidden('post_ID', $section->instance_WP_Post->ID);
-					echo Wpextend_Type_Field::render_input_hidden('post_referer', $_REQUEST['post_referer']);
-					echo Wpextend_Type_Field::render_input_hidden('iframe', $_REQUEST['iframe']);
-					
-					echo Wpextend_Type_Field::render_input_hidden('post_update', 'true');
+					}
 				}
 
 			echo '</div>';
 
+			echo Wpextend_Type_Field::render_input_hidden('post_ID', $section->instance_WP_Post->ID);
+			echo Wpextend_Type_Field::render_input_hidden('post_referer', $_REQUEST['post_referer']);
+			echo Wpextend_Type_Field::render_input_hidden('iframe', $_REQUEST['iframe']);
+			
+			echo Wpextend_Type_Field::render_input_hidden('post_update', 'true');
+				
 			echo Wpextend_Render_Admin_Html::form_close();
 			require_once( ABSPATH . 'wp-admin/admin-footer.php' );
 		}
