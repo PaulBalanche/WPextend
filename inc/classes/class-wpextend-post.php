@@ -21,11 +21,13 @@ class Wpextend_Post {
 			$this->instance_WP_Post = get_post($this->id);
 
 			// Add metadata to instance
-			$meta_data = get_metadata('post', $this->id);
-			$this->instance_WP_Post->meta_data = (object) [];
-			foreach( $meta_data as $key => $val ){
-				if( strpos( $key, WPEXTEND_PREFIX_DATA_IN_DB ) !== false ){
-					$this->instance_WP_Post->meta_data->{str_replace( WPEXTEND_PREFIX_DATA_IN_DB, '', $key )} = get_post_meta($post_id, $key, true);
+			if( $this->instance_WP_Post ){
+				$meta_data = get_metadata('post', $this->id);
+				$this->instance_WP_Post->meta_data = (object) [];
+				foreach( $meta_data as $key => $val ){
+					if( strpos( $key, WPEXTEND_PREFIX_DATA_IN_DB ) !== false ){
+						$this->instance_WP_Post->meta_data->{str_replace( WPEXTEND_PREFIX_DATA_IN_DB, '', $key )} = get_post_meta($post_id, $key, true);
+					}
 				}
 			}
 		}
@@ -53,15 +55,17 @@ class Wpextend_Post {
 	*/
 	public function add_section($id_section){
 
-		// Get all actual sections
-		$tab_sections = $this->get_sections_pc_wpextend();
+		if( $this->instance_WP_Post ){
+			// Get all actual sections
+			$tab_sections = $this->get_sections_pc_wpextend();
 
-		if( !in_array($id_section, $tab_sections) ){
-			// Add new section
-			$tab_sections[] = $id_section;
+			if( is_array($tab_sections) && !in_array($id_section, $tab_sections) ){
+				// Add new section
+				$tab_sections[] = $id_section;
 
-			// Save in database
-			update_post_meta( $this->instance_WP_Post->ID, Wpextend_Section_Pc::$key_list_section_in_database, $tab_sections );
+				// Save in database
+				update_post_meta( $this->instance_WP_Post->ID, Wpextend_Section_Pc::$key_list_section_in_database, $tab_sections );
+			}
 		}
 	}
 
