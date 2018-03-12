@@ -151,6 +151,13 @@ class Wpextend_Type_Field {
 
     public static function get_link_object( $data_link ){
 
+    	if( !$data_link ||
+    		!is_array($data_link) ||
+    		(!isset($data_link['label']) || empty($data_link['label']) ) ||
+    		( !isset($data_link['link']) || empty($data_link['link']) ) ){
+    		return null;
+    	}
+
 		$object_link = [
 			'target' => null
 		];
@@ -217,8 +224,6 @@ class Wpextend_Type_Field {
 
 		return $retour_html;
     }
-
-
 
 
 
@@ -483,6 +488,28 @@ class Wpextend_Type_Field {
 
 		return $retour_html;
     }
+
+
+
+    public static function get_image_object($id_image, $size = 'full'){
+
+		if( $id_image && is_numeric($id_image) ){
+
+			$info_image = wp_get_attachment_image_src($id_image, $size);
+			if( $info_image && is_array($info_image) ){
+
+				$object_image = (object) [
+					'src' => $info_image[0],
+					'title' => Thorin::esc_attr( get_the_title($id_image) ),
+					'alt' => get_post_meta( $id_image, '_wp_attachment_image_alt', true )
+				];
+
+				return $object_image;
+			}
+		}
+
+		return null;
+	}
 
 
 
