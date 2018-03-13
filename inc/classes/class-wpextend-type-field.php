@@ -500,6 +500,7 @@ class Wpextend_Type_Field {
 
 				$object_image = (object) [
 					'src' => $info_image[0],
+					'url' => $info_image[0],
 					'title' => Thorin::esc_attr( get_the_title($id_image) ),
 					'alt' => get_post_meta( $id_image, '_wp_attachment_image_alt', true )
 				];
@@ -645,6 +646,23 @@ class Wpextend_Type_Field {
 		</tr>';
 
 		return $retour_html;
+    }
+
+
+
+
+    public static function force_boolean($bool){
+
+    	if( $bool &&
+    		(
+    			$bool === true ||
+    			$bool == 'true' ||
+    			$bool == '1'
+    		)
+    	)
+    		return true;
+    	else
+    		return false;
     }
 
 
