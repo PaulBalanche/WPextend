@@ -762,10 +762,10 @@ class Wpextend_Section_Pc {
 		$data_section = $instance_section_courante->instance_WP_Post;
 
 		// Get all metadata & all metadata post parent
-		$data_section->post_parent_meta_data = (object) array();
-		$data_section->post_parent_meta_data->ID = $instance_section_courante->get_main_parent_id();
-		$data_parent = new Wpextend_Post( $data_section->post_parent_meta_data->ID );
+		$id_post_parent = $instance_section_courante->get_main_parent_id();
+		$data_parent = new Wpextend_Post( $id_post_parent );
 		$data_section->post_parent_meta_data = $data_parent->instance_WP_Post->meta_data;
+		$data_section->post_parent_meta_data->ID = $id_post_parent;
 
 		include( WPEXTEND_SECTION_CONTROLLERS_DIR . $file_to_load );
 		// include( WPEXTEND_SECTION_VIEWS_DIR . $file_to_load );

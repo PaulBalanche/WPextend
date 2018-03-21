@@ -51,7 +51,7 @@ body.wp-extend_page_wpextend_custom_fields .liCustomField{
 .link_upload_img_wpextend{
 	position: relative;
 	display: inline-block;
-	outline: 0;	
+	outline: 0;
 }
 	.link_upload_img_wpextend:focus{
 		box-shadow: none;
