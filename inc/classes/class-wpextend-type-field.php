@@ -138,8 +138,11 @@ class Wpextend_Type_Field {
 			  $value_cta = ( is_array($value) && array_key_exists('link', $value) ) ? $value['link'] : '';
 			  $label_cta = ( is_array($value) && array_key_exists('label', $value) ) ? $value['label'] : '';
 
-			  $retour_html .= '<div class="input_cta"><input name="'.$name.'[link]" type="text" id="input_'.$name.'" class="input_'.$name.' cta_link '.self::$class_input_link.'" value="'.str_replace('"', '&quot;', $value_cta).'" placeholder="http://..." class="regular-text ltr">
-			<input name="'.$name.'[label]" type="text" class="input_'.$name.' cta_label '.self::$class_input_link.'" value="'.str_replace('"', '&quot;', $label_cta).'" placeholder="Titre du lien" class="regular-text ltr"></div>';
+			  $retour_html .= '<div class="input_cta">
+			  	<input name="'.$name.'[link]" type="text" id="input_'.$name.'" class="input_'.$name.' cta_link '.self::$class_input_link.'" value="'.str_replace('"', '&quot;', $value_cta).'" placeholder="http://..." class="regular-text ltr">
+				<input name="'.$name.'[label]" type="text" class="input_'.$name.' cta_label '.self::$class_input_link.'" value="'.str_replace('"', '&quot;', $label_cta).'" placeholder="Titre du lien" class="regular-text ltr">
+				<a href="" class="button button-primary wplinks">Configure</a>
+			</div>';
 		 }
 
 		 $retour_html .= '</td>

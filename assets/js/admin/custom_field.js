@@ -321,5 +321,41 @@ jQuery(document).ready(function(){
 
 
 
+	/**
+	* Open wpLink editor
+	*
+	*/
+	jQuery( ".wplinks" ).click(function(event){
+
+		event.preventDefault();
+
+		var this_btn = jQuery(this);
+		if ( typeof window.wpLink === 'undefined' ) {
+			window.wpActiveEditor = true;
+		}
+		window.wpLink.open( true, 'http://dasdads', 'text' );
+		
+	});
+
+	$('#wp-link-submit').on('click', function(event) {
+
+		event.preventDefault();
+
+		var linkAtts = wpLink.getAttrs();	// The links attributes (href, target) are stored in an object, which can be access via  wpLink.getAttrs()
+		console.log(linkAtts);
+		// $('.cmb_text_link').val(linkAtts.href);	// Get the href attribute and add to a textfield, or use as you see fit
+		// wpLink.textarea = $('.cmb_text_link');	// To close the link dialogue, it is again expecting an wp_editor instance, so you need to give it something to set focus back to.
+		// wpLink.close();	// Close the dialogue
+	});
+	$('#wp-link-cancel, #wp-link-close').on('click', function(event) {
+
+		event.preventDefault();
+
+		wpLink.textarea = $('.cmb_text_link');
+		wpLink.close();
+	});
+
+
+
 
 });
