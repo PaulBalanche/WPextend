@@ -702,6 +702,11 @@ class Wpextend_Section_Pc {
 					$title_section = get_the_title($val);
 					if( empty($title_section) ){ $title_section = 'No title...'; }
 
+					$intance_section = new Wpextend_Post($val);
+					$type_section = $intance_section->get_type_section();
+					$type_section = explode( '__', $type_section, 2 );
+					$type_section = ( is_array($type_section) && count($type_section) == 2 ) ? $type_section[0].' > '.$type_section[1] : '';					
+
 					// $link_add_thickbox = '<a href="'.admin_url().'post.php?post='.$val.'&action=edit&iframe&TB_iframe=true&width=1000&height=550" class="thickbox">'.$title_section.'</a>';
 
 					$url_thickbox = add_query_arg( [
@@ -713,7 +718,7 @@ class Wpextend_Section_Pc {
 						'width' => 1000,
 						'height' => 550
 					], wp_nonce_url( admin_url('admin-post.php'), 'edit_section' ) );
-					$link_add_thickbox = '<a href="'. $url_thickbox . '" class="thickbox">'.$title_section.'</a>';
+					$link_add_thickbox = '<a href="'. $url_thickbox . '" class="thickbox"><strong>'.$title_section.'</strong><br /><i>('.$type_section.')</i></a>';
 
 					// $retour_html .= '<li class="ui-state-default" attr_id_sortable="'.$val.'"><a href="post.php?post='.$val.'&action=edit" >'.get_the_title($val).'</a>';
 					$retour_html .= '<li class="ui-state-default" attr_id_sortable="'.$val.'">'.$link_add_thickbox;
