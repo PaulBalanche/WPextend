@@ -174,7 +174,7 @@ class Wpextend_Type_Field {
 			}
 		}
 
-		return (object) $data_link;
+		return (object) $object_link;
 	}
 
 
