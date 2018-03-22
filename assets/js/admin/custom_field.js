@@ -195,7 +195,19 @@ jQuery(document).ready(function(){
 
 		link_upload_img_courant = jQuery(this);
 		name_input_courant = link_upload_img_courant.attr('data-name_input');
-		contner_list_image = link_upload_img_courant.parent().prev('.contner_list_images');
+
+		if( link_upload_img_courant.parent().prev('.contner_list_images').length == 1 ){
+
+			var accepteAllTypeFile = false;
+			var contner_list_files = link_upload_img_courant.parent().prev('.contner_list_images');
+		}
+		else if( link_upload_img_courant.parent().prev('.contner_list_files').length == 1 ){
+
+			var accepteAllTypeFile = true;
+			var contner_list_files = link_upload_img_courant.parent().prev('.contner_list_files');
+		}
+		else
+			return false;
 
 		if(frame){
 		  frame.open();
@@ -222,7 +234,13 @@ jQuery(document).ready(function(){
 					else
 						var src_image_uploade = attachments[i].url;
 
-					contner_list_image.find('.sortable').append('<li class="ui-state-default"><img src="' + src_image_uploade + '" ><input type="hidden" name="' + name_input_courant + '[]" class="input_upload_multiple_img_wpextend" value="' + attachments[i].id + '" /></li>');
+					contner_list_files.find('.sortable').append('<li class="ui-state-default"><img src="' + src_image_uploade + '" ><input type="hidden" name="' + name_input_courant + '[]" class="input_upload_multiple_img_wpextend" value="' + attachments[i].id + '" /></li>');
+				}
+				else if( accepteAllTypeFile ){
+
+					var name_file = attachments[i].filename;
+
+					contner_list_files.find('.sortable').append('<li class="ui-state-default">' + name_file + '<input type="hidden" name="' + name_input_courant + '[]" class="input_upload_multiple_img_wpextend" value="' + attachments[i].id + '" /></li>');
 				}
 			}
 		});

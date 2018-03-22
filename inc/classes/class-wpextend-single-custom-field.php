@@ -225,7 +225,11 @@ class Wpextend_Single_Custom_Field {
 				break;
 
 			case 'gallery_image':
-				$retour_html .= Wpextend_Type_Field::render_input_image_gallery( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->default_value_field, $this->description );
+				$retour_html .= Wpextend_Type_Field::render_input_image_gallery( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->default_value_field, $this->description, false );
+				break;
+
+			case 'multiple_files':
+				$retour_html .= Wpextend_Type_Field::render_input_image_gallery( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->default_value_field, $this->description, true );
 				break;
 
 			case 'file':

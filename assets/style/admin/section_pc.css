@@ -22,12 +22,12 @@
 		#metabox_buzzpress_sections ul li ul li:last-child{ margin-right: 0; }
 
 
-.ui-sortable li{
+#metabox_buzzpress_sections .ui-sortable li{
 	position: relative;
 	cursor: move;
 }
-.ui-sortable li.ui-state-disabled{ cursor: initial; opacity: 0.5; }
-.ui-sortable li.ui-state-disabled.add_new_post{ opacity: 1; }
+#metabox_buzzpress_sections  .ui-sortable li.ui-state-disabled{ cursor: initial; opacity: 0.5; }
+#metabox_buzzpress_sections  .ui-sortable li.ui-state-disabled.add_new_post{ opacity: 1; }
 
 
 span.delete_panneau_in_config{
