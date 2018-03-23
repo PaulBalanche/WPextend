@@ -147,9 +147,9 @@ jQuery(document).ready(function(){
 			// Get media attachment details from the frame state
 			var attachment = frame.state().get('selection').first().toJSON();
 
-			link_upload_file_courant.html(attachment.filename).removeClass('button button-primary');
 			link_upload_file_courant.parents('td').find('.input_file_wpextend').val(attachment.id);
 			link_upload_file_courant.parents('td').find(link_remove_file).removeClass('hidden');
+			link_upload_file_courant.parents('td').find('div.contner_list_files .file').replaceWith('<ul class="sortable"><li><span class="file"><span class="link_upload_file_wpextend"><strong>' + attachment.filename + '</strong><br /><br /><i>(' + attachment.type + ')</i></span></span></li></ul>');			
 		});
 
 		frame.open();
@@ -167,9 +167,17 @@ jQuery(document).ready(function(){
 
 		event.preventDefault();
 
-		jQuery(this).parents('td').find('.input_file_wpextend').val(-1);
-		jQuery(this).parent().find('p').html('Add file').addClass('button button-primary');
-		jQuery(this).parent().find(link_remove_file).addClass('hidden');
+		jQuery(this).addClass('hidden');
+
+		var container_input = jQuery(this).parents('td').find('div.contner_list_files');
+		container_input.find('.input_file_wpextend').val(-1);
+
+		container_input.find('span.file a').appendTo(container_input);
+		container_input.find('span.file').remove();
+		container_input.append( container_input.find('ul li').html() );
+		container_input.find('ul').remove();
+
+		container_input.find('a.thickbox').html('Add file').addClass('button button-primary');
 	});
 
 
