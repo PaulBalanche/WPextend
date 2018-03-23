@@ -240,7 +240,7 @@ jQuery(document).ready(function(){
 
 					var name_file = attachments[i].filename;
 
-					contner_list_files.find('.sortable').append('<li class="ui-state-default">' + name_file + '<input type="hidden" name="' + name_input_courant + '[]" class="input_upload_multiple_img_wpextend" value="' + attachments[i].id + '" /></li>');
+					contner_list_files.find('.sortable').append('<li class="ui-state-default"><span class="file"><span><strong>' + name_file + '</strong><br><br><i>(' + attachments[i].type + ')</i></span></span><input type="hidden" name="' + name_input_courant + '[]" class="input_upload_multiple_img_wpextend" value="' + attachments[i].id + '" /></li>');
 				}
 			}
 		});

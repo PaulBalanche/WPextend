@@ -70,11 +70,14 @@ body.wp-extend_page_wpextend_custom_fields .liCustomField{
 .contner_list_files ul.sortable li{
 	cursor: move;
 }
+	.contner_list_files ul li img,
 	.contner_list_files ul li .file{
 		display: inline-block;
 		position: absolute;
 		top: 0;
 		left: 0;
+	}
+	.contner_list_files ul li .file{
 		width: 150px;
     	height: 150px;
     	background: rgb(250,250,250);

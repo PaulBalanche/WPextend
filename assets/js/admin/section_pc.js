@@ -1,7 +1,7 @@
 jQuery( document ).ready(function() {
 
-	if(jQuery(".postbox .sortable, .contner_listing_sections_sortable .sortable").length > 0){
-		jQuery(".postbox .sortable, .contner_listing_sections_sortable .sortable").sortable({
+	if(jQuery(".postbox .sortable, .contner_listing_sections_sortable .sortable, body.TB_iframe .sortable").length > 0){
+		jQuery(".postbox .sortable, .contner_listing_sections_sortable .sortable, body.TB_iframe .sortable").sortable({
 			cancel: ".ui-state-disabled",
 			update: function(event, ui){
 
