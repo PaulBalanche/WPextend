@@ -454,41 +454,31 @@ class Wpextend_Type_Field {
      */
     public static function render_input_image( $label, $name, $defaut_value = false, $repeatable = false, $description = '' ){
 
-		 $no_image = true;
+		$no_image = true;
 
-		 if( is_numeric($defaut_value) ){
-			 $attachment_image_src = wp_get_attachment_image_src( $defaut_value );
-			 if( $attachment_image_src ){
-				 $html_image_post_thumbnail = '<img src="'.$attachment_image_src[0].'" />';
-				 $class_link_upload_file_wpextend = '';
-				 $class_link_remove = '';
-				 $no_image  = false;
-			 }
-		 }
+		if( is_numeric($defaut_value) ){
+			$attachment_image_src = wp_get_attachment_image_src( $defaut_value );
+			if( $attachment_image_src ){
+				$html_image_post_thumbnail = '<img src="'.$attachment_image_src[0].'" />';
+				$class_link_upload_file_wpextend = '';
+				$class_link_remove = '';
+				$no_image  = false;
+			}
+		}
 
-		 if( $no_image ){
-			 $html_image_post_thumbnail = 'Add image';
-			 $class_link_upload_file_wpextend = 'button button-primary';
-			 $class_link_remove = 'hidden';
-		 }
+		if( $no_image ){
+			$html_image_post_thumbnail = 'Add image';
+			$class_link_upload_file_wpextend = 'button button-primary';
+			$class_link_remove = 'hidden';
+		}
 
-		 $retour_html = '<tr class="tr_'.$name.'">
+		$retour_html = '<tr class="tr_'.$name.'">
 			<th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label><i class="description">'.$description.'</i></th>
-			<td>
-				<div class="contner_list_images">';
-					if( !$no_image ){
-						$retour_html .= '<ul class="sortable">
-							<li>';
-					}
-					$retour_html .= '<a href="" class="'.$class_link_upload_file_wpextend.' thickbox link_upload_img_wpextend">'.$html_image_post_thumbnail.'</a>
-					<span class="link_remove_img_wpextend dashicons dashicons-no '.$class_link_remove.'"></span>
-					<input type="hidden" name="'.$name.'" class="input_upload_img_wpextend" value="'.$defaut_value.'">';
-					if( !$no_image ){
-						$retour_html .= '</li>
-						</ul>';
-					}
-				$retour_html .= '</div>
-			</td>
+			<td>';
+
+				$retour_html .= Wpextend_Render_Admin_Html::multiple_media( $defaut_value, $name, false, false );
+
+			$retour_html .= '</td>
 		</tr>';
 
 		return $retour_html;
@@ -522,53 +512,19 @@ class Wpextend_Type_Field {
     /**
     *
     */
-    public static function render_input_image_gallery( $label, $name, $value, $description = '', $accepteAllTypeFile = false ) {
+    public static function render_input_image_gallery( $label, $name, $value, $description = '', $acceptAllTypeFile = false ) {
 
     	if( !is_array($value) ){
     		$value = [];
     	}
 
-    	$class_container = ( $accepteAllTypeFile ) ? 'contner_list_files' : 'contner_list_images';
-
 		$retour_html = '<tr class="tr_'.$name.'">
 			<th scope="row"><label>'.stripslashes($label).'</label><i class="description">'.$description.'</i></th>
-			<td>
-				<div class="' . $class_container . '">
-					<ul class="sortable">';
-					if( count($value) > 0 ){
-						foreach($value as $val){
+			<td>';
 
-							$instance_post = get_post( $val );
-
-							if( strpos( $instance_post->post_mime_type, 'image' ) !== false ){
-
-								$src_thumbnail_image = wp_get_attachment_image_src( $val, 'thumbnail' );
-								if( $src_thumbnail_image ){
-									$retour_html .= '<li class="ui-state-default">
-										<img src="'.$src_thumbnail_image[0].'" >
-										<input type="hidden" name="'.$name.'[]" class="input_upload_multiple_img_wpextend" value="'.$val.'" />
-										<span class="remove_image_gallery dashicons dashicons-no" data-name_input="'.$name.'"></span>
-									</li>';
-								}
-							}
-							else{
-
-								$retour_html .= '<li class="ui-state-default">
-									<span class="file">
-							           	<span><strong>'.$instance_post->post_title. '</strong><br /><br /><i>(' . $instance_post->post_mime_type . ')</i></span>
-							        </span>
-						           	<input type="hidden" name="'.$name.'[]" class="input_upload_multiple_img_wpextend" value="'.$val.'" />
-									<span class="remove_image_gallery dashicons dashicons-no" data-name_input="'.$name.'"></span>
-								</li>';
-							}
-						}
-					}
-					$retour_html .= '</ul>
-				</div>
-				<p class="hide-if-no-js">
-					<a href="" class="button button-primary thickbox link_upload_multiple_img_wpextend" data-name_input="'.$name.'" >Add one or more images</a>
-				</p>
-			</td>
+				$retour_html .= Wpextend_Render_Admin_Html::multiple_media( $value, $name, true, $acceptAllTypeFile );
+				
+				$retour_html .= '</td>
 		</tr>';
 
 		return $retour_html;
@@ -605,23 +561,11 @@ class Wpextend_Type_Field {
 
     	$retour_html = '<tr class="tr_'.$name.'">
 			<th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label><i class="description">'.$description.'</i></th>
-			<td>
-				<div class="contner_list_files">';
-				if( !$no_file ){
-					$retour_html .= '<ul class="sortable">
-						<li>';
-				}
-				$retour_html .= '<span class="file">
-					<a href="" class="'.$class_link_upload_file_wpextend.' thickbox link_upload_file_wpextend">'.$html_file.'</a>
-		        </span>
-			    <input type="hidden" name="'.$name.'" class="input_file_wpextend" value="'.$defaut_value.'">
-			    <a href="" class="link_remove_file_wptexend  dashicons dashicons-no '.$class_link_remove.'" ></a>';
-				if( !$no_file ){
-					$retour_html .= '</li>
-					</ul>';
-				}
-				$retour_html .= '</div>
-			</td>
+			<td>';
+
+				$retour_html .= Wpextend_Render_Admin_Html::multiple_media( $defaut_value, $name, false, false );
+
+			$retour_html .= '</td>
 		</tr>';
 
      return $retour_html;

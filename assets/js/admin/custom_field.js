@@ -348,4 +348,122 @@ jQuery(document).ready(function(){
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	jQuery( ".link_upload_multiple_media_wpextend" ).click( function(event){
+
+		event.preventDefault();
+		var current_btn = jQuery(this);
+
+		var multiple 				= ( current_btn.attr('data-multiple') && current_btn.attr('data-multiple') == '1' ) ? true : false;
+		var title_frame 			= ( multiple ) ? 'Select one or more images' : 'Select one image';
+		var name_input_courant 		= ( multiple ) ? current_btn.attr('data-name_input') + '[]' : current_btn.attr('data-name_input') ;
+		var accept_all_type_file  	= ( current_btn.attr('data-accept-all-type-file') && current_btn.attr('data-accept-all-type-file') == '1' ) ? true : false;
+
+		frame = wp.media({
+			title: title_frame,
+			button: {
+				text: 'Add'
+			},
+			multiple: multiple
+		});
+
+		frame.on('select', function(){
+
+			var attachments = frame.state().get('selection').toJSON();
+			for(var i in attachments){
+
+				var html_to_add = '';
+
+				if( attachments[i].type == 'image' ){
+
+					var src_image_uploade = ( attachments[i].sizes ) ? attachments[i].sizes.thumbnail.url : src_image_uploade = attachments[i].url;
+
+					html_to_add = '<img src="' + src_image_uploade + '" ><input type="hidden" name="' + name_input_courant + '" class="input_upload_multiple_img_wpextend" value="' + attachments[i].id + '" />';
+				}
+				else if( accept_all_type_file ){
+
+					var name_file = attachments[i].filename;
+					html_to_add = '<span class="file"><span><strong>' + name_file + '</strong><br><br><i>(' + attachments[i].type + ')</i></span></span><input type="hidden" name="' + name_input_courant + '" class="input_upload_multiple_img_wpextend" value="' + attachments[i].id + '" />';
+				}
+
+				if( html_to_add != '' ){
+
+					// Add new media
+					current_btn.parent('li').before( '<li class="single_media_wpextend">' + html_to_add + '</li>' );
+
+					// If single media > delete old media
+					if( ! multiple && current_btn.parent('li').parent('ul').find('li').length > 1 ){
+						current_btn.parent('li').parent('ul').find('li:last').remove();
+					}
+
+					// If there is li.null > remove it
+					if( current_btn.parent('li').parent('ul').find('li.null').length > 0 ){
+						current_btn.parent('li').parent('ul').find('li.null').remove();
+					}
+				}
+			}
+		});
+
+		frame.open();	
+	});
+
+	jQuery( ".remove_multiple_media_wpextend" ).click( function(event){
+
+		event.preventDefault();
+		var current_btn = jQuery(this);
+		var parent_ul = current_btn.parent('li').parent('ul');
+		var btn_add_media = parent_ul.find('li:last').find('.link_upload_multiple_media_wpextend');
+
+		var multiple 			= ( btn_add_media.attr('data-multiple') && btn_add_media.attr('data-multiple') == '1' ) ? true : false;
+		var name_input_courant 	= ( multiple ) ? btn_add_media.attr('data-name_input') + '[]' : btn_add_media.attr('data-name_input') ;
+
+		// Remove current media
+		current_btn.parent('li').remove();
+
+		// If none media > add input equal to -1
+		if( parent_ul.find('li.single_media_wpextend').length == 0 ){
+			parent_ul.prepend( '<li class="null"><input type="hidden" name="' + name_input_courant + '" class="input_upload_multiple_img_wpextend" value="-1" /></li>' );
+		}
+
+		// If single media, add add_link
+		if( ! multiple ){
+			parent_ul.append( '<li class="add_multiple_media_wpextend"><a href="" class="link_upload_multiple_media_wpextend dashicons dashicons-plus-alt" data-name_input="' + btn_add_media.attr('data-name_input') + '" data-multiple="' + multiple + '" ></a></li>' );
+		}
+	});
+
+
+
+
 });

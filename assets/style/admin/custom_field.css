@@ -48,16 +48,7 @@ body.wp-extend_page_wpextend_custom_fields .liCustomField{
 /**
 * Module gestionnaire-image-admin
 **/
-.link_upload_img_wpextend{
-	position: relative;
-	display: inline-block;
-	outline: 0;
-}
-	.link_upload_img_wpextend:focus{
-		box-shadow: none;
-	}
-.contner_list_images ul li,
-.contner_list_files ul li{
+.contner_multiple_media ul li{
 	position: relative;
 	display: inline-block;
 	margin: 0 10px 10px 0;
@@ -65,23 +56,35 @@ body.wp-extend_page_wpextend_custom_fields .liCustomField{
     background: none;
     width: 150px;
     height: 150px;
+    border: 2px dashed rgb(240,240,240);
 }
-.contner_list_images ul.sortable li,
-.contner_list_files ul.sortable li{
+.contner_multiple_media ul li.null{ display: none; }
+.contner_multiple_media ul li.add_multiple_media_wpextend a{
+	display: block;
+	position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    vertical-align: middle;
+	line-height: 150px;
+	font-size: 2.5em;
+}
+.contner_multiple_media ul.sortable li{
 	cursor: move;
 }
-	.contner_list_files ul li img,
-	.contner_list_files ul li .file{
+	.contner_multiple_media ul li img,
+	.contner_multiple_media ul li .file{
 		display: inline-block;
 		position: absolute;
 		top: 0;
 		left: 0;
 	}
-	.contner_list_files ul li .file{
+	.contner_multiple_media ul li .file{
 		width: 150px;
     	height: 150px;
     	background: rgb(250,250,250);
-    	border: 1px solid rgb(245,245,245);
     	word-wrap: break-word;
 	    padding: 10px;
 	    box-sizing: border-box;
@@ -89,38 +92,34 @@ body.wp-extend_page_wpextend_custom_fields .liCustomField{
 	    vertical-align: middle;
 	    line-height: 150px;
 	}
-		.contner_list_files ul li .file span,
-		.contner_list_files ul li .file a{
+		.contner_multiple_media ul li .file span,
+		.contner_multiple_media ul li .file a{
 			display: inline-block;
 			width: 100%;
 			line-height: 18px;
 		}
-.link_remove_img_wpextend,
-.link_remove_file_wptexend,
-.remove_image_gallery{
+.single_media_wpextend .link_upload_multiple_media_wpextend,
+.single_media_wpextend .remove_multiple_media_wpextend{
 	display:none;
 	position: absolute;
 	top: 10px;
-	right: 10px;
 	color: #0085ba;
 	background: #f1f1f1;
 	cursor: pointer;
 }
-.contner_list_images ul li:hover > .link_remove_img_wpextend,
-.contner_list_images ul li:hover > .remove_image_gallery,
-.contner_list_files ul li:hover > .link_remove_file_wptexend,
-.contner_list_files ul li:hover > .remove_image_gallery{
+.single_media_wpextend .link_upload_multiple_media_wpextend{
+	left: 10px;
+}
+.single_media_wpextend .remove_multiple_media_wpextend{
+	right: 10px;
+}
+.contner_multiple_media ul li:hover > .link_upload_multiple_media_wpextend,
+.contner_multiple_media ul li:hover > .remove_multiple_media_wpextend{
 	display: inline-block;
 	text-decoration: none;
 }
-.contner_list_images ul li:hover > .link_remove_img_wpextend.hidden,
-.contner_list_files ul li:hover > .link_remove_file_wptexend.hidden{
-	display: none;
-}
-	.contner_list_images ul li .link_remove_img_wpextend:hover,
-	.contner_list_images ul li .remove_image_gallery:hover,
-	.contner_list_files ul li .link_remove_file_wptexend:hover,
-	.contner_list_files ul li .remove_image_gallery:hover{
+	.single_media_wpextend .link_upload_multiple_media_wpextend:hover,
+	.single_media_wpextend .remove_multiple_media_wpextend:hover{
 		color: #006799;
 		background: white;
 	}
