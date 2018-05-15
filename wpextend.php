@@ -30,11 +30,17 @@
 
 	define( 'WPEXTEND_PREFIX_DATA_IN_DB'			, 'meta_buzzpress_' );
 
-	define( 'WPEXTEND_ENABLE_SECTION'				, TRUE );
+	if( !defined('WPEXTEND_ENABLE_SECTION') ){
+		define( 'WPEXTEND_ENABLE_SECTION'			, TRUE );
+	}
 
-	define( 'WPEXTEND_NAME_MENU_SETTINGS_EDITOR'	, 'WP Extend' );
+	if( !defined('WPEXTEND_NAME_MENU_SETTINGS_EDITOR') ){
+		define( 'WPEXTEND_NAME_MENU_SETTINGS_EDITOR', 'WP Extend' );
+	}
 
-	define( 'WPEXTEND_MAIN_SLUG_ADMIN_PAGE'			, 'wpextend' );
+	if( !defined('WPEXTEND_MAIN_SLUG_ADMIN_PAGE') ){
+		define( 'WPEXTEND_MAIN_SLUG_ADMIN_PAGE'		, 'wpextend' );
+	}
 
 	define( 'WPEXTEND_MultiPostThumbnails'			, ( class_exists('MultiPostThumbnails') ) ? TRUE : FALSE );
 
