@@ -12,21 +12,23 @@ class Wpextend_Single_Custom_Field {
 	public $options;
 	public $repeatable;
 	public $description;
+	public $placeholder;
 
 
 	/**
 	*
 	*/
-	 public function __construct($post_ID, $key_metabox, $key, $val, $default_value_field, $repeatable = false, $description = false){
+	 public function __construct($post_ID, $key_metabox, $key, $val, $default_value_field, $repeatable = false, $description = false, $placeholder = false){
 
-		$this->post_id = $post_ID;
-		$this->key_metabox = $key_metabox;
-		$this->key =  $key;
-		$this->data = $val;
-		$this->default_value_field = $default_value_field;
-		$this->options = ( array_key_exists( 'options', $val ) ) ? $val['options'] : false;
-		$this->repeatable = $repeatable;
-		$this->description = $description;
+		$this->post_id 				= $post_ID;
+		$this->key_metabox 			= $key_metabox;
+		$this->key 					=  $key;
+		$this->data 				= $val;
+		$this->default_value_field 	= $default_value_field;
+		$this->options 				= ( array_key_exists( 'options', $val ) ) ? $val['options'] : false;
+		$this->repeatable 			= $repeatable;
+		$this->description 			= $description;
+		$this->placeholder 			= $placeholder;
 
 		// Pour les champs custom post
 		if( $this->data['type'] == 'select_post_type' ){
@@ -217,7 +219,10 @@ class Wpextend_Single_Custom_Field {
 				break;
 
 			case 'link':
-				$retour_html .= Wpextend_Type_Field::render_input_cta( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->default_value_field, $this->repeatable, $this->description );
+
+				if( !is_array($this->placeholder) ){ $this->placeholder = array( 'http://...', 'Titre du lien' ); }
+
+				$retour_html .= Wpextend_Type_Field::render_input_cta( $this->data['name'], $this->key_metabox.'['.$this->key.']', $this->default_value_field, $this->repeatable, $this->description, $this->placeholder[0], $this->placeholder[1] );
 				break;
 
 			case 'image':

@@ -96,7 +96,10 @@ class Wpextend_Meta_Boxes {
 					// Field description
 					$description = ( array_key_exists( 'description', $val ) ) ? $val['description'] : '';
 
-					$instance_single_custom_field = new Wpextend_Single_Custom_Field( $post->ID, $this->metabox_ID, $key, $val, $default_value_field, $repeatable, $description );
+					// Placeholder
+					$placeholder = ( array_key_exists( 'placeholder', $val ) ) ? $val['placeholder'] : false;
+
+					$instance_single_custom_field = new Wpextend_Single_Custom_Field( $post->ID, $this->metabox_ID, $key, $val, $default_value_field, $repeatable, $description, $placeholder );
 					$retour_html .= $instance_single_custom_field->render_html_in_metabox();
 				}
 			}

@@ -97,7 +97,7 @@ class Wpextend_Type_Field {
 	 /**
      *
      */
-    public static function render_input_cta( $label, $name, $value = '', $repeatable = false, $description = '' ) {
+    public static function render_input_cta( $label, $name, $value = '', $repeatable = false, $description = '', $placeholder_link = 'http://...', $placeholder_label = 'Titre du lien') {
 
 		 $retour_html = '<tr class="tr_'.$name.'">
 		 <th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label><i class="description">'.$description.'</i></th>
@@ -113,13 +113,13 @@ class Wpextend_Type_Field {
 						 $value_cta = ( array_key_exists('link', $single_value) ) ? $single_value['link'] : '';
 		   			 $label_cta = ( array_key_exists('label', $single_value) ) ? $single_value['label'] : '';
 
-						 $retour_html .= '<div class="repeatable_field input_cta"><input name="'.$name.'['.$key_value.'][link]" type="text" id="input_'.$name.'" class="input_'.$name.' cta_link '.self::$class_input_link.'" value="'.str_replace('"', '&quot;', $value_cta).'" placeholder="http://..." class="regular-text ltr">
-						<input name="'.$name.'['.$key_value.'][label]" type="text" class="input_'.$name.' cta_label '.self::$class_input_link.'" value="'.str_replace('"', '&quot;', $label_cta).'" placeholder="Titre du lien" class="regular-text ltr"></div>';
+						 $retour_html .= '<div class="repeatable_field input_cta"><input name="'.$name.'['.$key_value.'][link]" type="text" id="input_'.$name.'" class="input_'.$name.' cta_link '.self::$class_input_link.'" value="'.str_replace('"', '&quot;', $value_cta).'" placeholder="'.$placeholder_link.'" class="regular-text ltr">
+						<input name="'.$name.'['.$key_value.'][label]" type="text" class="input_'.$name.' cta_label '.self::$class_input_link.'" value="'.str_replace('"', '&quot;', $label_cta).'" placeholder="'.$placeholder_label.'" class="regular-text ltr"></div>';
 					 }
 					 else{
 
-	   				 $retour_html .= '<div class="repeatable_field input_cta"><input name="'.$name.'['.$key_value.'][link]" type="text" id="input_'.$name.'" class="input_'.$name.' cta_link '.self::$class_input_link.'" value="" placeholder="http://..." class="regular-text ltr">
-		   			  <input name="'.$name.'['.$key_value.'][label]" type="text" class="input_'.$name.' cta_label '.self::$class_input_link.'" value="" placeholder="Titre du lien" class="regular-text ltr"></div>';
+	   				 $retour_html .= '<div class="repeatable_field input_cta"><input name="'.$name.'['.$key_value.'][link]" type="text" id="input_'.$name.'" class="input_'.$name.' cta_link '.self::$class_input_link.'" value="" placeholder="'.$placeholder_link.'" class="regular-text ltr">
+		   			  <input name="'.$name.'['.$key_value.'][label]" type="text" class="input_'.$name.' cta_label '.self::$class_input_link.'" value="" placeholder="'.$placeholder_label.'" class="regular-text ltr"></div>';
 					 }
 				 }
 			 }
@@ -128,8 +128,8 @@ class Wpextend_Type_Field {
 				$value_cta = '';
    				$label_cta = '';
 
-   			 $retour_html .= '<div class="repeatable_field input_cta"><input name="'.$name.'[0][link]" type="text" id="input_'.$name.'" class="input_'.$name.' cta_link '.self::$class_input_link.'" value="'.str_replace('"', '&quot;', $value_cta).'" placeholder="http://..." class="regular-text ltr">
-   		  <input name="'.$name.'[0][label]" type="text" class="input_'.$name.' cta_label '.self::$class_input_link.'" value="'.str_replace('"', '&quot;', $label_cta).'" placeholder="Titre du lien" class="regular-text ltr"></div>';
+   			 $retour_html .= '<div class="repeatable_field input_cta"><input name="'.$name.'[0][link]" type="text" id="input_'.$name.'" class="input_'.$name.' cta_link '.self::$class_input_link.'" value="'.str_replace('"', '&quot;', $value_cta).'" placeholder="'.$placeholder_link.'" class="regular-text ltr">
+   		  <input name="'.$name.'[0][label]" type="text" class="input_'.$name.' cta_label '.self::$class_input_link.'" value="'.str_replace('"', '&quot;', $label_cta).'" placeholder="'.$placeholder_label.'" class="regular-text ltr"></div>';
 			 }
 
 			 $retour_html .= '<span class="repeat_field">+</span><input type="hidden" class="input_hidden_cta" value="'.$name.'[index]" />';
@@ -139,8 +139,8 @@ class Wpextend_Type_Field {
 			  $value_cta = ( is_array($value) && array_key_exists('link', $value) ) ? $value['link'] : '';
 			  $label_cta = ( is_array($value) && array_key_exists('label', $value) ) ? $value['label'] : '';
 
-			  $retour_html .= '<div class="input_cta"><input name="'.$name.'[link]" type="text" id="input_'.$name.'" class="input_'.$name.' cta_link '.self::$class_input_link.'" value="'.str_replace('"', '&quot;', $value_cta).'" placeholder="http://..." class="regular-text ltr">
-			<input name="'.$name.'[label]" type="text" class="input_'.$name.' cta_label '.self::$class_input_link.'" value="'.str_replace('"', '&quot;', $label_cta).'" placeholder="Titre du lien" class="regular-text ltr"></div>';
+			  $retour_html .= '<div class="input_cta"><input name="'.$name.'[link]" type="text" id="input_'.$name.'" class="input_'.$name.' cta_link '.self::$class_input_link.'" value="'.str_replace('"', '&quot;', $value_cta).'" placeholder="'.$placeholder_link.'" class="regular-text ltr">
+			<input name="'.$name.'[label]" type="text" class="input_'.$name.' cta_label '.self::$class_input_link.'" value="'.str_replace('"', '&quot;', $label_cta).'" placeholder="'.$placeholder_label.'" class="regular-text ltr"></div>';
 		 }
 
 		 $retour_html .= '</td>
