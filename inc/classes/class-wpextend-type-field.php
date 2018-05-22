@@ -563,7 +563,7 @@ class Wpextend_Type_Field {
 			<th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label><i class="description">'.$description.'</i></th>
 			<td>';
 
-				$retour_html .= Wpextend_Render_Admin_Html::multiple_media( $defaut_value, $name, false, false );
+				$retour_html .= Wpextend_Render_Admin_Html::multiple_media( $defaut_value, $name, false, true );
 
 			$retour_html .= '</td>
 		</tr>';
