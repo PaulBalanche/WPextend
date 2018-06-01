@@ -2,7 +2,7 @@
 	/**
 	* Plugin Name: "WPextend"
 	* Plugin URI: https://github.com/PaulBalanche/WPextend
-	* Version: 1.3.5
+	* Version: 1.3.6
 	* Author: Paul Balanche
 	**/
 
@@ -32,6 +32,10 @@
 
 	if( !defined('WPEXTEND_ENABLE_SECTION') ){
 		define( 'WPEXTEND_ENABLE_SECTION'			, TRUE );
+	}
+
+	if( !defined('WPEXTEND_ENABLE_CUSTOM_FIELDS') ){
+		define( 'WPEXTEND_ENABLE_CUSTOM_FIELDS'		, TRUE );
 	}
 
 	if( !defined('WPEXTEND_NAME_MENU_SETTINGS_EDITOR') ){
