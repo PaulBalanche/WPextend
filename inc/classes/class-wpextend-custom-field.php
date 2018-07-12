@@ -58,7 +58,7 @@ class Wpextend_Custom_Field {
 	public function create_hooks() {
 
 		// admin_enqueue_scripts
-		add_action('admin_enqueue_scripts', array( __CLASS__, 'script_admin' ) );
+		// add_action('admin_enqueue_scripts', array( __CLASS__, 'script_admin' ) );
 
 		// $_POST or $_GET traitment if necessary
 		add_action( 'admin_post_add_metabox_wpextend', array( $this, 'add_new_metabox') );
@@ -79,11 +79,8 @@ class Wpextend_Custom_Field {
 	*
 	*/
 	static public function script_admin(){
-
-		wp_enqueue_style( 'style_admin_wpextend_custom_field', WPEXTEND_ASSETS_URL . 'style/admin/custom_field.css', false, true );
-
-		wp_enqueue_script( 'script_admin_wpextend_custom_field', WPEXTEND_ASSETS_URL . 'js/admin/custom_field.js', array('jquery'));
-		wp_enqueue_script( 'script_admin_wpextend_custom_field_setting_page', WPEXTEND_ASSETS_URL . 'js/admin/custom_field_setting_page.js', array('jquery'));
+		
+		// Moved in Wpextend_Main
 	}
 
 
