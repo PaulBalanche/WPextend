@@ -408,7 +408,7 @@ jQuery(document).ready(function(){
 
 				if( attachments[i].type == 'image' ){
 
-					var src_image_uploade = ( attachments[i].sizes ) ? attachments[i].sizes.thumbnail.url : src_image_uploade = attachments[i].url;
+					var src_image_uploade = ( attachments[i].sizes && attachments[i].sizes.thumbnail ) ? attachments[i].sizes.thumbnail.url : attachments[i].url;
 
 					html_to_add = '<img src="' + src_image_uploade + '" ><input type="hidden" name="' + name_input_courant + '" class="input_upload_multiple_img_wpextend" value="' + attachments[i].id + '" />';
 				}

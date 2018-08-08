@@ -80,6 +80,7 @@ body.wp-extend_page_wpextend_custom_fields .liCustomField{
 		position: absolute;
 		top: 0;
 		left: 0;
+		max-width: 100%;
 	}
 	.contner_multiple_media ul li .file{
 		width: 150px;

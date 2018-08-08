@@ -104,6 +104,10 @@ class Wpextend_Single_Setting {
 				$retour_html .= Wpextend_Type_Field::render_input_image( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->value, $this->repeatable, $this->description );
 				break;
 
+			case 'gallery_image':
+				$retour_html .= Wpextend_Type_Field::render_input_image_gallery( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->value, $this->description, false );
+				break;
+
 			case 'file':
 				$retour_html .= Wpextend_Type_Field::render_input_file( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->value, $this->repeatable, $this->description );
 				break;
