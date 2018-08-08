@@ -116,7 +116,6 @@ class Wpextend_Main {
 		// Global settings values
 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
 		$retour_html .= Wpextend_Type_Field::render_input_textarea( 'WP Extend Global settings values', 'wpextend_global_settings_value_export', Wpextend_Global_Settings::getInstance()->prepare_values_to_export(), false, '', false );
-		// $retour_html .= Wpextend_Type_Field::render_input_text( 'WP Extend Global settings values', 'wpextend_global_settings_value_export', Wpextend_Global_Settings::getInstance()->prepare_values_to_export(), '', false, '');
 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 
 		if( WPEXTEND_ENABLE_CUSTOM_POST_TYPE ){

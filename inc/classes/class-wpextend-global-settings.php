@@ -583,22 +583,23 @@ class Wpextend_Global_Settings {
 				foreach($val2 as $key3 => $val3){
 
 					$val3_temp = $val3;
-					$val3_temp = apply_filters('the_content', $val3 );
-					$val3_temp = preg_replace('/\n/', '', $val3_temp);
 					
-					$val3_temp = html_entity_decode($val3_temp, ENT_NOQUOTES | ENT_HTML5, 'UTF-8');
+					if( !is_array($val3_temp) ) {
+						$val3_temp = apply_filters('the_content', $val3 );
+						$val3_temp = preg_replace('/\n/', '', $val3_temp);
+						
+						$val3_temp = html_entity_decode($val3_temp, ENT_NOQUOTES | ENT_HTML5, 'UTF-8');
 
-					$val3_temp = str_replace('“', '"', $val3_temp);
-					$val3_temp = str_replace('”', '"', $val3_temp);
-					$val3_temp = str_replace('’', '\'', $val3_temp);
-					$val3_temp = str_replace('"', '\"', $val3_temp);
+						$val3_temp = str_replace('“', '"', $val3_temp);
+						$val3_temp = str_replace('”', '"', $val3_temp);
+						$val3_temp = str_replace('’', '\'', $val3_temp);
+						$val3_temp = str_replace('"', '\"', $val3_temp);
+					}
 
 					$values_to_export[$key][$key2][$key3] = $val3_temp;
 				}
 			}
 		}
-
-		// pre($values_to_export);
 
 		$values_to_export = json_encode( $values_to_export, JSON_UNESCAPED_UNICODE );
 
