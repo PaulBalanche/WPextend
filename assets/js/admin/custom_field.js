@@ -20,8 +20,8 @@ jQuery(document).ready(function(){
 
 
 
-	if(jQuery(".contner_list_images .sortable").length > 0){
-		jQuery(".contner_list_images .sortable").sortable();
+	if(jQuery(".contner_list_images .sortable, .contner_multiple_media .sortable").length > 0){
+		jQuery(".contner_list_images .sortable, .contner_multiple_media .sortable").sortable();
 	}
 
 
