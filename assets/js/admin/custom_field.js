@@ -434,6 +434,9 @@ jQuery(document).ready(function(){
 					}
 				}
 			}
+
+			// If image is included in woocommerce variation
+			current_btn.closest( '.woocommerce_variation' ).addClass( 'variation-needs-update' );
 		});
 
 		frame.open();	
@@ -461,6 +464,9 @@ jQuery(document).ready(function(){
 		if( ! multiple ){
 			parent_ul.append( '<li class="add_multiple_media_wpextend"><a href="" class="link_upload_multiple_media_wpextend dashicons dashicons-plus-alt" data-name_input="' + btn_add_media.attr('data-name_input') + '" data-multiple="' + multiple + '" ></a></li>' );
 		}
+
+		// If image is included in woocommerce variation
+		current_btn.closest( '.woocommerce_variation' ).addClass( 'variation-needs-update' );
 	});
 
 
