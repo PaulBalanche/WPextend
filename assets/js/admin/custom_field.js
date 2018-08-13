@@ -381,7 +381,7 @@ jQuery(document).ready(function(){
 
 
 
-	jQuery( ".link_upload_multiple_media_wpextend" ).click( function(event){
+	jQuery( ".link_upload_multiple_media_wpextend" ).live( "click", function(event){
 
 		event.preventDefault();
 		var current_btn = jQuery(this);
@@ -439,7 +439,7 @@ jQuery(document).ready(function(){
 		frame.open();	
 	});
 
-	jQuery( ".remove_multiple_media_wpextend" ).click( function(event){
+	jQuery( ".remove_multiple_media_wpextend" ).live( "click", function(event){
 
 		event.preventDefault();
 		var current_btn = jQuery(this);
