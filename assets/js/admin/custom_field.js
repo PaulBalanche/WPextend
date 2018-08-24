@@ -436,7 +436,8 @@ jQuery(document).ready(function(){
 			}
 
 			// If image is included in woocommerce variation
-			current_btn.closest( '.woocommerce_variation' ).addClass( 'variation-needs-update' );
+		if( jQuery('.woocommerce_variation').length > 0) { current_btn.closest( '.woocommerce_variation' ).addClass( 'variation-needs-update' ); }
+		if( jQuery('#variable_product_options').length > 0) { jQuery('#variable_product_options').find( 'button.cancel-variation-changes, button.save-variation-changes' ).removeAttr('disabled'); }
 		});
 
 		frame.open();	
@@ -466,7 +467,8 @@ jQuery(document).ready(function(){
 		}
 
 		// If image is included in woocommerce variation
-		current_btn.closest( '.woocommerce_variation' ).addClass( 'variation-needs-update' );
+		if( jQuery('.woocommerce_variation').length > 0) { current_btn.closest( '.woocommerce_variation' ).addClass( 'variation-needs-update' ); }
+		if( jQuery('#variable_product_options').length > 0) { jQuery('#variable_product_options').find( 'button.cancel-variation-changes, button.save-variation-changes' ).removeAttr('disabled'); }
 	});
 
 
