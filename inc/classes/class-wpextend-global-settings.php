@@ -24,9 +24,15 @@ class Wpextend_Global_Settings {
 	* @return object Wpextend_Global_Settings
 	*/
 	public static function getInstance() {
+
 		 if (is_null(self::$_instance)) {
 			  self::$_instance = new Wpextend_Global_Settings();
 		 }
+		 else{
+			// WPML initialisation
+			self::$_instance->WPML_initialisation();
+		}
+
 		 return self::$_instance;
 	}
 
@@ -40,22 +46,13 @@ class Wpextend_Global_Settings {
 	private function __construct() {
 
 		// WPML initialisation
-		$WPML_default_lang = apply_filters('wpml_default_language', NULL );
- 		$this->WPML_current_langage = apply_filters( 'wpml_current_language', NULL );
-		if( $this->WPML_current_langage && !empty($this->WPML_current_langage) && $this->WPML_current_langage != $WPML_default_lang )
-			$this->WPML_langage = $this->WPML_current_langage;
-		else
-			$this->WPML_langage = $this->WPML_default_langage;
-
-
+		$this->WPML_initialisation();
 
 		// Set option from database
 		$this->wpextend_global_settings = get_option( $this->name_option_in_database );
 		if( !is_array( $this->wpextend_global_settings ) ) {
 			$this->wpextend_global_settings = array();
 		}
-
-
 
 		// Get value in database and assign to $wpextend_global_settings_values
 		foreach( $this->wpextend_global_settings as $key => $val){
@@ -78,6 +75,22 @@ class Wpextend_Global_Settings {
 
 		// Configure hooks
 		$this->create_hooks();
+	}
+
+
+
+	/**
+	* WPML initialisation
+	*
+	*/
+	public function WPML_initialisation(){
+
+		$WPML_default_lang = apply_filters('wpml_default_language', NULL );
+ 		$this->WPML_current_langage = apply_filters( 'wpml_current_language', NULL );
+		if( $this->WPML_current_langage && !empty($this->WPML_current_langage) && $this->WPML_current_langage != $WPML_default_lang )
+			$this->WPML_langage = $this->WPML_current_langage;
+		else
+			$this->WPML_langage = $this->WPML_default_langage;
 	}
 
 
