@@ -1,7 +1,7 @@
 {
     "name": "wpextend/wpextend",
     "type": "wordpress-plugin",
-    "description": "Extend default Wordpress functionalities",
+    "description": "Extend basics Wordpress features like general settings, easy custom post type creation, ...",
     "keywords": ["wordpress", "plugin", "wpextend"],
     "homepage": "https://github.com/PaulBalanche/WPextend/",
     "license": "MIT",

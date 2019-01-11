@@ -239,13 +239,13 @@ class Wpextend_Global_Settings {
 	*/
 	public function render_admin_page() {
 
-		 // Get info current screen
-		 $current_screen = get_current_screen();
+		// Get info current screen
+		$current_screen = get_current_screen();
 
-		 // Header page & open form
-		 $retour_html = Wpextend_Render_Admin_Html::header('Site settings');
+		// Header page & open form
+		$retour_html = Wpextend_Render_Admin_Html::header('Site settings');
 
-		 $retour_html .= '<div class="accordion_wpextend">';
+		$retour_html .= '<div class="accordion_wpextend">';
 
 		 // Get all categories to create fieldset
 		 $all_category = $this->get_all_category();
@@ -258,6 +258,11 @@ class Wpextend_Global_Settings {
 		 		$instance_category->capabilities == 'editor' ||
 		 		( current_user_can('manage_options') )
 		 	){
+
+				$data_wp_list_table[] = [
+					'key'	=> $key,
+					'title'	=> $val
+				];
 
 			 	$retour_html .= '<h2>'.$val;
 			 	if( $instance_category->wpml_compatible && !empty(apply_filters('wpml_current_language', NULL )) ){
@@ -272,7 +277,7 @@ class Wpextend_Global_Settings {
 				$retour_html .= Wpextend_Type_Field::render_input_hidden( 'category', $key );
 
 				if($current_screen->parent_base == WPEXTEND_MAIN_SLUG_ADMIN_PAGE){
-					$retour_html .= '<h2>'.$val.' (<a href="'.add_query_arg( array( 'action' => 'delete_category_setting', 'category' => $key, '_wpnonce' => wp_create_nonce( 'delete_setting' ) ), admin_url( 'admin-post.php' ) ).'">Delete</a>)</h2>';
+					$retour_html .= '<p style="text-align:right"><a href="'.add_query_arg( array( 'action' => 'delete_category_setting', 'category' => $key, '_wpnonce' => wp_create_nonce( 'delete_setting' ) ), admin_url( 'admin-post.php' ) ).'" class="button button-primary">Delete entire category</a></p>';
 				}
 
 				$retour_html .= $instance_category->render_html();
@@ -282,7 +287,7 @@ class Wpextend_Global_Settings {
 				}
 
 				if($current_screen->parent_base == WPEXTEND_MAIN_SLUG_ADMIN_PAGE){
-				 	$retour_html .= '<hr>'.Wpextend_Single_Setting::render_form_create( $this->get_all_category(), $key );
+				 	$retour_html .= Wpextend_Single_Setting::render_form_create( $this->get_all_category(), $key );
 			 	}
 				$retour_html .= '</div>';
 			}
@@ -292,7 +297,7 @@ class Wpextend_Global_Settings {
 
 		// Add catergory form & add setting form
 		if($current_screen->parent_base == WPEXTEND_MAIN_SLUG_ADMIN_PAGE){
-			$retour_html .= '<fieldset class="fieldset_wpextend"><h2>New settings category</h2>';
+			$retour_html .= '<fieldset class="card"><h2>New settings category</h2>';
 			$retour_html .= Wpextend_Category_Settings::render_form_create();
 			$retour_html .= '</fieldset>';
 		}

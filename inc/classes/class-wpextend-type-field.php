@@ -90,6 +90,21 @@ class Wpextend_Type_Field {
 		</tr>';
 
 		return $retour_html;
+	}
+	
+
+
+	/**
+     *
+     */
+    public static function render_label_and_free_html( $label, $name, $html = '', $description = '' ) {
+
+		$retour_html = '<tr class="tr_'.$name.'">
+		<th scope="row"><label>'.stripslashes($label).'</label><i class="description">'.$description.'</i></th>
+			<td>' . $html . '</td>
+		</tr>';
+
+		return $retour_html;
     }
 
 

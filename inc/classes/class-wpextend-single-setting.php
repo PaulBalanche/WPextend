@@ -70,51 +70,53 @@ class Wpextend_Single_Setting {
 		$current_screen = get_current_screen();
 
 		$retour_html = '';
-		switch( $this->type ) {
-
-			case 'text':
-				$retour_html .= Wpextend_Type_Field::render_input_text( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->value, $this->placeholder, $this->repeatable, $this->description );
-				break;
-
-			case 'textarea':
-				$retour_html .= Wpextend_Type_Field::render_input_textarea( $this->name, 'textarea__fields__cat__'.$this->category.'__id__'.$this->id, $this->value, $this->repeatable, $this->description );
-				break;
-
-			case 'select':
-				$retour_html .= Wpextend_Type_Field::render_input_select( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->options, $this->value, $this->repeatable, $this->description );
-				break;
-
-			case 'select_post_type':
-				$retour_html .= Wpextend_Type_Field::render_input_select( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->options, $this->value, $this->repeatable, $this->description );
-				break;
-
-			case 'radio':
-				$retour_html .= Wpextend_Type_Field::render_input_radio( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->options, $this->value, $this->repeatable, $this->description );
-				break;
-
-			case 'link':
-				$retour_html .= Wpextend_Type_Field::render_input_cta( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->value, $this->repeatable, $this->description );
-				break;
-
-			case 'checkbox':
-				$retour_html .= Wpextend_Type_Field::render_input_checkbox( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->options, $this->value, $this->repeatable, $this->description );
-				break;
-
-			case 'image':
-				$retour_html .= Wpextend_Type_Field::render_input_image( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->value, $this->repeatable, $this->description );
-				break;
-
-			case 'gallery_image':
-				$retour_html .= Wpextend_Type_Field::render_input_image_gallery( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->value, $this->description, false );
-				break;
-
-			case 'file':
-				$retour_html .= Wpextend_Type_Field::render_input_file( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->value, $this->repeatable, $this->description );
-				break;
-		}
 
 		if($current_screen->parent_base == WPEXTEND_MAIN_SLUG_ADMIN_PAGE){
-			$retour_html .= '<tr><td><a href="'.add_query_arg( array( 'action' => 'delete_setting', 'category' => $this->category, 'key' => $this->id, '_wpnonce' => wp_create_nonce( 'delete_setting' ) ), admin_url( 'admin-post.php' ) ).'">Delete</a></td></tr>';
+			$retour_html .= Wpextend_Type_Field::render_label_and_free_html( $this->name, 'fields['.$this->category.']['.$this->id.']', '<a href="'.add_query_arg( array( 'action' => 'delete_setting', 'category' => $this->category, 'key' => $this->id, '_wpnonce' => wp_create_nonce( 'delete_setting' ) ), admin_url( 'admin-post.php' ) ).'">Delete</a>' );
+		}
+		else {
+			switch( $this->type ) {
+
+				case 'text':
+					$retour_html .= Wpextend_Type_Field::render_input_text( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->value, $this->placeholder, $this->repeatable, $this->description );
+					break;
+
+				case 'textarea':
+					$retour_html .= Wpextend_Type_Field::render_input_textarea( $this->name, 'textarea__fields__cat__'.$this->category.'__id__'.$this->id, $this->value, $this->repeatable, $this->description );
+					break;
+
+				case 'select':
+					$retour_html .= Wpextend_Type_Field::render_input_select( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->options, $this->value, $this->repeatable, $this->description );
+					break;
+
+				case 'select_post_type':
+					$retour_html .= Wpextend_Type_Field::render_input_select( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->options, $this->value, $this->repeatable, $this->description );
+					break;
+
+				case 'radio':
+					$retour_html .= Wpextend_Type_Field::render_input_radio( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->options, $this->value, $this->repeatable, $this->description );
+					break;
+
+				case 'link':
+					$retour_html .= Wpextend_Type_Field::render_input_cta( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->value, $this->repeatable, $this->description );
+					break;
+
+				case 'checkbox':
+					$retour_html .= Wpextend_Type_Field::render_input_checkbox( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->options, $this->value, $this->repeatable, $this->description );
+					break;
+
+				case 'image':
+					$retour_html .= Wpextend_Type_Field::render_input_image( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->value, $this->repeatable, $this->description );
+					break;
+
+				case 'gallery_image':
+					$retour_html .= Wpextend_Type_Field::render_input_image_gallery( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->value, $this->description, false );
+					break;
+
+				case 'file':
+					$retour_html .= Wpextend_Type_Field::render_input_file( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->value, $this->repeatable, $this->description );
+					break;
+			}
 		}
 
 		return $retour_html;

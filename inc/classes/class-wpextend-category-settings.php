@@ -41,11 +41,36 @@ class Wpextend_Category_Settings {
 	public function render_html() {
 
 		$retour_html = Wpextend_Render_Admin_Html::table_edit_open();
+		$Wpextend_List_Table_data = [];
 		foreach( $this->list_settings as $key => $val) {
 
-			$instance_field_setting = new Wpextend_Single_Setting($key, $this->id);
-			$retour_html .= $instance_field_setting->render_html();
+			$Wpextend_List_Table_data[] = array_merge($val, [ 'action_delete' => [ 'action' => 'delete_setting', 'category' => $this->id, 'key' => $key, '_wpnonce' => wp_create_nonce( 'delete_setting' ) ] ] );
+			// $instance_field_setting = new Wpextend_Single_Setting($key, $this->id);
+			// $retour_html .= $instance_field_setting->render_html();
 		}
+	
+		// pre($Wpextend_List_Table_data);
+
+		ob_start();
+
+		$args_Wpextend_List_Table = [
+			'data' 		=> $Wpextend_List_Table_data,
+			'columns'	=> [
+				'name'			=> 'Name',
+				'description' 	=> 'Description',
+				'type' 			=> 'Type',
+				'repeatable' 	=> 'Repeatable'
+			],
+			'per_page'	=> 200,
+			// 'delete_link' => '<a href="'.add_query_arg(  ), admin_url( 'admin-post.php' ) ).'">Delete</a>'
+		];
+		$Wpextend_List_Table = new Wpextend_List_Table($args_Wpextend_List_Table);
+		$Wpextend_List_Table->prepare_items();
+		$Wpextend_List_Table->display();
+
+		$retour_html .= ob_get_contents();
+		ob_end_clean();
+
 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 
 		return $retour_html;
@@ -63,12 +88,12 @@ class Wpextend_Category_Settings {
 		$retour_html = Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'add_category_setting_wpextend', 'add_category_setting_wpextend' );
 
 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
-		$retour_html .= Wpextend_Type_Field::render_input_text( 'Name', 'name' );
-		$retour_html .= Wpextend_Type_Field::render_input_checkbox( 'Traduction ?', 'wpml_compatible', array( 'true' => 'Les champs doivent être traduisible') );
-		$retour_html .= Wpextend_Type_Field::render_input_select( 'Capabilities', 'capabilities', array( 'administrator' => 'Administrator', 'editor' => 'Editor' ) );
+		$retour_html .= Wpextend_Type_Field::render_input_text( __('Name', WPEXTEND_TEXTDOMAIN), 'name' );
+		$retour_html .= Wpextend_Type_Field::render_input_checkbox( __('Multilanguage compatibility', WPEXTEND_TEXTDOMAIN), 'wpml_compatible', array( 'true' => __('Must be multilingual?', WPEXTEND_TEXTDOMAIN) ) );
+		$retour_html .= Wpextend_Type_Field::render_input_select( __('Capabilities', WPEXTEND_TEXTDOMAIN), 'capabilities', array( 'administrator' => __('Administrator', WPEXTEND_TEXTDOMAIN), 'editor' => __('Editor', WPEXTEND_TEXTDOMAIN) ), 'administrator' );
 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 
-		$retour_html .= Wpextend_Render_Admin_Html::form_close( 'Add Category' );
+		$retour_html .= Wpextend_Render_Admin_Html::form_close( __('Add category', WPEXTEND_TEXTDOMAIN) );
 
 		return $retour_html;
 	}
