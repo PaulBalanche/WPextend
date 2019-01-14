@@ -265,13 +265,19 @@ class Wpextend_Global_Settings {
 				];
 
 			 	$retour_html .= '<h2>'.$val;
-			 	if( $instance_category->wpml_compatible && !empty(apply_filters('wpml_current_language', NULL )) ){
+			 	if( $current_screen->parent_base != WPEXTEND_MAIN_SLUG_ADMIN_PAGE && $instance_category->wpml_compatible && !empty(apply_filters('wpml_current_language', NULL )) ){
 			 		$retour_html .= ' ('.apply_filters('wpml_current_language', NULL ).')';
 			 	}
 			 	$retour_html .= '</h2><div>';
 
 			 	if($current_screen->parent_base != WPEXTEND_MAIN_SLUG_ADMIN_PAGE){
 					$retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'update_settings_wpextend');
+				}
+				else{
+					$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
+					$retour_html .= Wpextend_Type_Field::render_input_checkbox( __('Multilanguage compatibility', WPEXTEND_TEXTDOMAIN), 'wpml_compatible', array( 'true' => __('Must be multilingual?', WPEXTEND_TEXTDOMAIN) ), [ $instance_category->wpml_compatible ] );
+					$retour_html .= Wpextend_Type_Field::render_input_text( __('Capabilities', WPEXTEND_TEXTDOMAIN), 'capabilities', $instance_category->capabilities );
+					$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 				}
 				
 				$retour_html .= Wpextend_Type_Field::render_input_hidden( 'category', $key );

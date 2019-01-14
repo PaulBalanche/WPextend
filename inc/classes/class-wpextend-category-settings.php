@@ -40,36 +40,40 @@ class Wpextend_Category_Settings {
 	*/
 	public function render_html() {
 
+		// Get info current screen
+		$current_screen = get_current_screen();
+		
 		$retour_html = Wpextend_Render_Admin_Html::table_edit_open();
-		$Wpextend_List_Table_data = [];
+		if($current_screen->parent_base == WPEXTEND_MAIN_SLUG_ADMIN_PAGE){ $Wpextend_List_Table_data = []; }
 		foreach( $this->list_settings as $key => $val) {
 
-			$Wpextend_List_Table_data[] = array_merge($val, [ 'action_delete' => [ 'action' => 'delete_setting', 'category' => $this->id, 'key' => $key, '_wpnonce' => wp_create_nonce( 'delete_setting' ) ] ] );
-			// $instance_field_setting = new Wpextend_Single_Setting($key, $this->id);
-			// $retour_html .= $instance_field_setting->render_html();
+			if($current_screen->parent_base != WPEXTEND_MAIN_SLUG_ADMIN_PAGE){
+				$instance_field_setting = new Wpextend_Single_Setting($key, $this->id);
+				$retour_html .= $instance_field_setting->render_html();
+			}
+			else{
+				$Wpextend_List_Table_data[] = array_merge($val, [ 'action_delete' => [ 'action' => 'delete_setting', 'category' => $this->id, 'key' => $key, '_wpnonce' => wp_create_nonce( 'delete_setting' ) ] ] );
+			}
 		}
-	
-		// pre($Wpextend_List_Table_data);
 
-		ob_start();
-
-		$args_Wpextend_List_Table = [
-			'data' 		=> $Wpextend_List_Table_data,
-			'columns'	=> [
-				'name'			=> 'Name',
-				'description' 	=> 'Description',
-				'type' 			=> 'Type',
-				'repeatable' 	=> 'Repeatable'
-			],
-			'per_page'	=> 200,
-			// 'delete_link' => '<a href="'.add_query_arg(  ), admin_url( 'admin-post.php' ) ).'">Delete</a>'
-		];
-		$Wpextend_List_Table = new Wpextend_List_Table($args_Wpextend_List_Table);
-		$Wpextend_List_Table->prepare_items();
-		$Wpextend_List_Table->display();
-
-		$retour_html .= ob_get_contents();
-		ob_end_clean();
+		if($current_screen->parent_base == WPEXTEND_MAIN_SLUG_ADMIN_PAGE){
+			ob_start();
+			$args_Wpextend_List_Table = [
+				'data' 		=> $Wpextend_List_Table_data,
+				'columns'	=> [
+					'name'			=> 'Name',
+					'description' 	=> 'Description',
+					'type' 			=> 'Type',
+					'repeatable' 	=> 'Repeatable'
+				],
+				'per_page'	=> 200
+			];
+			$Wpextend_List_Table = new Wpextend_List_Table($args_Wpextend_List_Table);
+			$Wpextend_List_Table->prepare_items();
+			$Wpextend_List_Table->display();
+			$retour_html .= ob_get_contents();
+			ob_end_clean();
+		}
 
 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 
