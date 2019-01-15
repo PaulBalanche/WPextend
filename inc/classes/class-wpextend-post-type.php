@@ -136,17 +136,55 @@ class Wpextend_Post_Type {
 		// Header page & open form
 		$retour_html = Wpextend_Render_Admin_Html::header('Custom Post Type');
 
-		// Get all custom type to create fieldset
-		$all_custom_post_type = $this->get_all_include_base_wordpress();
-		$retour_html .= '<ul>';
-		foreach( $all_custom_post_type as $key => $val) {
 
-			$retour_html .= '<li>'.$val.' <a href="'.add_query_arg( 'id', $key ).'" >edit</a>';
-			if( !in_array($key, self::$list_reserved_post_types) ){
-				$retour_html .= ' | <a href="'.add_query_arg( array( 'action' => 'delete_custom_post_type', 'id' => $key ), admin_url( 'admin-post.php' ) ).'" >delete</a></li>';
+
+		// Display table with all custom post type
+		$all_custom_post_type = $this->get_all_include_base_wordpress();
+		if( is_array($all_custom_post_type) && count($all_custom_post_type) > 0 ) {
+
+			$Wpextend_List_Table_data = [];
+			foreach( $all_custom_post_type as $key => $val) {
+
+				$current_list_Table_data = [
+					'name'	=> $val,
+					'action_edit' => [
+						'id' => $key
+					]
+				];
+
+				if( !in_array($key, self::$list_reserved_post_types) ){
+
+					$current_list_Table_data_delete = [
+						'action_delete' => [
+							'action' => 'delete_custom_post_type',
+							'id' => $key,
+							'_wpnonce' => wp_create_nonce( 'delete_custom_post_type' )
+						]
+					];
+				}
+				else{
+					$current_list_Table_data_delete = [];
+				}
+				
+				$Wpextend_List_Table_data[] = array_merge($current_list_Table_data, $current_list_Table_data_delete);
 			}
-		}
-		$retour_html .= '</ul>';
+
+			ob_start();
+			$args_Wpextend_List_Table = [
+				'data' 		=> $Wpextend_List_Table_data,
+				'columns'	=> [
+					'name'			=> 'Name'
+				],
+				'per_page'	=> 200
+			];
+			$Wpextend_List_Table = new Wpextend_List_Table($args_Wpextend_List_Table);
+			$Wpextend_List_Table->prepare_items();
+			$Wpextend_List_Table->display();
+			$retour_html .= ob_get_contents();
+			ob_end_clean();
+		}	
+		
+
 
 		// Add custom psot type form
 		if(isset($_GET['id'])){

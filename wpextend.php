@@ -37,6 +37,11 @@ if( !defined('WPEXTEND_MAIN_SLUG_ADMIN_PAGE') ){
 	define( 'WPEXTEND_MAIN_SLUG_ADMIN_PAGE' , 'wpextend' );
 }
 
+// Enable or disable CUSTON POST TYPE feature
+if( !defined('WPEXTEND_ENABLE_CUSTOM_POST_TYPE') ){
+	define( 'WPEXTEND_ENABLE_CUSTOM_POST_TYPE' , TRUE );
+}
+
 // MultiPostThumbnails plugin integration
 define( 'WPEXTEND_MultiPostThumbnails' , ( class_exists('MultiPostThumbnails') ) ? TRUE : FALSE );
 

@@ -84,8 +84,17 @@ class Wpextend_List_Table extends WP_List_Table {
         //     'edit'      => sprintf('<a href="?page=%s&action=%s&movie=%s">Edit</a>',$_REQUEST['page'],'edit',$item['ID']),
         //     'delete'    => sprintf('<a href="' . add_query_arg( array( 'action' => 'delete_setting', 'category' => $this->category, 'key' => $this->id, '_wpnonce' => wp_create_nonce( 'delete_setting' ) ), admin_url( 'admin-post.php' ) ) . '">Delete</a>')
         // );
+
+        if( isset($item['action_edit']) ) {
+
+            $url = ( in_array('_wpnonce', $item['action_edit']) ) ? admin_url( 'admin-post.php' ) : false;
+            $actions['edit'] = sprintf('<a href="' . add_query_arg( $item['action_edit'], $url ) . '">Edit</a>');
+        }
+
         if( isset($item['action_delete']) ) {
-            $actions['delete'] = sprintf('<a href="' . add_query_arg( $item['action_delete'], admin_url( 'admin-post.php' ) ) . '">Delete</a>');
+
+            $url = ( in_array('_wpnonce', $item['action_delete']) ) ? admin_url( 'admin-post.php' ) : false;
+            $actions['delete'] = sprintf('<a href="' . add_query_arg( $item['action_delete'], $url ) . '">Delete</a>');
         }
         
         //Return the title contents

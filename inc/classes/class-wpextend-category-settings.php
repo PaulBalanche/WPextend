@@ -52,7 +52,14 @@ class Wpextend_Category_Settings {
 				$retour_html .= $instance_field_setting->render_html();
 			}
 			else{
-				$Wpextend_List_Table_data[] = array_merge($val, [ 'action_delete' => [ 'action' => 'delete_setting', 'category' => $this->id, 'key' => $key, '_wpnonce' => wp_create_nonce( 'delete_setting' ) ] ] );
+				$Wpextend_List_Table_data[] = array_merge($val, [
+					'action_delete' => [
+						'action' => 'delete_setting',
+						'category' => $this->id,
+						'key' => $key,
+						'_wpnonce' => wp_create_nonce( 'delete_setting' )
+					]
+				] );
 			}
 		}
 
