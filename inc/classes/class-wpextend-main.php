@@ -6,6 +6,7 @@ class Wpextend_Main {
 
     private static $_instance;
 
+	public $instance_multilanguage;
 	public $instance_global_settings;
 	public $instance_post_type_wpextend;
 
@@ -33,6 +34,7 @@ class Wpextend_Main {
     */
     private function __construct() {
 
+		$this->instance_multilanguage = Wpextend_Multilanguage::getInstance();
 		$this->instance_global_settings = Wpextend_Global_Settings::getInstance();
 		if( WPEXTEND_ENABLE_CUSTOM_POST_TYPE ){ $this->instance_post_type_wpextend = Wpextend_Post_Type::getInstance(); }
 
