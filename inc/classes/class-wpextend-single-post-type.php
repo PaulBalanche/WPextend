@@ -1,6 +1,4 @@
 <?php
-
-
 /**
  *
  */
@@ -53,9 +51,6 @@ class Wpextend_Single_Post_Type {
 	public static $default_annex_args = array(
 		'multiple_post_thumbnails'	=> '0'
 	);
-
-
-
 
 
 
@@ -116,7 +111,10 @@ class Wpextend_Single_Post_Type {
 				'label' => $this->taxonomy['label'],
 				'rewrite' => array( 'slug' => $this->taxonomy['slug'] ),
 				'hierarchical' => true,
-				'sort' => true
+				'sort' => true,
+				'show_ui' => true,
+				'show_admin_column' => true,
+				'show_in_rest' => true
 			)
 		);
 	}
@@ -177,7 +175,7 @@ class Wpextend_Single_Post_Type {
 
 		if( !in_array($slug, Wpextend_Post_Type::$list_reserved_post_types) ){
 
-			$retour_html .= '<hr>';
+			$retour_html .= '<br /><br /><br /><br /><h3>Informations:</h3><div style="float:left; width: 50%">';
 
 			$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
 			foreach( self::$default_labels as $key => $val) {
@@ -185,7 +183,7 @@ class Wpextend_Single_Post_Type {
 			}
 			$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 
-			$retour_html .= '<hr>';
+			$retour_html .= '</div><div style="float:right; width: 50%">';
 
 			$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
 			foreach( self::$default_args as $key => $val) {
@@ -205,7 +203,7 @@ class Wpextend_Single_Post_Type {
 			}
 	 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 
-			$retour_html .= '<hr>';
+			$retour_html .= '</div><div style="clear:both"></div><br /><br /><br /><br /><h3>Taxonomy:</h3>';
 		
 
 			$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
@@ -215,7 +213,7 @@ class Wpextend_Single_Post_Type {
 
 		}
 
-		$retour_html .= '<hr>';
+		$retour_html .= '<br /><br /><br /><br /><h3>Multiple post thumbnails:</h3>';
 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
 		foreach( self::$default_annex_args as $key => $val) {
 

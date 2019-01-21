@@ -1,6 +1,4 @@
 <?php
-
-
 /**
  *
  */
@@ -186,15 +184,19 @@ class Wpextend_Post_Type {
 		
 
 
-		// Add custom psot type form
+		// Add / edit custom post type form
 		if(isset($_GET['id'])){
 
+			$retour_html .= '<fieldset class="card" style="max-width:1400px"><h2>Edit</h2>';
 			$custom_post = ( isset($this->custom_post_type_wpextend[ $_GET['id'] ]) ) ? new Wpextend_Single_Post_Type( $_GET['id'], $this->custom_post_type_wpextend[ $_GET['id'] ] ) : new Wpextend_Single_Post_Type($_GET['id']);
 			$retour_html .= $custom_post->render_form_edit();
 		}
 		else{
+
+			$retour_html .= '<fieldset class="card" style="max-width:1400px"><h2>Add custom post type</h2>';
 			$retour_html .= Wpextend_Single_Post_Type::render_form_create();
 		}
+		$retour_html .= '</fieldset>';
 
 		// return
 		echo $retour_html;

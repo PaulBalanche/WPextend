@@ -61,9 +61,10 @@ function _wpextend_init() {
 	require( WPEXTEND_DIR . '/inc/functions/basic-functions.php' );
 
 	// Autoloader
+	// require( WPEXTEND_DIR . '/vendor/autoload.php' );
 	require( WPEXTEND_CLASSES_DIR . 'class-wpextend-autoload.php' );
 	Wpextend_Auto_Load::register();
-
+	// WPS::enable_options_page();
 	// Main
 	$instance_Wpextend_Main = Wpextend_Main::getInstance();
 }
