@@ -1,5 +1,5 @@
 <?php
-	
+
 	/**
 	* Check if array is assocative or not
 	*
@@ -73,6 +73,3 @@
 			print_r($array);
 		echo "</pre>";
 	}
-
-
-?>

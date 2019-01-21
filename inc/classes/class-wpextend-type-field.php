@@ -1,6 +1,4 @@
 <?php
-
-
 /**
  *
  */
@@ -87,6 +85,21 @@ class Wpextend_Type_Field {
 		 		<input type="text" id="input_'.$name.'" class="input_'.$name.' '.self::$class_input_text.'" value="'.str_replace('"', '&quot;', $value).'" class="regular-text ltr" disabled >
 		 		<input name="'.$name.'" type="hidden" value="'.str_replace('"', '&quot;', $value).'" />
 			</td>
+		</tr>';
+
+		return $retour_html;
+	}
+	
+
+
+	/**
+     *
+     */
+    public static function render_label_and_free_html( $label, $name, $html = '', $description = '' ) {
+
+		$retour_html = '<tr class="tr_'.$name.'">
+		<th scope="row"><label>'.stripslashes($label).'</label><i class="description">'.$description.'</i></th>
+			<td>' . $html . '</td>
 		</tr>';
 
 		return $retour_html;

@@ -1,21 +1,21 @@
 <?php
-
-
 /**
 *
 */
 class Wpextend_Global_Settings {
 
-	 private static $_instance;
-	 public $wpextend_global_settings;
-	 public $wpextend_global_settings_values = array();
-	 public $name_option_in_database = '_buzzpress_global_settings';
-	 public $name_option_value_in_database = '_buzzpress_global_settings_value_';
-	 public $WPML_default_langage = 'all';
-	 public $WPML_current_langage = null;
-	 public $WPML_langage;
-	 static public $admin_url = '';
+	private static $_instance;
 
+	public $wpextend_global_settings;
+	public $wpextend_global_settings_values = array();
+
+	public $name_option_in_database = '_buzzpress_global_settings';
+	public $name_option_value_in_database = '_buzzpress_global_settings_value_';
+
+	public $wordpress_default_locale = null;
+	public $wordpress_current_langage = null;
+
+	static public $admin_url = '';
 
 
 	/**
@@ -29,8 +29,8 @@ class Wpextend_Global_Settings {
 			  self::$_instance = new Wpextend_Global_Settings();
 		 }
 		 else{
-			// WPML initialisation
-			self::$_instance->WPML_initialisation();
+			// Mutlilanguages initialisation
+			self::$_instance->multilanguages_initialisation();
 		}
 
 		 return self::$_instance;
@@ -45,8 +45,8 @@ class Wpextend_Global_Settings {
 	*/
 	private function __construct() {
 
-		// WPML initialisation
-		$this->WPML_initialisation();
+		// Mutlilanguages initialisation
+		$this->multilanguages_initialisation();
 
 		// Set option from database
 		$this->wpextend_global_settings = get_option( $this->name_option_in_database );
@@ -80,17 +80,24 @@ class Wpextend_Global_Settings {
 
 
 	/**
-	* WPML initialisation
+	* Mutlilanguages initialisation
 	*
 	*/
-	public function WPML_initialisation(){
+	public function multilanguages_initialisation(){
 
-		$WPML_default_lang = apply_filters('wpml_default_language', NULL );
- 		$this->WPML_current_langage = apply_filters( 'wpml_current_language', NULL );
-		if( $this->WPML_current_langage && !empty($this->WPML_current_langage) && $this->WPML_current_langage != $WPML_default_lang )
-			$this->WPML_langage = $this->WPML_current_langage;
-		else
-			$this->WPML_langage = $this->WPML_default_langage;
+		// Get default locale
+		$this->wordpress_default_locale = substr(Wpextend_Multilanguage::get_wplang(), 0, 2);
+
+		// Get admin & front current language
+		if( apply_filters( 'wpml_current_language', NULL ) ) {
+			$this->wordpress_current_langage = apply_filters( 'wpml_current_language', NULL );
+		}
+		elseif( isset($_GET['lang']) && !empty($_GET['lang']) ){
+			$this->wordpress_current_langage = $_GET['lang'];
+		}
+		else{
+			$this->wordpress_current_langage = $this->wordpress_default_locale;
+		}
 	}
 
 
@@ -139,9 +146,13 @@ class Wpextend_Global_Settings {
 
 
 	/**
-	* @param void $id
-	*/
-	public function get($id, $category) {
+	 * Function to get accurate settings via $ID and $CATEGORY or tab category
+	 * 
+	 */
+	static public function get($id, $category) {
+
+		// Get Wpextend_Global_Settings instance
+		$instance_global_settings = Wpextend_Global_Settings::getInstance();
 
 		if($id != null){
 
@@ -149,25 +160,24 @@ class Wpextend_Global_Settings {
 			$category = sanitize_title( $category );
 
 			if(
-				is_array( $this->wpextend_global_settings_values ) &&
-				array_key_exists($category, $this->wpextend_global_settings_values ) &&
-				is_array( $this->wpextend_global_settings_values[$category] ) &&
-				array_key_exists($id, $this->wpextend_global_settings_values[$category] ) &&
+				is_array( $instance_global_settings->wpextend_global_settings_values ) &&
+				array_key_exists($category, $instance_global_settings->wpextend_global_settings_values ) &&
+				is_array( $instance_global_settings->wpextend_global_settings_values[$category] ) &&
+				array_key_exists($id, $instance_global_settings->wpextend_global_settings_values[$category] ) &&
 				(
-					( $this->wpextend_global_settings[$category]['wpml_compatible'] == 1 && array_key_exists( $this->WPML_langage, $this->wpextend_global_settings_values[$category][$id]) ) ||
-					( $this->wpextend_global_settings[$category]['wpml_compatible'] != 1 && array_key_exists( $this->WPML_default_langage, $this->wpextend_global_settings_values[$category][$id]) )
+					( $instance_global_settings->wpextend_global_settings[$category]['wpml_compatible'] == 1 && array_key_exists( $instance_global_settings->wordpress_current_langage, $instance_global_settings->wpextend_global_settings_values[$category][$id]) ) ||
+					( $instance_global_settings->wpextend_global_settings[$category]['wpml_compatible'] != 1 && array_key_exists( $instance_global_settings->wordpress_default_locale, $instance_global_settings->wpextend_global_settings_values[$category][$id]) )
 				)
 			){
 
-				if( $this->wpextend_global_settings[$category]['wpml_compatible'] == 1 ){
-
-					if( $this->WPML_current_langage != null && array_key_exists($this->WPML_current_langage, $this->wpextend_global_settings_values[$category][$id]) )
-						return $this->wpextend_global_settings_values[$category][$id][$this->WPML_current_langage];
-					else
-						return $this->wpextend_global_settings_values[$category][$id][$this->WPML_langage];
+				if(
+					$instance_global_settings->wpextend_global_settings[$category]['wpml_compatible'] == 1 &&
+					$instance_global_settings->wordpress_current_langage != null && array_key_exists($instance_global_settings->wordpress_current_langage, $instance_global_settings->wpextend_global_settings_values[$category][$id])
+				){
+					return $instance_global_settings->wpextend_global_settings_values[$category][$id][$instance_global_settings->wordpress_current_langage];
 				}
-				else
-					return $this->wpextend_global_settings_values[$category][$id][$this->WPML_default_langage];
+				
+				return $instance_global_settings->wpextend_global_settings_values[$category][$id][$instance_global_settings->wordpress_default_locale];
 			}
 		}
 		else{
@@ -175,21 +185,20 @@ class Wpextend_Global_Settings {
 			$category = sanitize_title( $category );
 
 			if(
-				is_array( $this->wpextend_global_settings_values ) &&
-				array_key_exists($category, $this->wpextend_global_settings_values ) &&
-				is_array( $this->wpextend_global_settings_values[$category] )
+				is_array( $instance_global_settings->wpextend_global_settings_values ) &&
+				array_key_exists($category, $instance_global_settings->wpextend_global_settings_values ) &&
+				is_array( $instance_global_settings->wpextend_global_settings_values[$category] )
 			){
 				$retour = array();
-				foreach( $this->wpextend_global_settings_values[$category] as $key => $val ){
-					if( $this->wpextend_global_settings[$category]['wpml_compatible'] == 1 ){
-						
-						if( $this->WPML_current_langage != null && array_key_exists($this->WPML_current_langage, $val) )
-							$retour[$key] = $val[$this->WPML_current_langage];
-						else
-							$retour[$key] = $val[$this->WPML_langage];
+				foreach( $instance_global_settings->wpextend_global_settings_values[$category] as $key => $val ){
+					if(
+						$instance_global_settings->wpextend_global_settings[$category]['wpml_compatible'] == 1 &&
+						$instance_global_settings->wordpress_current_langage != null && array_key_exists($instance_global_settings->wordpress_current_langage, $val)
+					){
+						$retour[$key] = $val[$instance_global_settings->wordpress_current_langage];
 					}
 					else
-						$retour[$key] = $val[$this->WPML_default_langage];
+						$retour[$key] = $val[$instance_global_settings->wordpress_default_locale];
 				}
 				return $retour;
 			}
@@ -203,9 +212,12 @@ class Wpextend_Global_Settings {
 	/**
 	* Get all settingd
 	*/
-	public function get_all_settings(){
+	static public function get_all_settings(){
 
-		return $this->wpextend_global_settings_values;
+		// Get Wpextend_Global_Settings instance
+		$instance_global_settings = Wpextend_Global_Settings::getInstance();
+
+		return $instance_global_settings->wpextend_global_settings_values;
 	}
 
 
@@ -239,13 +251,13 @@ class Wpextend_Global_Settings {
 	*/
 	public function render_admin_page() {
 
-		 // Get info current screen
-		 $current_screen = get_current_screen();
+		// Get info current screen
+		$current_screen = get_current_screen();
 
-		 // Header page & open form
-		 $retour_html = Wpextend_Render_Admin_Html::header('Site settings');
+		// Header page & open form
+		$retour_html = Wpextend_Render_Admin_Html::header('Site settings');
 
-		 $retour_html .= '<div class="accordion_wpextend">';
+		$retour_html .= '<div class="accordion_wpextend">';
 
 		 // Get all categories to create fieldset
 		 $all_category = $this->get_all_category();
@@ -259,8 +271,13 @@ class Wpextend_Global_Settings {
 		 		( current_user_can('manage_options') )
 		 	){
 
+				$data_wp_list_table[] = [
+					'key'	=> $key,
+					'title'	=> $val
+				];
+
 			 	$retour_html .= '<h2>'.$val;
-			 	if( $instance_category->wpml_compatible && !empty(apply_filters('wpml_current_language', NULL )) ){
+			 	if( $current_screen->parent_base != WPEXTEND_MAIN_SLUG_ADMIN_PAGE && $instance_category->wpml_compatible && !empty(apply_filters('wpml_current_language', NULL )) ){
 			 		$retour_html .= ' ('.apply_filters('wpml_current_language', NULL ).')';
 			 	}
 			 	$retour_html .= '</h2><div>';
@@ -268,11 +285,17 @@ class Wpextend_Global_Settings {
 			 	if($current_screen->parent_base != WPEXTEND_MAIN_SLUG_ADMIN_PAGE){
 					$retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'update_settings_wpextend');
 				}
+				else{
+					$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
+					$retour_html .= Wpextend_Type_Field::render_input_checkbox( __('Multilanguage compatibility', WPEXTEND_TEXTDOMAIN), 'wpml_compatible', array( 'true' => __('Must be multilingual?', WPEXTEND_TEXTDOMAIN) ), [ $instance_category->wpml_compatible ] );
+					$retour_html .= Wpextend_Type_Field::render_input_text( __('Capabilities', WPEXTEND_TEXTDOMAIN), 'capabilities', $instance_category->capabilities );
+					$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
+				}
 				
 				$retour_html .= Wpextend_Type_Field::render_input_hidden( 'category', $key );
 
 				if($current_screen->parent_base == WPEXTEND_MAIN_SLUG_ADMIN_PAGE){
-					$retour_html .= '<h2>'.$val.' (<a href="'.add_query_arg( array( 'action' => 'delete_category_setting', 'category' => $key, '_wpnonce' => wp_create_nonce( 'delete_setting' ) ), admin_url( 'admin-post.php' ) ).'">Delete</a>)</h2>';
+					$retour_html .= '<p style="text-align:right"><a href="'.add_query_arg( array( 'action' => 'delete_category_setting', 'category' => $key, '_wpnonce' => wp_create_nonce( 'delete_setting' ) ), admin_url( 'admin-post.php' ) ).'" class="button button-primary">Delete entire category</a></p>';
 				}
 
 				$retour_html .= $instance_category->render_html();
@@ -282,7 +305,7 @@ class Wpextend_Global_Settings {
 				}
 
 				if($current_screen->parent_base == WPEXTEND_MAIN_SLUG_ADMIN_PAGE){
-				 	$retour_html .= '<hr>'.Wpextend_Single_Setting::render_form_create( $this->get_all_category(), $key );
+				 	$retour_html .= Wpextend_Single_Setting::render_form_create( $this->get_all_category(), $key );
 			 	}
 				$retour_html .= '</div>';
 			}
@@ -292,7 +315,7 @@ class Wpextend_Global_Settings {
 
 		// Add catergory form & add setting form
 		if($current_screen->parent_base == WPEXTEND_MAIN_SLUG_ADMIN_PAGE){
-			$retour_html .= '<fieldset class="fieldset_wpextend"><h2>New settings category</h2>';
+			$retour_html .= '<fieldset class="card"><h2>New settings category</h2>';
 			$retour_html .= Wpextend_Category_Settings::render_form_create();
 			$retour_html .= '</fieldset>';
 		}
@@ -382,11 +405,8 @@ class Wpextend_Global_Settings {
 
 
 
-
-
-
 	/**
-	* Get POST and appli correspond function
+	* Get POST and apply correspond function
 	*
 	* @return boolean
 	*/
@@ -421,6 +441,7 @@ class Wpextend_Global_Settings {
 							// Second test if setting exists
 							if( array_key_exists( $key_field, $instance_global_settings->wpextend_global_settings[$key_category]['fields'] ) ){
 
+								// If multilangue settings
 								if( $instance_global_settings->wpextend_global_settings[$key_category]['wpml_compatible'] == 1 ){
 
 									if( is_array($value) ){
@@ -434,19 +455,13 @@ class Wpextend_Global_Settings {
 											}
 										}
 
-										$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_langage] = $value;
-										if( $instance_global_settings->WPML_current_langage != null && $instance_global_settings->WPML_langage != $instance_global_settings->WPML_current_langage )
-											$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_current_langage] = $value;
+										$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->wordpress_current_langage] = $value;
 									}
 									elseif( $instance_global_settings->wpextend_global_settings[$key_category]['fields'][$key_field]['type'] == 'textarea' ){
-										$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_langage] = $value;
-										if( $instance_global_settings->WPML_current_langage != null && $instance_global_settings->WPML_langage != $instance_global_settings->WPML_current_langage )
-											$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_current_langage] = $value;
+										$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->wordpress_current_langage] = $value;
 									}
 									else{
-										$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_langage] = sanitize_text_field($value);
-										if( $instance_global_settings->WPML_current_langage != null && $instance_global_settings->WPML_langage != $instance_global_settings->WPML_current_langage )
-											$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_current_langage] = sanitize_text_field($value);
+										$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->wordpress_current_langage] = sanitize_text_field($value);
 									}
 								}
 								else{
@@ -462,13 +477,13 @@ class Wpextend_Global_Settings {
 											}
 										}
 
-										$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_default_langage] = $value;
+										$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->wordpress_default_locale] = $value;
 									}
 									elseif( $instance_global_settings->wpextend_global_settings[$key_category]['fields'][$key_field]['type'] == 'textarea' ){
-										$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_default_langage] = $value;
+										$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->wordpress_default_locale] = $value;
 									}
 									else{
-										$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->WPML_default_langage] = sanitize_text_field($value);
+										$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->wordpress_default_locale] = sanitize_text_field($value);
 									}
 								}
 							}
@@ -486,8 +501,6 @@ class Wpextend_Global_Settings {
 			exit;
 		}
 	}
-
-
 
 
 
@@ -618,5 +631,7 @@ class Wpextend_Global_Settings {
 
 		return $values_to_export;
 	}
+
+
 
 }

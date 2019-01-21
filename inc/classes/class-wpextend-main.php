@@ -1,6 +1,4 @@
 <?php
-
-
 /**
  *
  */
@@ -8,14 +6,12 @@ class Wpextend_Main {
 
     private static $_instance;
 
+	public $instance_multilanguage;
 	public $instance_global_settings;
-	public $instance_wpextend_custom_field;
 	public $instance_post_type_wpextend;
-	public $section_pc_wpextend;
 
 	static public $admin_url_import = '_import';
 	static public $admin_url_export = '_export';
-
 
 
 
@@ -38,9 +34,8 @@ class Wpextend_Main {
     */
     private function __construct() {
 
-		if( WPEXTEND_ENABLE_SECTION ){ $this->section_pc_wpextend = Wpextend_Section_Pc::getInstance(); }
+		$this->instance_multilanguage = Wpextend_Multilanguage::getInstance();
 		$this->instance_global_settings = Wpextend_Global_Settings::getInstance();
-		if( WPEXTEND_ENABLE_CUSTOM_FIELDS ){ $this->instance_wpextend_custom_field = Wpextend_Custom_Field::getInstance(); }
 		if( WPEXTEND_ENABLE_CUSTOM_POST_TYPE ){ $this->instance_post_type_wpextend = Wpextend_Post_Type::getInstance(); }
 
 		add_action('admin_menu', array ( __CLASS__ ,  'define_admin_menu' ) );
@@ -65,8 +60,6 @@ class Wpextend_Main {
 		add_menu_page('WP Extend', 'WP Extend', 'manage_options', WPEXTEND_MAIN_SLUG_ADMIN_PAGE, array( Wpextend_Global_Settings::getInstance(), 'render_admin_page' ) );
 		add_submenu_page(WPEXTEND_MAIN_SLUG_ADMIN_PAGE, 'WP Extend - Site settings', 'Site settings', 'manage_options', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . Wpextend_Global_Settings::$admin_url, array( Wpextend_Global_Settings::getInstance(), 'render_admin_page' ) );
 		if( WPEXTEND_ENABLE_CUSTOM_POST_TYPE ){ add_submenu_page(WPEXTEND_MAIN_SLUG_ADMIN_PAGE, 'WP Extend - Custom Post Type', 'Custom Post Type', 'manage_options', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . Wpextend_Post_Type::$admin_url, array( Wpextend_Post_Type::getInstance(), 'render_admin_page' ) ); }
-		if( WPEXTEND_ENABLE_CUSTOM_FIELDS ){ add_submenu_page(WPEXTEND_MAIN_SLUG_ADMIN_PAGE, 'WP Extend - Custom Fields', 'Custom Fields', 'manage_options', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . Wpextend_Custom_Field::$admin_url, array( Wpextend_Custom_Field::getInstance(), 'render_admin_page' ) ); }
-		if( WPEXTEND_ENABLE_SECTION ){ add_submenu_page('wpextend', 'WP Extend - Section', 'Section', 'manage_options', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . Wpextend_Section_Pc::$admin_url, array( Wpextend_Section_Pc::getInstance(), 'render_admin_page' ) ); }
 		add_submenu_page(WPEXTEND_MAIN_SLUG_ADMIN_PAGE, 'WP Extend - Export', 'Export', 'manage_options', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . Wpextend_Main::$admin_url_export, array( Wpextend_Main::getInstance(), 'render_export' ) );
 		add_submenu_page(WPEXTEND_MAIN_SLUG_ADMIN_PAGE, 'WP Extend - Import', 'Import', 'manage_options', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . Wpextend_Main::$admin_url_import, array( Wpextend_Main::getInstance(), 'render_import' ) );
 	 }
@@ -86,8 +79,6 @@ class Wpextend_Main {
 		wp_enqueue_style( 'style_jquery-ui-theme', WPEXTEND_ASSETS_URL . 'style/admin/jquery-ui.theme.min.css', false, true );
 
 		// Wpextend_Custom_Field Style and Script 
-		wp_enqueue_style( 'style_admin_wpextend_custom_field', WPEXTEND_ASSETS_URL . 'style/admin/custom_field.css', false, true );
-		wp_enqueue_script( 'script_admin_wpextend_custom_field', WPEXTEND_ASSETS_URL . 'js/admin/custom_field.js', array('jquery'));
 		wp_enqueue_script( 'script_admin_wpextend_custom_field_setting_page', WPEXTEND_ASSETS_URL . 'js/admin/custom_field_setting_page.js', array('jquery'));
 
 		wp_enqueue_script( 'jquery-ui-accordion' );
@@ -122,20 +113,6 @@ class Wpextend_Main {
 			// Custom post type
 			$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
 			$retour_html .= Wpextend_Type_Field::render_input_textarea( 'WP Extend Custom Post Type', 'wpextend_custom_post_type_export', stripslashes( json_encode( Wpextend_Post_Type::getInstance()->custom_post_type_wpextend, JSON_UNESCAPED_UNICODE ) ), false, '', false );
-			$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
-		}
-
-		if( WPEXTEND_ENABLE_CUSTOM_FIELDS ){
-		 	// Custom field
-			$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
-			$retour_html .= Wpextend_Type_Field::render_input_textarea( 'WP Extend Custom Field', 'wpextend_custom_field_value_export', stripslashes( json_encode( Wpextend_Custom_Field::getInstance()->Wpextend_Custom_Field, JSON_UNESCAPED_UNICODE ) ), false, '', false );
-			$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
-		}
-
-		if( WPEXTEND_ENABLE_SECTION ){ 
-			// WP Extend Section Pc
-			$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
-			$retour_html .= Wpextend_Type_Field::render_input_textarea( 'WP Extend Section Pc', 'wpextend_section_pc_value_export', stripslashes( json_encode( Wpextend_Section_Pc::getInstance()->Wpextend_Section_Pc, JSON_UNESCAPED_UNICODE ) ), false, '', false );
 			$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
 		}
 
@@ -194,35 +171,6 @@ class Wpextend_Main {
 			}
 
 			$retour_html .= '<br /><hr><br />';
-		}
-
-		if( WPEXTEND_ENABLE_CUSTOM_FIELDS ){
-			
-		 	// Formulaire d'import Custom field
-			$retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'import_wpextend_custom_field', 'import_wpextend_custom_field' );
-
-			$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
-			$retour_html .= Wpextend_Type_Field::render_input_textarea( 'WP Extend Custom Field to import', 'wpextend_custom_field_to_import', '', false, '', false );
-			$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
-
-			$retour_html .= Wpextend_Render_Admin_Html::form_close( 'Import' );
-			if( file_exists( WPEXTEND_IMPORT_DIR . 'custom_field.json' ) ){
-				$retour_html .= '<p><a href="' . add_query_arg( ['action' => 'import_wpextend_custom_field', 'file' => 'custom_field'] , wp_nonce_url(admin_url( 'admin-post.php' ), 'import_wpextend_custom_field')) . '" class="button" >Import JSON file</a></p>';
-			}
-
-			$retour_html .= '<br /><hr><br />';
-		}
-
-		if( WPEXTEND_ENABLE_SECTION ){
-
-			// Formulaire d'import WP Extend Section Pc
-			$retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'import_wpextend_section_pc', 'import_wpextend_section_pc' );
-
-			$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
-			$retour_html .= Wpextend_Type_Field::render_input_textarea( 'WP Extend Section Pc to import', 'wpextend_section_pc_to_import', '', false, '', false );
-			$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
-
-			$retour_html .= Wpextend_Render_Admin_Html::form_close( 'Import' );
 		}
 
 	 	echo $retour_html;
