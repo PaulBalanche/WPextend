@@ -268,9 +268,7 @@ class GlobalSettings {
 
 		 	$instance_category = new CategorySettings($key);
 		 	if(
-		 		$instance_category->capabilities == null ||
-		 		$instance_category->capabilities == 'null' ||
-		 		$instance_category->capabilities == 'editor' ||
+		 		$instance_category->capabilities == 'all' ||
 		 		( current_user_can('manage_options') )
 		 	){
 
@@ -291,7 +289,7 @@ class GlobalSettings {
 				else{
 					$retour_html .= RenderAdminHtml::table_edit_open();
 					$retour_html .= TypeField::render_input_checkbox( __('Multilanguage compatibility', WPEXTEND_TEXTDOMAIN), 'wpml_compatible', array( 'true' => __('Must be multilingual?', WPEXTEND_TEXTDOMAIN) ), [ $instance_category->wpml_compatible ] );
-					$retour_html .= TypeField::render_input_text( __('Capabilities', WPEXTEND_TEXTDOMAIN), 'capabilities', $instance_category->capabilities );
+					$retour_html .= TypeField::render_input_radio( __('Capabilities', WPEXTEND_TEXTDOMAIN), 'capabilities', array( 'all' => __('Everyone', WPEXTEND_TEXTDOMAIN), 'only_administrator' => __('Only administrator', WPEXTEND_TEXTDOMAIN) ), 'all' );
 					$retour_html .= RenderAdminHtml::table_edit_close();
 				}
 				

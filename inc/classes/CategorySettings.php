@@ -27,7 +27,7 @@ class CategorySettings {
 
 			$this->id = $id;
 			$this->name = $instance_settings_Wpextend->wpextend_global_settings[$id]['name'];
-			$this->capabilities = ( array_key_exists('capabilities', $instance_settings_Wpextend->wpextend_global_settings[$id]) && !empty($instance_settings_Wpextend->wpextend_global_settings[$id]['capabilities']) && $instance_settings_Wpextend->wpextend_global_settings[$id]['capabilities'] != null ) ? $instance_settings_Wpextend->wpextend_global_settings[$id]['capabilities'] : null;
+			$this->capabilities = ( array_key_exists('capabilities', $instance_settings_Wpextend->wpextend_global_settings[$id]) && !empty($instance_settings_Wpextend->wpextend_global_settings[$id]['capabilities']) ) ? $instance_settings_Wpextend->wpextend_global_settings[$id]['capabilities'] : 'all';
 			$this->wpml_compatible = ( array_key_exists('wpml_compatible', $instance_settings_Wpextend->wpextend_global_settings[$id]) && !empty($instance_settings_Wpextend->wpextend_global_settings[$id]['wpml_compatible']) && $instance_settings_Wpextend->wpextend_global_settings[$id]['wpml_compatible'] ) ? true : false;
 			$this->list_settings = $instance_settings_Wpextend->wpextend_global_settings[$id]['fields'];
 		}
@@ -102,7 +102,7 @@ class CategorySettings {
 		$retour_html .= RenderAdminHtml::table_edit_open();
 		$retour_html .= TypeField::render_input_text( __('Name', WPEXTEND_TEXTDOMAIN), 'name' );
 		$retour_html .= TypeField::render_input_checkbox( __('Multilanguage compatibility', WPEXTEND_TEXTDOMAIN), 'wpml_compatible', array( 'true' => __('Must be multilingual?', WPEXTEND_TEXTDOMAIN) ) );
-		$retour_html .= TypeField::render_input_select( __('Capabilities', WPEXTEND_TEXTDOMAIN), 'capabilities', array( 'administrator' => __('Administrator', WPEXTEND_TEXTDOMAIN), 'editor' => __('Editor', WPEXTEND_TEXTDOMAIN) ), 'administrator' );
+		$retour_html .= TypeField::render_input_radio( __('Capabilities', WPEXTEND_TEXTDOMAIN), 'capabilities', array( 'all' => __('Everyone', WPEXTEND_TEXTDOMAIN), 'only_administrator' => __('Only administrator', WPEXTEND_TEXTDOMAIN) ), 'all' );
 		$retour_html .= RenderAdminHtml::table_edit_close();
 
 		$retour_html .= RenderAdminHtml::form_close( __('Add category', WPEXTEND_TEXTDOMAIN) );
