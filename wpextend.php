@@ -37,7 +37,7 @@ if( !defined('WPEXTEND_MAIN_SLUG_ADMIN_PAGE') ){
 	define( 'WPEXTEND_MAIN_SLUG_ADMIN_PAGE' , 'wpextend' );
 }
 
-// Enable or disable CUSTON POST TYPE feature
+// Enable or disable CUSTOM POST TYPE feature
 if( !defined('WPEXTEND_ENABLE_CUSTOM_POST_TYPE') ){
 	define( 'WPEXTEND_ENABLE_CUSTOM_POST_TYPE' , TRUE );
 }
@@ -60,11 +60,9 @@ function _wpextend_init() {
 	// Functions
 	require( WPEXTEND_DIR . '/inc/functions/basic-functions.php' );
 
-	// Autoloader
-	// require( WPEXTEND_DIR . '/vendor/autoload.php' );
-	require( WPEXTEND_CLASSES_DIR . 'class-wpextend-autoload.php' );
-	Wpextend_Auto_Load::register();
-	// WPS::enable_options_page();
-	// Main
-	$instance_Wpextend_Main = Wpextend_Main::getInstance();
+	// WP-Extend vendor autoloader
+	require( WPEXTEND_DIR . '/vendor/autoload.php' );
+
+	// Load Main instance
+	$instance_Wpextend_Main = Wpextend\Main::getInstance();
 }

@@ -1,8 +1,11 @@
 <?php
+
+namespace Wpextend;
+
 /**
 *
 */
-class Wpextend_Global_Settings {
+class GlobalSettings {
 
 	private static $_instance;
 
@@ -19,14 +22,14 @@ class Wpextend_Global_Settings {
 
 
 	/**
-	* First instance of class Wpextend_Global_Settings
+	* First instance of class GlobalSettings
 	*
-	* @return object Wpextend_Global_Settings
+	* @return object GlobalSettings
 	*/
 	public static function getInstance() {
 
 		 if (is_null(self::$_instance)) {
-			  self::$_instance = new Wpextend_Global_Settings();
+			  self::$_instance = new GlobalSettings();
 		 }
 		 else{
 			// Mutlilanguages initialisation
@@ -86,7 +89,7 @@ class Wpextend_Global_Settings {
 	public function multilanguages_initialisation(){
 
 		// Get default locale
-		$this->wordpress_default_locale = substr(Wpextend_Multilanguage::get_wplang(), 0, 2);
+		$this->wordpress_default_locale = substr(Multilanguage::get_wplang(), 0, 2);
 
 		// Get admin & front current language
 		if( apply_filters( 'wpml_current_language', NULL ) ) {
@@ -113,18 +116,18 @@ class Wpextend_Global_Settings {
 		add_action('admin_enqueue_scripts', array( __CLASS__, 'script_admin' ) );
 
 	   	// $_POST traitment if necessary
-	   	add_action( 'admin_post_update_settings_wpextend', 'Wpextend_Global_Settings::udpate_values' );
-	   	add_action( 'admin_post_add_category_setting_wpextend', 'Wpextend_Category_Settings::add_new' );
-	   	add_action( 'admin_post_add_settings_wpextend', 'Wpextend_Single_Setting::add_new' );
-		add_action( 'admin_post_delete_category_setting', 'Wpextend_Category_Settings::delete_category_setting' );
-		add_action( 'admin_post_delete_setting', 'Wpextend_Single_Setting::delete_setting' );
+	   	add_action( 'admin_post_update_settings_wpextend', 'Wpextend\GlobalSettings::udpate_values' );
+	   	add_action( 'admin_post_add_category_setting_wpextend', 'Wpextend\CategorySettings::add_new' );
+	   	add_action( 'admin_post_add_settings_wpextend', 'Wpextend\SingleSetting::add_new' );
+		add_action( 'admin_post_delete_category_setting', 'Wpextend\CategorySettings::delete_category_setting' );
+		add_action( 'admin_post_delete_setting', 'Wpextend\SingleSetting::delete_setting' );
 		add_action( 'admin_post_import_wpextend_global_settings', array($this, 'import') );
 		add_action( 'admin_post_import_wpextend_global_settings_values', array($this, 'import_values') );
 
 	   	// AJAX $_POST traitment if necessary
-	   	add_action( 'wp_ajax_update_settings_wpextend', 'Wpextend_Global_Settings::udpate_values' );
-	   	add_action( 'wp_ajax_add_category_setting_wpextend', 'Wpextend_Category_Settings::add_new' );
-	   	add_action( 'wp_ajax_add_settings_wpextend', 'Wpextend_Single_Setting::add_new' );
+	   	add_action( 'wp_ajax_update_settings_wpextend', 'Wpextend\GlobalSettings::udpate_values' );
+	   	add_action( 'wp_ajax_add_category_setting_wpextend', 'Wpextend\CategorySettings::add_new' );
+	   	add_action( 'wp_ajax_add_settings_wpextend', 'Wpextend\SingleSetting::add_new' );
 	}
 
 
@@ -151,8 +154,8 @@ class Wpextend_Global_Settings {
 	 */
 	static public function get($id, $category) {
 
-		// Get Wpextend_Global_Settings instance
-		$instance_global_settings = Wpextend_Global_Settings::getInstance();
+		// Get GlobalSettings instance
+		$instance_global_settings = GlobalSettings::getInstance();
 
 		if($id != null){
 
@@ -214,8 +217,8 @@ class Wpextend_Global_Settings {
 	*/
 	static public function get_all_settings(){
 
-		// Get Wpextend_Global_Settings instance
-		$instance_global_settings = Wpextend_Global_Settings::getInstance();
+		// Get GlobalSettings instance
+		$instance_global_settings = GlobalSettings::getInstance();
 
 		return $instance_global_settings->wpextend_global_settings_values;
 	}
@@ -255,7 +258,7 @@ class Wpextend_Global_Settings {
 		$current_screen = get_current_screen();
 
 		// Header page & open form
-		$retour_html = Wpextend_Render_Admin_Html::header('Site settings');
+		$retour_html = RenderAdminHtml::header('Site settings');
 
 		$retour_html .= '<div class="accordion_wpextend">';
 
@@ -263,7 +266,7 @@ class Wpextend_Global_Settings {
 		 $all_category = $this->get_all_category();
 		 foreach( $all_category as $key => $val) {
 
-		 	$instance_category = new Wpextend_Category_Settings($key);
+		 	$instance_category = new CategorySettings($key);
 		 	if(
 		 		$instance_category->capabilities == null ||
 		 		$instance_category->capabilities == 'null' ||
@@ -283,16 +286,16 @@ class Wpextend_Global_Settings {
 			 	$retour_html .= '</h2><div>';
 
 			 	if($current_screen->parent_base != WPEXTEND_MAIN_SLUG_ADMIN_PAGE){
-					$retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'update_settings_wpextend');
+					$retour_html .= RenderAdminHtml::form_open( admin_url( 'admin-post.php' ), 'update_settings_wpextend');
 				}
 				else{
-					$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
-					$retour_html .= Wpextend_Type_Field::render_input_checkbox( __('Multilanguage compatibility', WPEXTEND_TEXTDOMAIN), 'wpml_compatible', array( 'true' => __('Must be multilingual?', WPEXTEND_TEXTDOMAIN) ), [ $instance_category->wpml_compatible ] );
-					$retour_html .= Wpextend_Type_Field::render_input_text( __('Capabilities', WPEXTEND_TEXTDOMAIN), 'capabilities', $instance_category->capabilities );
-					$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
+					$retour_html .= RenderAdminHtml::table_edit_open();
+					$retour_html .= TypeField::render_input_checkbox( __('Multilanguage compatibility', WPEXTEND_TEXTDOMAIN), 'wpml_compatible', array( 'true' => __('Must be multilingual?', WPEXTEND_TEXTDOMAIN) ), [ $instance_category->wpml_compatible ] );
+					$retour_html .= TypeField::render_input_text( __('Capabilities', WPEXTEND_TEXTDOMAIN), 'capabilities', $instance_category->capabilities );
+					$retour_html .= RenderAdminHtml::table_edit_close();
 				}
 				
-				$retour_html .= Wpextend_Type_Field::render_input_hidden( 'category', $key );
+				$retour_html .= TypeField::render_input_hidden( 'category', $key );
 
 				if($current_screen->parent_base == WPEXTEND_MAIN_SLUG_ADMIN_PAGE){
 					$retour_html .= '<p style="text-align:right"><a href="'.add_query_arg( array( 'action' => 'delete_category_setting', 'category' => $key, '_wpnonce' => wp_create_nonce( 'delete_setting' ) ), admin_url( 'admin-post.php' ) ).'" class="button button-primary">Delete entire category</a></p>';
@@ -301,11 +304,11 @@ class Wpextend_Global_Settings {
 				$retour_html .= $instance_category->render_html();
 
 				if($current_screen->parent_base != WPEXTEND_MAIN_SLUG_ADMIN_PAGE){
-					$retour_html .= Wpextend_Render_Admin_Html::form_close();
+					$retour_html .= RenderAdminHtml::form_close();
 				}
 
 				if($current_screen->parent_base == WPEXTEND_MAIN_SLUG_ADMIN_PAGE){
-				 	$retour_html .= Wpextend_Single_Setting::render_form_create( $this->get_all_category(), $key );
+				 	$retour_html .= SingleSetting::render_form_create( $this->get_all_category(), $key );
 			 	}
 				$retour_html .= '</div>';
 			}
@@ -316,7 +319,7 @@ class Wpextend_Global_Settings {
 		// Add catergory form & add setting form
 		if($current_screen->parent_base == WPEXTEND_MAIN_SLUG_ADMIN_PAGE){
 			$retour_html .= '<fieldset class="card"><h2>New settings category</h2>';
-			$retour_html .= Wpextend_Category_Settings::render_form_create();
+			$retour_html .= CategorySettings::render_form_create();
 			$retour_html .= '</fieldset>';
 		}
 
@@ -355,7 +358,7 @@ class Wpextend_Global_Settings {
 	public function add_new_setting($name, $description, $type, $id_category, $options = false, $repeatable = false) {
 
 		if( !empty($name) &&
-			array_key_exists( $type, Wpextend_Type_Field::get_available_fields() ) &&
+			array_key_exists( $type, TypeField::get_available_fields() ) &&
 		 	array_key_exists( $id_category, $this->get_all_category() )
 		) {
 
@@ -416,8 +419,8 @@ class Wpextend_Global_Settings {
 
 		if( isset( $_POST['category'] ) ){
 
-			// Get Wpextend_Global_Settings instance
-			$instance_global_settings = Wpextend_Global_Settings::getInstance();
+			// Get GlobalSettings instance
+			$instance_global_settings = GlobalSettings::getInstance();
 
 			$all_category = $instance_global_settings->get_all_category();
 

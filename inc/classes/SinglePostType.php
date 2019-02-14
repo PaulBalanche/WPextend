@@ -1,8 +1,11 @@
 <?php
+
+namespace Wpextend;
+
 /**
  *
  */
-class Wpextend_Single_Post_Type {
+class SinglePostType {
 
 	public $slug;
 	public $labels;
@@ -133,7 +136,7 @@ class Wpextend_Single_Post_Type {
 		$annex_args = self::$default_annex_args;
 
 		$retour_html = self::render_form( $tab_labels, $slug, $tab_args, $taxonomy, $annex_args );
-		$retour_html .= Wpextend_Render_Admin_Html::form_close( 'Add post type' );
+		$retour_html .= RenderAdminHtml::form_close( 'Add post type' );
 		return $retour_html;
  	}
 
@@ -153,7 +156,7 @@ class Wpextend_Single_Post_Type {
 		$annex_args = $this->annex_args;
 
 		$retour_html = self::render_form( $tab_labels, $slug, $tab_args, $taxonomy, $annex_args );
-		$retour_html .= Wpextend_Render_Admin_Html::form_close( 'Edit post type' );
+		$retour_html .= RenderAdminHtml::form_close( 'Edit post type' );
 		return $retour_html;
  	}
 
@@ -167,62 +170,62 @@ class Wpextend_Single_Post_Type {
 	static private function render_form( $tab_labels, $slug, $tab_args, $taxonomy, $annex_args ){
 
 		$retour_html = '<hr>';
- 		$retour_html .= Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'add_custom_post_type_wpextend', 'add_custom_post_type_wpextend' );
+ 		$retour_html .= RenderAdminHtml::form_open( admin_url( 'admin-post.php' ), 'add_custom_post_type_wpextend', 'add_custom_post_type_wpextend' );
 
- 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
-		$retour_html .= ( !in_array($slug, Wpextend_Post_Type::$list_reserved_post_types) ) ? Wpextend_Type_Field::render_input_text( 'Slug', 'slug', $slug) : Wpextend_Type_Field::render_disable_input_text( 'Slug', 'slug', $slug);
-		$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
+ 		$retour_html .= RenderAdminHtml::table_edit_open();
+		$retour_html .= ( !in_array($slug, PostType::$list_reserved_post_types) ) ? TypeField::render_input_text( 'Slug', 'slug', $slug) : TypeField::render_disable_input_text( 'Slug', 'slug', $slug);
+		$retour_html .= RenderAdminHtml::table_edit_close();
 
-		if( !in_array($slug, Wpextend_Post_Type::$list_reserved_post_types) ){
+		if( !in_array($slug, PostType::$list_reserved_post_types) ){
 
 			$retour_html .= '<br /><br /><br /><br /><h3>Informations:</h3><div style="float:left; width: 50%">';
 
-			$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
+			$retour_html .= RenderAdminHtml::table_edit_open();
 			foreach( self::$default_labels as $key => $val) {
-				$retour_html .= Wpextend_Type_Field::render_input_text( $key, 'labels['.$key.']', $tab_labels[$key] );
+				$retour_html .= TypeField::render_input_text( $key, 'labels['.$key.']', $tab_labels[$key] );
 			}
-			$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
+			$retour_html .= RenderAdminHtml::table_edit_close();
 
 			$retour_html .= '</div><div style="float:right; width: 50%">';
 
-			$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
+			$retour_html .= RenderAdminHtml::table_edit_open();
 			foreach( self::$default_args as $key => $val) {
 				if( is_array($val) ) {
 					if( isAssoc($val) ){
 						$defaut_value = (self::$default_args != $tab_args) ? $tab_args[$key] : false;
-						$retour_html .= Wpextend_Type_Field::render_input_checkbox( $key, 'args['.$key.']', $val, $defaut_value );
+						$retour_html .= TypeField::render_input_checkbox( $key, 'args['.$key.']', $val, $defaut_value );
 					}
 					else{
 						$defaut_value = (self::$default_args != $tab_args) ? $tab_args[$key] : false;
-						$retour_html .= Wpextend_Type_Field::render_input_select( $key, 'args['.$key.']', $val, $defaut_value );
+						$retour_html .= TypeField::render_input_select( $key, 'args['.$key.']', $val, $defaut_value );
 					}
 				}
 				else {
-					$retour_html .= Wpextend_Type_Field::render_input_text( $key, 'args['.$key.']', $tab_args[$key] );
+					$retour_html .= TypeField::render_input_text( $key, 'args['.$key.']', $tab_args[$key] );
 				}
 			}
-	 		$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
+	 		$retour_html .= RenderAdminHtml::table_edit_close();
 
 			$retour_html .= '</div><div style="clear:both"></div><br /><br /><br /><br /><h3>Taxonomy:</h3>';
 		
 
-			$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
-			$retour_html .= Wpextend_Type_Field::render_input_text( 'Taxonomy label', 'taxonomy[label]', $taxonomy['label']);
-			$retour_html .= Wpextend_Type_Field::render_input_text( 'Taxonomy slug', 'taxonomy[slug]', $taxonomy['slug']);
-			$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
+			$retour_html .= RenderAdminHtml::table_edit_open();
+			$retour_html .= TypeField::render_input_text( 'Taxonomy label', 'taxonomy[label]', $taxonomy['label']);
+			$retour_html .= TypeField::render_input_text( 'Taxonomy slug', 'taxonomy[slug]', $taxonomy['slug']);
+			$retour_html .= RenderAdminHtml::table_edit_close();
 
 		}
 
 		$retour_html .= '<br /><br /><br /><br /><h3>Multiple post thumbnails:</h3>';
-		$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
+		$retour_html .= RenderAdminHtml::table_edit_open();
 		foreach( self::$default_annex_args as $key => $val) {
 
 			if( $key == 'multiple_post_thumbnails' )
-				$retour_html .= Wpextend_Type_Field::render_input_text( $key, 'annex_args['.$key.']', $annex_args[$key], '', false, 'Require "Multiple Post Thumbnails" plugin' );
+				$retour_html .= TypeField::render_input_text( $key, 'annex_args['.$key.']', $annex_args[$key], '', false, 'Require "Multiple Post Thumbnails" plugin' );
 			else
-				$retour_html .= Wpextend_Type_Field::render_input_text( $key, 'annex_args['.$key.']', $annex_args[$key] );
+				$retour_html .= TypeField::render_input_text( $key, 'annex_args['.$key.']', $annex_args[$key] );
 		}
-		$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
+		$retour_html .= RenderAdminHtml::table_edit_close();
 		
 
  		return $retour_html;
@@ -247,8 +250,8 @@ class Wpextend_Single_Post_Type {
 
 		if( isset($_POST['slug']) ) {
 
-			// Get Wpextend_Post_Type instance
-			$instance_Wpextend_Post_Type = Wpextend_Post_Type::getInstance();
+			// Get PostType instance
+			$instance_Wpextend_Post_Type = PostType::getInstance();
 
 			$slug = sanitize_text_field( $_POST['slug'] );
 
@@ -323,7 +326,7 @@ class Wpextend_Single_Post_Type {
 			$id_post_type = sanitize_text_field( $_GET['id'] );
 
 			// Get Wpextend_Post_Type instance
-			$instance_Wpextend_Post_Type = Wpextend_Post_Type::getInstance();
+			$instance_Wpextend_Post_Type = PostType::getInstance();
 
 			// Add in Wpextend_Post_Type
  			$instance_Wpextend_Post_Type->delete( $id_post_type );

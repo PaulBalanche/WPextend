@@ -1,8 +1,11 @@
 <?php
+
+namespace Wpextend;
+
 /**
  *
  */
-class Wpextend_Type_Field {
+class TypeField {
 
 	public static $class_input_text = 'input_text_wpextend';
 	public static $class_input_link = 'input_link_wpextend';
@@ -489,7 +492,7 @@ class Wpextend_Type_Field {
 			<th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label><i class="description">'.$description.'</i></th>
 			<td>';
 
-				$retour_html .= Wpextend_Render_Admin_Html::multiple_media( $defaut_value, $name, false, false );
+				$retour_html .= RenderAdminHtml::multiple_media( $defaut_value, $name, false, false );
 
 			$retour_html .= '</td>
 		</tr>';
@@ -535,7 +538,7 @@ class Wpextend_Type_Field {
 			<th scope="row"><label>'.stripslashes($label).'</label><i class="description">'.$description.'</i></th>
 			<td>';
 
-				$retour_html .= Wpextend_Render_Admin_Html::multiple_media( $value, $name, true, $acceptAllTypeFile );
+				$retour_html .= RenderAdminHtml::multiple_media( $value, $name, true, $acceptAllTypeFile );
 				
 				$retour_html .= '</td>
 		</tr>';
@@ -576,7 +579,7 @@ class Wpextend_Type_Field {
 			<th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label><i class="description">'.$description.'</i></th>
 			<td>';
 
-				$retour_html .= Wpextend_Render_Admin_Html::multiple_media( $defaut_value, $name, false, true );
+				$retour_html .= RenderAdminHtml::multiple_media( $defaut_value, $name, false, true );
 
 			$retour_html .= '</td>
 		</tr>';

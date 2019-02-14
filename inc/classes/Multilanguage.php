@@ -1,8 +1,11 @@
 <?php
+
+namespace Wpextend;
+
 /**
  *
  */
-class Wpextend_Multilanguage {
+class Multilanguage {
 
     private static $_instance;
 
@@ -14,7 +17,7 @@ class Wpextend_Multilanguage {
     public static function getInstance() {
 
         if (is_null(self::$_instance)) {
-            self::$_instance = new Wpextend_Multilanguage();
+            self::$_instance = new Multilanguage();
         }
         return self::$_instance;
     }

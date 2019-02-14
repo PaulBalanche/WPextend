@@ -1,8 +1,11 @@
 <?php
+
+namespace Wpextend;
+
 /**
  *
  */
-class Wpextend_Post_Type {
+class PostType {
 
 
 
@@ -21,7 +24,7 @@ class Wpextend_Post_Type {
  	*/
 	public static function getInstance() {
 		 if (is_null(self::$_instance)) {
-			  self::$_instance = new Wpextend_Post_Type();
+			  self::$_instance = new PostType();
 		 }
 		 return self::$_instance;
 	}
@@ -72,8 +75,8 @@ class Wpextend_Post_Type {
 		// Initialise les customs posts
 		add_action( 'init', array( $this, 'initialize') );
 		add_action( 'init', array( $this, 'initialize_multiple_post_thumbnails') );
-	  	add_action( 'admin_post_add_custom_post_type_wpextend', 'Wpextend_Single_Post_Type::add_new' );
-	  	add_action( 'admin_post_delete_custom_post_type', 'Wpextend_Single_Post_Type::delete' );
+	  	add_action( 'admin_post_add_custom_post_type_wpextend', 'Wpextend\SinglePostType::add_new' );
+	  	add_action( 'admin_post_delete_custom_post_type', 'Wpextend\SinglePostType::delete' );
 	  	add_action( 'admin_post_import_wpextend_custom_post_type', array($this, 'import') );
 	}
 
@@ -89,7 +92,7 @@ class Wpextend_Post_Type {
 		if( is_array($this->custom_post_type_wpextend) ){
 			foreach( $this->custom_post_type_wpextend as $slug => $val ) {
 				if( !in_array($slug, self::$list_reserved_post_types) ){
-					$custom_post = new Wpextend_Single_Post_Type( $slug, $val );
+					$custom_post = new SinglePostType( $slug, $val );
 					$custom_post->register_custom_post_type();
 				}
 			}
@@ -132,7 +135,7 @@ class Wpextend_Post_Type {
 	public function render_admin_page() {
 
 		// Header page & open form
-		$retour_html = Wpextend_Render_Admin_Html::header('Custom Post Type');
+		$retour_html = RenderAdminHtml::header('Custom Post Type');
 
 
 
@@ -175,7 +178,7 @@ class Wpextend_Post_Type {
 				],
 				'per_page'	=> 200
 			];
-			$Wpextend_List_Table = new Wpextend_List_Table($args_Wpextend_List_Table);
+			$Wpextend_List_Table = new ListTable($args_Wpextend_List_Table);
 			$Wpextend_List_Table->prepare_items();
 			$Wpextend_List_Table->display();
 			$retour_html .= ob_get_contents();
@@ -188,13 +191,13 @@ class Wpextend_Post_Type {
 		if(isset($_GET['id'])){
 
 			$retour_html .= '<fieldset class="card" style="max-width:1400px"><h2>Edit</h2>';
-			$custom_post = ( isset($this->custom_post_type_wpextend[ $_GET['id'] ]) ) ? new Wpextend_Single_Post_Type( $_GET['id'], $this->custom_post_type_wpextend[ $_GET['id'] ] ) : new Wpextend_Single_Post_Type($_GET['id']);
+			$custom_post = ( isset($this->custom_post_type_wpextend[ $_GET['id'] ]) ) ? new SinglePostType( $_GET['id'], $this->custom_post_type_wpextend[ $_GET['id'] ] ) : new SinglePostType($_GET['id']);
 			$retour_html .= $custom_post->render_form_edit();
 		}
 		else{
 
 			$retour_html .= '<fieldset class="card" style="max-width:1400px"><h2>Add custom post type</h2>';
-			$retour_html .= Wpextend_Single_Post_Type::render_form_create();
+			$retour_html .= SinglePostType::render_form_create();
 		}
 		$retour_html .= '</fieldset>';
 
@@ -217,7 +220,7 @@ class Wpextend_Post_Type {
 
 
 	/**
- 	* Update private variable Wpextend_Post_Type to add new setting
+ 	* Update private variable PostType to add new setting
 	*/
 	public function add_new( $labels, $slug, $args, $taxonomy, $annex_args ){
 
@@ -234,7 +237,7 @@ class Wpextend_Post_Type {
 
 
 	/**
- 	* Update private variable Wpextend_Post_Type to add new setting
+ 	* Update private variable PostType to add new setting
 	*/
 	public function delete($slug){
 

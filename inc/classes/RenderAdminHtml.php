@@ -1,8 +1,11 @@
 <?php
+
+namespace Wpextend;
+
 /**
 *
 */
-class Wpextend_Render_Admin_Html {
+class RenderAdminHtml {
 
 
 

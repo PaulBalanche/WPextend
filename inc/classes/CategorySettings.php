@@ -1,8 +1,11 @@
 <?php
+
+namespace Wpextend;
+
 /**
  *
  */
-class Wpextend_Category_Settings {
+class CategorySettings {
 
     public $id;
     public $name;
@@ -19,7 +22,7 @@ class Wpextend_Category_Settings {
 	 */
 	public function __construct($id) {
 
-		$instance_settings_Wpextend = Wpextend_Global_Settings::getInstance();
+		$instance_settings_Wpextend = GlobalSettings::getInstance();
 		if( array_key_exists($id, $instance_settings_Wpextend->wpextend_global_settings) ) {
 
 			$this->id = $id;
@@ -41,12 +44,12 @@ class Wpextend_Category_Settings {
 		// Get info current screen
 		$current_screen = get_current_screen();
 		
-		$retour_html = Wpextend_Render_Admin_Html::table_edit_open();
+		$retour_html = RenderAdminHtml::table_edit_open();
 		if($current_screen->parent_base == WPEXTEND_MAIN_SLUG_ADMIN_PAGE){ $Wpextend_List_Table_data = []; }
 		foreach( $this->list_settings as $key => $val) {
 
 			if($current_screen->parent_base != WPEXTEND_MAIN_SLUG_ADMIN_PAGE){
-				$instance_field_setting = new Wpextend_Single_Setting($key, $this->id);
+				$instance_field_setting = new SingleSetting($key, $this->id);
 				$retour_html .= $instance_field_setting->render_html();
 			}
 			else{
@@ -73,14 +76,14 @@ class Wpextend_Category_Settings {
 				],
 				'per_page'	=> 200
 			];
-			$Wpextend_List_Table = new Wpextend_List_Table($args_Wpextend_List_Table);
+			$Wpextend_List_Table = new ListTable($args_Wpextend_List_Table);
 			$Wpextend_List_Table->prepare_items();
 			$Wpextend_List_Table->display();
 			$retour_html .= ob_get_contents();
 			ob_end_clean();
 		}
 
-		$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
+		$retour_html .= RenderAdminHtml::table_edit_close();
 
 		return $retour_html;
 	}
@@ -94,15 +97,15 @@ class Wpextend_Category_Settings {
 	*/
 	static public function render_form_create(){
 
-		$retour_html = Wpextend_Render_Admin_Html::form_open( admin_url( 'admin-post.php' ), 'add_category_setting_wpextend', 'add_category_setting_wpextend' );
+		$retour_html = RenderAdminHtml::form_open( admin_url( 'admin-post.php' ), 'add_category_setting_wpextend', 'add_category_setting_wpextend' );
 
-		$retour_html .= Wpextend_Render_Admin_Html::table_edit_open();
-		$retour_html .= Wpextend_Type_Field::render_input_text( __('Name', WPEXTEND_TEXTDOMAIN), 'name' );
-		$retour_html .= Wpextend_Type_Field::render_input_checkbox( __('Multilanguage compatibility', WPEXTEND_TEXTDOMAIN), 'wpml_compatible', array( 'true' => __('Must be multilingual?', WPEXTEND_TEXTDOMAIN) ) );
-		$retour_html .= Wpextend_Type_Field::render_input_select( __('Capabilities', WPEXTEND_TEXTDOMAIN), 'capabilities', array( 'administrator' => __('Administrator', WPEXTEND_TEXTDOMAIN), 'editor' => __('Editor', WPEXTEND_TEXTDOMAIN) ), 'administrator' );
-		$retour_html .= Wpextend_Render_Admin_Html::table_edit_close();
+		$retour_html .= RenderAdminHtml::table_edit_open();
+		$retour_html .= TypeField::render_input_text( __('Name', WPEXTEND_TEXTDOMAIN), 'name' );
+		$retour_html .= TypeField::render_input_checkbox( __('Multilanguage compatibility', WPEXTEND_TEXTDOMAIN), 'wpml_compatible', array( 'true' => __('Must be multilingual?', WPEXTEND_TEXTDOMAIN) ) );
+		$retour_html .= TypeField::render_input_select( __('Capabilities', WPEXTEND_TEXTDOMAIN), 'capabilities', array( 'administrator' => __('Administrator', WPEXTEND_TEXTDOMAIN), 'editor' => __('Editor', WPEXTEND_TEXTDOMAIN) ), 'administrator' );
+		$retour_html .= RenderAdminHtml::table_edit_close();
 
-		$retour_html .= Wpextend_Render_Admin_Html::form_close( __('Add category', WPEXTEND_TEXTDOMAIN) );
+		$retour_html .= RenderAdminHtml::form_close( __('Add category', WPEXTEND_TEXTDOMAIN) );
 
 		return $retour_html;
 	}
@@ -123,15 +126,15 @@ class Wpextend_Category_Settings {
 
 		if( isset( $_POST['name'], $_POST['capabilities'] ) ) {
 
-			// Get Wpextend_Global_Settings instance
-			$instance_global_settings = Wpextend_Global_Settings::getInstance();
+			// Get GlobalSettings instance
+			$instance_global_settings = GlobalSettings::getInstance();
 
 			// Protect data
 			$name = sanitize_text_field( $_POST['name'] );
 			$traduisible = ( isset( $_POST['wpml_compatible'] ) && is_array( $_POST['wpml_compatible'] ) && $_POST['wpml_compatible'][0] == true ) ? true : false;
 			$capabilities = sanitize_text_field( $_POST['capabilities'] );
 
-			// Add in Wpextend_Global_Settings
+			// Add in GlobalSettings
 			$instance_global_settings->add_new_category($name, $traduisible, $capabilities);
 
 			// Save in Wordpress database
@@ -155,13 +158,13 @@ class Wpextend_Category_Settings {
 
 		if( isset( $_GET['category'] ) ) {
 
-			// Get Wpextend_Global_Settings instance
-			$instance_global_settings = Wpextend_Global_Settings::getInstance();
+			// Get GlobalSettings instance
+			$instance_global_settings = GlobalSettings::getInstance();
 
 			// Protect data
 			$category = sanitize_text_field( $_GET['category'] );
 
-			// Add in Wpextend_Global_Settings
+			// Add in GlobalSettings
 			$instance_global_settings->remove_category_setting( $category );
 
 			// Save in Wordpress database

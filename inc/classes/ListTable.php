@@ -1,8 +1,13 @@
 <?php
+
+namespace Wpextend;
+
+use WP_List_Table;
+
 /**
  *
  */
-class Wpextend_List_Table extends WP_List_Table {
+class ListTable extends WP_List_Table {
 
 
 
