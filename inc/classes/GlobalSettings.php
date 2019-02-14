@@ -296,7 +296,7 @@ class GlobalSettings {
 				$retour_html .= TypeField::render_input_hidden( 'category', $key );
 
 				if($current_screen->parent_base == WPEXTEND_MAIN_SLUG_ADMIN_PAGE){
-					$retour_html .= '<p style="text-align:right"><a href="'.add_query_arg( array( 'action' => 'delete_category_setting', 'category' => $key, '_wpnonce' => wp_create_nonce( 'delete_setting' ) ), admin_url( 'admin-post.php' ) ).'" class="button button-primary">Delete entire category</a></p>';
+					$retour_html .= '<p style="text-align:right"><a href="'.add_query_arg( array( 'action' => 'delete_category_setting', 'category' => $key, '_wpnonce' => wp_create_nonce( 'delete_category_setting' ) ), admin_url( 'admin-post.php' ) ).'" class="button button-primary">Delete entire category</a></p>';
 				}
 
 				$retour_html .= $instance_category->render_html();

@@ -90,13 +90,13 @@ class ListTable extends WP_List_Table {
 
         if( isset($item['action_edit']) ) {
 
-            $url = ( in_array('_wpnonce', $item['action_edit']) ) ? admin_url( 'admin-post.php' ) : false;
+            $url = ( array_key_exists('_wpnonce', $item['action_edit']) ) ? admin_url( 'admin-post.php' ) : false;
             $actions['edit'] = sprintf('<a href="' . add_query_arg( $item['action_edit'], $url ) . '">Edit</a>');
         }
 
         if( isset($item['action_delete']) ) {
 
-            $url = ( in_array('_wpnonce', $item['action_delete']) ) ? admin_url( 'admin-post.php' ) : false;
+            $url = ( array_key_exists('_wpnonce', $item['action_delete']) ) ? admin_url( 'admin-post.php' ) : false;
             $actions['delete'] = sprintf('<a href="' . add_query_arg( $item['action_delete'], $url ) . '">Delete</a>');
         }
         

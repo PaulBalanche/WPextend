@@ -154,7 +154,7 @@ class CategorySettings {
 	static public function delete_category_setting(){
 
 		// Check valid nonce
-		check_admin_referer('delete_setting');
+		check_admin_referer('delete_category_setting');
 
 		if( isset( $_GET['category'] ) ) {
 

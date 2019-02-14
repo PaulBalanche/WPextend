@@ -27,12 +27,12 @@ class SinglePostType {
 	);
 
 	public static $default_args = array(
-		'description'			=> 'Custom post description',
+		'description'			=> '',
 		'public'				=> array( 'true', 'false' ),
 		'capability_type'		=> array( 'post' ),
 		'hierarchical'			=> array( 'false', 'true' ),
 		'show_in_menu'			=> array( 'true', 'false' ),
-		'menu_position'			=> 'null',
+		'menu_position'			=> '',
 		'rewrite'				=> array( 'false', 'true' ),
 		'has_archive'			=> array( 'false', 'true' ),
 		'show_in_rest'			=> array( 'false', 'true' ),
@@ -48,6 +48,24 @@ class SinglePostType {
 			'revisions' => 'revisions',
 			'page-attributes' => 'page-attributes',
 			'post-formats' => 'post-formats'
+		)
+	);
+
+	public static $default_args_on_creation = array(
+		'description'			=> 'Custom post description',
+		'public'				=> 'true',
+		'capability_type'		=> 'post',
+		'hierarchical'			=> 'false',
+		'show_in_menu'			=> 'true',
+		'menu_position'			=> 'null',
+		'rewrite'				=> 'true',
+		'has_archive'			=> 'false',
+		'show_in_rest'			=> 'true',
+		'supports'				=> array(
+			'title',
+			'editor',
+			'author',
+			'thumbnail'
 		)
 	);
 
@@ -131,7 +149,7 @@ class SinglePostType {
 
 		$tab_labels = self::$default_labels;
 		$slug = '';
-		$tab_args = self::$default_args;
+		$tab_args = self::$default_args_on_creation;
 		$taxonomy = array('slug' => '', 'label' => '');
 		$annex_args = self::$default_annex_args;
 
