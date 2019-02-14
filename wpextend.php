@@ -2,9 +2,9 @@
 /**
 * Plugin Name: WP Extend
 * Plugin URI: https://github.com/PaulBalanche/WPextend
-* Description: Simple plugin to add basics Wordpress features like general settings
+* Description: Extends basic Wordpress features such as add general settings, easy creating custom post type, ...
 * Text Domain: wp-extend
-* Version: 2.0.1
+* Version: 2.0.2
 * Author: Paul Balanche
 **/
 
