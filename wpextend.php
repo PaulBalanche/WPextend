@@ -4,7 +4,7 @@
 * Plugin URI: https://github.com/PaulBalanche/WPextend
 * Description: Simple plugin to add basics Wordpress features like general settings
 * Text Domain: wp-extend
-* Version: 2.0.0
+* Version: 2.0.1
 * Author: Paul Balanche
 **/
 
