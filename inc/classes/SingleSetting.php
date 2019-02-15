@@ -98,12 +98,12 @@ class SingleSetting {
 					$retour_html .= TypeField::render_input_radio( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->options, $this->value, $this->repeatable, $this->description );
 					break;
 
-				case 'link':
-					$retour_html .= TypeField::render_input_cta( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->value, $this->repeatable, $this->description );
-					break;
-
 				case 'checkbox':
 					$retour_html .= TypeField::render_input_checkbox( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->options, $this->value, $this->repeatable, $this->description );
+					break;
+
+				case 'link':
+					$retour_html .= TypeField::render_input_cta( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->value, $this->repeatable, $this->description );
 					break;
 
 				case 'image':
@@ -116,6 +116,18 @@ class SingleSetting {
 
 				case 'file':
 					$retour_html .= TypeField::render_input_file( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->value, $this->repeatable, $this->description );
+					break;
+				
+				case 'multiple_files':
+					$retour_html .= TypeField::render_input_file( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->value, $this->repeatable, $this->description, true );
+					break;
+
+				case 'daterange':
+					$retour_html .= TypeField::render_input_daterange( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->value, '', $this->description );
+					break;
+
+				case 'sliderrange':
+					$retour_html .= TypeField::render_input_sliderrange( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->value );
 					break;
 			}
 		}

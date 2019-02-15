@@ -142,7 +142,7 @@ body.wp-admin table.table_wpextend tbody tr th i.description{ display: block; fo
 * input
 */
 body.wp-admin .input_text_wpextend{ padding: 10px 0; text-indent: 10px; width: 100%; }
-body.wp-admin .input_link_wpextend{ padding: 10px 0; text-indent: 10px; }
+body.wp-admin .input_link_wpextend{ padding: 10px 0; text-indent: 10px; width: 100%; }
 
 
 

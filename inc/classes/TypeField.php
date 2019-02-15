@@ -26,19 +26,19 @@ class TypeField {
      */
     public static function get_available_fields() {
 		 return array(
-	 		'text' 					=> 'Text',
-	 		'textarea' 				=> 'Textarea',
-	 		'select' 				=> 'Select',
-			'select_post_type'		=> 'Select post type',
-	 		'radio' 				=> 'Radio',
-	 		'checkbox' 				=> 'Checkbox',
-			'link' 					=> 'Link',
-	 		'image' 				=> 'Image',
-	 		'gallery_image'			=> 'Image gallery',
-	 		'multiple_files'		=> 'Multiple files',
-	 		'file' 					=> 'File',
-	 		'daterange'				=> 'Datepicker range',
-	 		'sliderrange'			=> 'Slider range'
+	 		'text' 				=> 'Text',
+	 		'textarea' 			=> 'Textarea',
+	 		'select' 			=> 'Select',
+			'select_post_type'	=> 'Select post type',
+	 		'radio' 			=> 'Radio',
+	 		'checkbox' 			=> 'Checkbox',
+			'link' 				=> 'Link',
+	 		'image' 			=> 'Image',
+	 		'gallery_image'		=> 'Image gallery',
+            'file' 				=> 'File',
+            'multiple_files'	=> 'Multiple files',
+	 		'daterange'			=> 'Datepicker range',
+	 		'sliderrange'		=> 'Slider range'
 	 	);
     }
 
@@ -231,7 +231,7 @@ class TypeField {
 			'_content_editor_dfw' 	=> false,
 			'tinymce'             	=> $tinymce,
 			'quicktags'           	=> true,
-			'editor_height'			=> 120
+			'editor_height'					=> 120
 		]);
 		$retour_html .= ob_get_contents();
 		ob_end_clean();
@@ -551,40 +551,40 @@ class TypeField {
     /**
      *
      */
-    public static function render_input_file( $label, $name, $defaut_value = false, $repeatable = false, $description = '' ){
+    public static function render_input_file( $label, $name, $defaut_value = false, $repeatable = false, $description = '', $multiple = false ){
 
-      $no_file = true;
+        $no_file = true;
 
-      if( is_numeric($defaut_value) && $defaut_value > -1 ){
+        if( is_numeric($defaut_value) && $defaut_value > -1 ){
 
       	$instance_post = get_post( $defaut_value );
-      	if( is_object( $instance_post ) ){
-			$name_file = '<strong>' . $instance_post->post_title . '</strong><br /><br /><i>(' . $instance_post->post_mime_type . ')</i>';
-			if( !empty( $name_file ) ){
-				$html_file = $name_file;
-				$class_link_upload_file_wpextend = '';
-				$class_link_remove = '';
-				$no_file  = false;
-			}
-		}
-      }
+            if( is_object( $instance_post ) ){
+                $name_file = '<strong>' . $instance_post->post_title . '</strong><br /><br /><i>(' . $instance_post->post_mime_type . ')</i>';
+                if( !empty( $name_file ) ){
+                    $html_file = $name_file;
+                    $class_link_upload_file_wpextend = '';
+                    $class_link_remove = '';
+                    $no_file  = false;
+                }
+            }
+        }
 
-      if( $no_file ){
-         $html_file = 'Add file';
-         $class_link_upload_file_wpextend = 'button button-primary';
-         $class_link_remove = 'hidden';
-      }
+        if( $no_file ){
+            $html_file = 'Add file';
+            $class_link_upload_file_wpextend = 'button button-primary';
+            $class_link_remove = 'hidden';
+        }
 
-    	$retour_html = '<tr class="tr_'.$name.'">
-			<th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label><i class="description">'.$description.'</i></th>
-			<td>';
+        $retour_html = '<tr class="tr_'.$name.'">
+        <th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label><i class="description">'.$description.'</i></th>
+        <td>';
 
-				$retour_html .= RenderAdminHtml::multiple_media( $defaut_value, $name, false, true );
+        $retour_html .= RenderAdminHtml::multiple_media( $defaut_value, $name, $multiple, true );
 
-			$retour_html .= '</td>
+        $retour_html .= '</td>
 		</tr>';
 
-     return $retour_html;
+        return $retour_html;
     }
 
 
