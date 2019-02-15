@@ -268,14 +268,18 @@ class GlobalSettings {
 
 		 	$instance_category = new CategorySettings($key);
 		 	if(
-		 		$instance_category->capabilities == 'all' ||
-		 		( current_user_can('manage_options') )
+		 		(
+					 $instance_category->capabilities == 'all' ||
+					 current_user_can('manage_options')
+				) &&
+				(
+					!$instance_category->wpml_compatible ||
+					(
+						$instance_category->wpml_compatible &&
+						!empty( apply_filters('wpml_current_language', NULL) )
+					)
+				)
 		 	){
-
-				$data_wp_list_table[] = [
-					'key'	=> $key,
-					'title'	=> $val
-				];
 
 			 	$retour_html .= '<h2>'.$val;
 			 	if( $current_screen->parent_base != WPEXTEND_MAIN_SLUG_ADMIN_PAGE && $instance_category->wpml_compatible && !empty(apply_filters('wpml_current_language', NULL )) ){
