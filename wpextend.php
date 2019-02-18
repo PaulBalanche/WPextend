@@ -4,7 +4,7 @@
 * Plugin URI: https://github.com/PaulBalanche/WPextend
 * Description: Extends basic Wordpress features such as add general settings, easy creating custom post type, ...
 * Text Domain: wp-extend
-* Version: 2.0.5
+* Version: 2.0.6
 * Author: Paul Balanche
 **/
 
@@ -25,7 +25,6 @@ define( 'WPEXTEND_CLASSES_DIR'					, realpath( WPEXTEND_DIR . '/inc/classes' ) .
 define( 'WPEXTEND_PLUGIN_URL'					, plugins_url('', __FILE__) . '/' );
 define( 'WPEXTEND_ASSETS_URL'					, WPEXTEND_PLUGIN_URL . 'assets' . '/' );
 define( 'WPEXTEND_IMPORT_DIR'					, get_stylesheet_directory() . '/wpextend/import/' );
-define( 'WPEXTEND_PREFIX_FILE_CLASS'			, 'class-' );
 define( 'WPEXTEND_PREFIX_DATA_IN_DB'			, 'meta_wpextend_' );
 define( 'WPEXTEND_TEXTDOMAIN'					, 'wp-extend' );
 
