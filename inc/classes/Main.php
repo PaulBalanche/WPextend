@@ -114,10 +114,17 @@ class Main {
 		$retour_html .= TypeField::render_input_textarea( 'WP Extend Global settings values', 'wpextend_global_settings_value_export', GlobalSettings::getInstance()->prepare_values_to_export(), false, '', false );
 		$retour_html .= RenderAdminHtml::table_edit_close();
 
-		if( WPEXTEND_ENABLE_CUSTOM_POST_TYPE ){
+		if( WPEXTEND_ENABLE_CUSTOM_POST_TYPE ) {
 			// Custom post type
 			$retour_html .= RenderAdminHtml::table_edit_open();
 			$retour_html .= TypeField::render_input_textarea( 'WP Extend Custom Post Type', 'wpextend_custom_post_type_export', stripslashes( json_encode( PostType::getInstance()->custom_post_type_wpextend, JSON_UNESCAPED_UNICODE ) ), false, '', false );
+			$retour_html .= RenderAdminHtml::table_edit_close();
+		}
+
+		if( WPEXTEND_ENABLE_GUTENBERG ) {
+			// Gutenberg blocks
+			$retour_html .= RenderAdminHtml::table_edit_open();
+			$retour_html .= TypeField::render_input_textarea( 'Gutenberg blocks', 'wpextend_gutenberg_blocks_export', stripslashes( GutenbergBlock::getInstance()->export_blocks_saved() ), false, '', false );
 			$retour_html .= RenderAdminHtml::table_edit_close();
 		}
 
@@ -176,6 +183,21 @@ class Main {
 			}
 
 			$retour_html .= '<br /><hr><br />';
+		}
+
+		if( WPEXTEND_ENABLE_GUTENBERG ) {
+			// Gutenberg blocks
+
+			$retour_html .= RenderAdminHtml::form_open( admin_url( 'admin-post.php' ), 'import_wpextend_gutenberg_blocks', 'import_wpextend_gutenberg_blocks' );
+
+			$retour_html .= RenderAdminHtml::table_edit_open();
+			$retour_html .= TypeField::render_input_textarea( 'Gutenberg blocks to import', 'wpextend_gutenberg_blocks_to_import', '', false, '', false );
+			$retour_html .= RenderAdminHtml::table_edit_close();
+
+			$retour_html .= RenderAdminHtml::form_close( 'Import' );
+			if( file_exists( WPEXTEND_IMPORT_DIR . 'gutenberg_blocks.json' ) ){
+				$retour_html .= '<p><a href="' . add_query_arg( ['action' => 'import_wpextend_gutenberg_blocks', 'file' => 'gutenberg_blocks'] , wp_nonce_url(admin_url( 'admin-post.php' ), 'import_wpextend_gutenberg_blocks')) . '" class="button" >Import JSON file</a></p>';
+			}
 		}
 
 	 	echo $retour_html;

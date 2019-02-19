@@ -285,6 +285,39 @@ class GutenbergBlock {
 
         // Update Gutenberg blocks categories
         add_filter( 'block_categories', array($this, 'update_block_categories'), 10, 2 );
+
+        // Admin port to import Gutenberg blocks
+        add_action( 'admin_post_import_wpextend_gutenberg_blocks', array($this, 'import') );
+    }
+
+
+
+    /**
+     * Abstact function to get all Gutenberg blocks saved in post
+     * 
+     */
+    public function get_all_blocks_saved(){
+
+        $gutenberg_blocks_saved = get_posts([
+            'posts_per_page'   => -1,
+            'post_type'        => self::$gutenberg_name_custom_post_type,
+            'post_status'      => 'publish',
+            'suppress_filters' => true
+        ]);
+
+        return ( is_array($gutenberg_blocks_saved) ) ? $gutenberg_blocks_saved : [];
+    }
+
+
+
+    /**
+     * Function to get the Gutenberg block category
+     * 
+     */
+    public function get_category_block($block_id){
+
+        $tax_block = get_the_terms($block_id, self::$gutenberg_name_custom_post_type . '_category');
+        return ( is_array($tax_block) && count($tax_block) > 0 ) ? [ 'slug' => $tax_block[0]->slug, 'title' => $tax_block[0]->name ] : self::$name_default_block_category;
     }
     
 
@@ -297,39 +330,35 @@ class GutenbergBlock {
 
         $custom_post_type_wpextend[ self::$gutenberg_name_custom_post_type ] = [
             'labels' => [
-                'name' => 'Gutenberg block',
-                'singular_name' => 'Gutenberg block',
-                'add_new' => 'Add',
-                'add_new_item' => 'Add new Gutenberg block',
-                'new_item' => 'New',
-                'edit_item' => 'Edit Gutenberg block',
-                'view_item' => 'View Gutenberg block',
-                'all_items' => 'All Gutenberg blocks',
-                'search_items' => 'Search Gutenberg block',
-                'parent_item_colon' => 'Custom Gutenberg block parent',
-                'not_found' => 'None Gutenberg block',
-                'not_found_in_trash' => 'None Gutenberg block deleted'
+                'name'                  => 'Gutenberg block',
+                'singular_name'         => 'Gutenberg block',
+                'add_new'               => 'Add',
+                'add_new_item'          => 'Add new Gutenberg block',
+                'new_item'              => 'New',
+                'edit_item'             => 'Edit Gutenberg block',
+                'view_item'             => 'View Gutenberg block',
+                'all_items'             => 'All Gutenberg blocks',
+                'search_items'          => 'Search Gutenberg block',
+                'parent_item_colon'     => 'Custom Gutenberg block parent',
+                'not_found'             => 'None Gutenberg block',
+                'not_found_in_trash'    => 'None Gutenberg block deleted'
             ],
             'args' => [
-                'description' => 'Gutenberg block description',
-                'public' => true,
-                'capability_type' => 'post',
-                'hierarchical' => false,
-                'show_in_menu' => true,
-                'menu_position' => 'null',
-                'rewrite' => false,
-                'has_archive' => false,
-                'show_in_rest' => true,
-                'supports' => [
-                    'title',
-                    'thumbnail',
-                    'excerpt'
-
-                ]
+                'description'       => 'Gutenberg block description',
+                'public'            => true,
+                'capability_type'   => 'post',
+                'hierarchical'      => false,
+                'show_in_menu'      => true,
+                'menu_position'     => 'null',
+                'rewrite'           => false,
+                'has_archive'       => false,
+                'show_in_rest'      => true,
+                'supports'          => [ 'title', 'thumbnail', 'excerpt' ]
             ],
             'taxonomy' => [
-                'label' => 'Categories',
-                'slug' => self::$gutenberg_name_custom_post_type . '_category'
+                'label'         => 'Categories',
+                'slug'          => self::$gutenberg_name_custom_post_type . '_category',
+                'hierarchical'  => false
             ]
         ];
 
@@ -387,29 +416,17 @@ class GutenbergBlock {
         
         if( function_exists('acf_register_block') ) {
             
-            $gutenberg_blocks_saved = get_posts([
-                'posts_per_page'   => -1,
-                'post_type'        => self::$gutenberg_name_custom_post_type,
-                'post_status'      => 'publish',
-                'suppress_filters' => true
-            ]);
-            if( is_array($gutenberg_blocks_saved) && count($gutenberg_blocks_saved) > 0 ) {
-                foreach($gutenberg_blocks_saved as $block) {
+            foreach($this->get_all_blocks_saved() as $block) {
 
-                    // Returns "gutenberg_block_category"
-                    $tax_block = get_the_terms($block->ID, self::$gutenberg_name_custom_post_type . '_category');
-                    $category = ( is_array($tax_block) && count($tax_block) > 0 ) ? $tax_block[0]->slug : self::$name_default_block_category['slug'];
-
-                    acf_register_block([
-                        'name'				=> $block->post_name,
-                        'title'				=> $block->post_title,
-                        'description'		=> $block->post_excerpt,
-                        'render_callback'	=> array($this, 'acf_gutenberg_block_render_callback'),
-                        'category'			=> $category,
-                        'icon'				=> get_field('icon_gutenberg_block', $block->ID),
-                        'keywords'			=> []
-                    ]);
-                }
+                acf_register_block([
+                    'name'				=> $block->post_name,
+                    'title'				=> $block->post_title,
+                    'description'		=> $block->post_excerpt,
+                    'render_callback'	=> array($this, 'acf_gutenberg_block_render_callback'),
+                    'category'			=> $this->get_category_block($block->ID)['slug'],
+                    'icon'				=> get_field('icon_gutenberg_block', $block->ID),
+                    'keywords'			=> []
+                ]);
             }
         }
     }
@@ -417,7 +434,7 @@ class GutenbergBlock {
 
 
     /**
-     * Update Gutenberg blocks categories
+     * Update Gutenberg blocks categories display on Gutenberg
      * 
      */
     public function update_block_categories( $categories, $post ) {
@@ -466,6 +483,109 @@ class GutenbergBlock {
             // Include controller part
             include( get_theme_file_path(self::$path_gutenberg_theme_controllers . $slug . '.php') );
         }
+    }
+
+
+
+    /**
+     * Function to export Guntenberg blocks to JSON format
+     * 
+     */
+    public function export_blocks_saved(){
+
+        $tab_gutenberg_blocks_to_export = [];
+
+        foreach($this->get_all_blocks_saved() as $block) {
+
+            $tab_gutenberg_blocks_to_export[] = [
+                'post_title'    => $block->post_title,
+                'post_name'     => $block->post_name,
+                'post_excerpt'  => $block->post_excerpt,
+                'custom_data'   => [
+                    'taxonomy'      => $this->get_category_block($block->ID)['title'],
+                    'icon'          => get_field('icon_gutenberg_block', $block->ID)
+                ]
+            ];
+        }
+
+        return json_encode( $tab_gutenberg_blocks_to_export, JSON_UNESCAPED_UNICODE );
+    }
+
+
+
+    /**
+     * Admin port to import Gutenberg blocks
+     * 
+     */
+    public function import(){
+
+        // Check valid nonce
+		$action_nonce = ( isset($_GET['action']) ) ? $_GET['action'] : $_POST['action'];
+        check_admin_referer($action_nonce);
+        
+        if( isset( $_POST['wpextend_gutenberg_blocks_to_import'] ) && !empty($_POST['wpextend_gutenberg_blocks_to_import']) ) {
+
+			$tab_gutenberg_blocks_to_import = json_decode( stripslashes($_POST['wpextend_gutenberg_blocks_to_import']), true );
+		}
+		elseif( isset($_GET['file']) && file_exists( WPEXTEND_IMPORT_DIR . $_GET['file'] . '.json' ) ){
+
+			$data_json_file = file_get_contents( WPEXTEND_IMPORT_DIR . $_GET['file'] . '.json' );
+			$tab_gutenberg_blocks_to_import = json_decode( $data_json_file, true );
+		}
+		else{
+			exit;
+		}
+
+		// Save in Wordpress post
+		if( is_array($tab_gutenberg_blocks_to_import) ){
+
+            foreach( $tab_gutenberg_blocks_to_import as $block ) {
+                $this->add_or_update_block($block);
+            }
+
+			if( !isset( $_POST['ajax'] ) ) {
+				$goback = add_query_arg( 'udpate', 'true', wp_get_referer() );
+				wp_safe_redirect( $goback );
+			}
+			exit;
+		}
+    }
+
+
+
+    /**
+     * Abstract function to insert / update Gutenberg block
+     * 
+     */
+    public function add_or_update_block($block){
+
+        if( is_array($block) ) {
+
+            $the_block = get_posts([
+                'name'           => $block['post_name'],
+                'post_type'      => self::$gutenberg_name_custom_post_type,
+                'post_status'    => 'any',
+                'posts_per_page' => 1
+            ]);
+            $current_block_id = ( is_array($the_block) && count($the_block) == 1 ) ? $the_block[0]->ID : 0;
+
+            return wp_insert_post(array_merge(
+                $block,
+                [
+                    'ID'            => $current_block_id,
+                    'post_type'     => self::$gutenberg_name_custom_post_type,
+                    'post_status'   => 'publish',
+                    'tax_input'     => [
+                        self::$gutenberg_name_custom_post_type . '_category' => $block['custom_data']['taxonomy']
+                    ],
+                    'meta_input'    => [
+                        'icon' => $block['custom_data']['icon']
+                    ]
+                ]
+            ));
+        }
+
+        return false;
     }
 
 

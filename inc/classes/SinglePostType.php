@@ -90,6 +90,7 @@ class SinglePostType {
 
 		if( array_key_exists('taxonomy', $data) && is_array($data['taxonomy']) && array_key_exists('slug', $data['taxonomy']) && array_key_exists('label', $data['taxonomy']) && !empty($data['taxonomy']['slug']) && !empty($data['taxonomy']['label']) ){
 			$this->taxonomy = $data['taxonomy'];
+			$this->taxonomy['hierarchical'] = ( array_key_exists('hierarchical', $data['taxonomy']) ) ? $data['taxonomy']['hierarchical'] : true;
 		}
  	 }
 
@@ -131,7 +132,7 @@ class SinglePostType {
 			array(
 				'label' => $this->taxonomy['label'],
 				'rewrite' => array( 'slug' => $this->taxonomy['slug'] ),
-				'hierarchical' => true,
+				'hierarchical' => $this->taxonomy['hierarchical'],
 				'sort' => true,
 				'show_ui' => true,
 				'show_admin_column' => true,
