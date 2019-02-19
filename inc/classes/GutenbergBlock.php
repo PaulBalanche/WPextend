@@ -14,7 +14,243 @@ class GutenbergBlock {
     private static $_instance,
     $path_gutenberg_theme_controllers = 'gutenberg-blocks/controllers/',
     $path_gutenberg_theme_views = 'gutenberg-blocks/views/',
-    $gutenberg_name_custom_post_type = 'gutenberg_blocks';
+    $gutenberg_name_custom_post_type = 'gutenberg_blocks',
+    $name_default_block_category = [ 'slug' => 'default', 'title' => 'Default' ],
+    $wp_icon = [
+        'dashicons-menu',
+        'dashicons-admin-site',
+        'dashicons-dashboard',
+        'dashicons-admin-post',
+        'dashicons-admin-media',
+        'dashicons-admin-links',
+        'dashicons-admin-page',
+        'dashicons-admin-comments',
+        'dashicons-admin-appearance',
+        'dashicons-admin-plugins',
+        'dashicons-admin-users',
+        'dashicons-admin-tools',
+        'dashicons-admin-settings',
+        'dashicons-admin-network',
+        'dashicons-admin-home',
+        'dashicons-admin-generic',
+        'dashicons-admin-collapse',
+        'dashicons-filter',
+        'dashicons-admin-customizer',
+        'dashicons-admin-multisite',
+        'dashicons-welcome-write-blog',
+        'dashicons-welcome-add-page',
+        'dashicons-welcome-view-site',
+        'dashicons-welcome-widgets-menus',
+        'dashicons-welcome-comments',
+        'dashicons-welcome-learn-more',
+        'dashicons-format-aside',
+        'dashicons-format-image',
+        'dashicons-format-gallery',
+        'dashicons-format-video',
+        'dashicons-format-status',
+        'dashicons-format-quote',
+        'dashicons-format-chat',
+        'dashicons-format-audio',
+        'dashicons-camera',
+        'dashicons-images-alt',
+        'dashicons-images-alt2',
+        'dashicons-video-alt',
+        'dashicons-video-alt2',
+        'dashicons-video-alt3',
+        'dashicons-media-archive',
+        'dashicons-media-audio',
+        'dashicons-media-code',
+        'dashicons-media-default',
+        'dashicons-media-document',
+        'dashicons-media-interactive',
+        'dashicons-media-spreadsheet',
+        'dashicons-media-text',
+        'dashicons-media-video',
+        'dashicons-playlist-audio',
+        'dashicons-playlist-video',
+        'dashicons-controls-play',
+        'dashicons-controls-pause',
+        'dashicons-controls-forward',
+        'dashicons-controls-skipforward',
+        'dashicons-controls-back',
+        'dashicons-controls-skipback',
+        'dashicons-controls-repeat',
+        'dashicons-controls-volumeon',
+        'dashicons-controls-volumeoff',
+        'dashicons-image-crop',
+        'dashicons-image-rotate',
+        'dashicons-image-rotate-left',
+        'dashicons-image-rotate-right',
+        'dashicons-image-flip-vertical',
+        'dashicons-image-flip-horizontal',
+        'dashicons-image-filter',
+        'dashicons-undo',
+        'dashicons-redo',
+        'dashicons-editor-bold',
+        'dashicons-editor-italic',
+        'dashicons-editor-ul',
+        'dashicons-editor-ol',
+        'dashicons-editor-quote',
+        'dashicons-editor-alignleft',
+        'dashicons-editor-aligncenter',
+        'dashicons-editor-alignright',
+        'dashicons-editor-insertmore',
+        'dashicons-editor-spellcheck',
+        'dashicons-editor-expand',
+        'dashicons-editor-contract',
+        'dashicons-editor-kitchensink',
+        'dashicons-editor-underline',
+        'dashicons-editor-justify',
+        'dashicons-editor-textcolor',
+        'dashicons-editor-paste-word',
+        'dashicons-editor-paste-text',
+        'dashicons-editor-removeformatting',
+        'dashicons-editor-video',
+        'dashicons-editor-customchar',
+        'dashicons-editor-outdent',
+        'dashicons-editor-indent',
+        'dashicons-editor-help',
+        'dashicons-editor-strikethrough',
+        'dashicons-editor-unlink',
+        'dashicons-editor-rtl',
+        'dashicons-editor-break',
+        'dashicons-editor-code',
+        'dashicons-editor-paragraph',
+        'dashicons-editor-table',
+        'dashicons-align-left',
+        'dashicons-align-right',
+        'dashicons-align-center',
+        'dashicons-align-none',
+        'dashicons-lock',
+        'dashicons-unlock',
+        'dashicons-calendar',
+        'dashicons-calendar-alt',
+        'dashicons-visibility',
+        'dashicons-hidden',
+        'dashicons-post-status',
+        'dashicons-edit',
+        'dashicons-trash',
+        'dashicons-sticky',
+        'dashicons-external',
+        'dashicons-arrow-up',
+        'dashicons-arrow-down',
+        'dashicons-arrow-right',
+        'dashicons-arrow-left',
+        'dashicons-arrow-up-alt',
+        'dashicons-arrow-down-alt',
+        'dashicons-arrow-right-alt',
+        'dashicons-arrow-left-alt',
+        'dashicons-arrow-up-alt2',
+        'dashicons-arrow-down-alt2',
+        'dashicons-arrow-right-alt2',
+        'dashicons-arrow-left-alt2',
+        'dashicons-sort',
+        'dashicons-leftright',
+        'dashicons-randomize',
+        'dashicons-list-view',
+        'dashicons-exerpt-view',
+        'dashicons-grid-view',
+        'dashicons-move',
+        'dashicons-share',
+        'dashicons-share-alt',
+        'dashicons-share-alt2',
+        'dashicons-twitter',
+        'dashicons-rss',
+        'dashicons-email',
+        'dashicons-email-alt',
+        'dashicons-facebook',
+        'dashicons-facebook-alt',
+        'dashicons-googleplus',
+        'dashicons-networking',
+        'dashicons-hammer',
+        'dashicons-art',
+        'dashicons-migrate',
+        'dashicons-performance',
+        'dashicons-universal-access',
+        'dashicons-universal-access-alt',
+        'dashicons-tickets',
+        'dashicons-nametag',
+        'dashicons-clipboard',
+        'dashicons-heart',
+        'dashicons-megaphone',
+        'dashicons-schedule',
+        'dashicons-wordpress',
+        'dashicons-wordpress-alt',
+        'dashicons-pressthis',
+        'dashicons-update',
+        'dashicons-screenoptions',
+        'dashicons-info',
+        'dashicons-cart',
+        'dashicons-feedback',
+        'dashicons-cloud',
+        'dashicons-translation',
+        'dashicons-tag',
+        'dashicons-category',
+        'dashicons-archive',
+        'dashicons-tagcloud',
+        'dashicons-text',
+        'dashicons-yes',
+        'dashicons-no',
+        'dashicons-no-alt',
+        'dashicons-plus',
+        'dashicons-plus-alt',
+        'dashicons-minus',
+        'dashicons-dismiss',
+        'dashicons-marker',
+        'dashicons-star-filled',
+        'dashicons-star-half',
+        'dashicons-star-empty',
+        'dashicons-flag',
+        'dashicons-warning',
+        'dashicons-location',
+        'dashicons-location-alt',
+        'dashicons-vault',
+        'dashicons-shield',
+        'dashicons-shield-alt',
+        'dashicons-sos',
+        'dashicons-search',
+        'dashicons-slides',
+        'dashicons-analytics',
+        'dashicons-chart-pie',
+        'dashicons-chart-bar',
+        'dashicons-chart-line',
+        'dashicons-chart-area',
+        'dashicons-groups',
+        'dashicons-businessman',
+        'dashicons-id',
+        'dashicons-id-alt',
+        'dashicons-products',
+        'dashicons-awards',
+        'dashicons-forms',
+        'dashicons-testimonial',
+        'dashicons-portfolio',
+        'dashicons-book',
+        'dashicons-book-alt',
+        'dashicons-download',
+        'dashicons-upload',
+        'dashicons-backup',
+        'dashicons-clock',
+        'dashicons-lightbulb',
+        'dashicons-microphone',
+        'dashicons-desktop',
+        'dashicons-laptop',
+        'dashicons-tablet',
+        'dashicons-smartphone',
+        'dashicons-phone',
+        'dashicons-index-card',
+        'dashicons-carrot',
+        'dashicons-building',
+        'dashicons-store',
+        'dashicons-album',
+        'dashicons-palmtree',
+        'dashicons-tickets-alt',
+        'dashicons-money',
+        'dashicons-smiley',
+        'dashicons-thumbs-up',
+        'dashicons-thumbs-down',
+        'dashicons-layout',
+        'dashicons-paperclip'
+    ];
 
 
 
@@ -41,11 +277,14 @@ class GutenbergBlock {
         // Automatically add gutenberg blocks custom_post_type
         add_filter( 'load_custom_post_type_wpextend', array($this, 'add_gutenberg_block_to_intial_custom_post_type'), 10, 1);
 
+        // Add custom fields to Gutenberg blocks
+        add_action( 'acf/init', array($this, 'acf_add_custom_fieds_to_gutenberg_block') );
+
         // Register ACF Gutenberg blocks
         add_action( 'acf/init', array($this, 'acf_init_register_gutenberg_blocks') );
 
-        add_filter( 'allowed_block_types', array($this, 'my_plugin_allowed_block_types'), 10, 2 );
-        add_filter( 'block_categories', array($this, 'my_plugin_block_categories'), 10, 2 );
+        // Update Gutenberg blocks categories
+        add_filter( 'block_categories', array($this, 'update_block_categories'), 10, 2 );
     }
     
 
@@ -100,12 +339,52 @@ class GutenbergBlock {
 
 
     /**
+     * Add custom fields to Gutenberg blocks
+     * 
+     */
+    public function acf_add_custom_fieds_to_gutenberg_block(){
+
+        if( function_exists('acf_add_local_field_group') ) {
+
+            $choices_radio_icon = [ 'null' => '' ];
+            foreach( self::$wp_icon as $icon ) {
+                $icon_formatted = str_replace('dashicons-', '', $icon);
+                $choices_radio_icon[$icon_formatted] = $icon_formatted;
+            }
+
+            acf_add_local_field_group([
+                'key' => 'gutenberg_block_settings',
+                'title' => 'Block settings',
+                'fields' => [
+                    [
+                        'key' => 'icon_gutenberg_block',
+                        'label' => 'Icon',
+                        'name' => 'icon',
+                        'type' => 'select',
+                        'choices' => $choices_radio_icon
+                    ]
+                ],
+                'location' => [
+                    [
+                        [
+                            'param' => 'post_type',
+                            'operator' => '==',
+                            'value' => self::$gutenberg_name_custom_post_type,
+                        ]
+                    ]
+                ]
+            ]);
+        }
+    }
+
+
+
+    /**
      * Register ACF Gutenberg blocks
      * 
      */
-    public static function acf_init_register_gutenberg_blocks() {
+    public function acf_init_register_gutenberg_blocks() {
         
-        // check function exists
         if( function_exists('acf_register_block') ) {
             
             $gutenberg_blocks_saved = get_posts([
@@ -119,7 +398,7 @@ class GutenbergBlock {
 
                     // Returns "gutenberg_block_category"
                     $tax_block = get_the_terms($block->ID, self::$gutenberg_name_custom_post_type . '_category');
-                    $category = ( is_array($tax_block) && count($tax_block) > 0 ) ? $tax_block[0]->slug : 'common';
+                    $category = ( is_array($tax_block) && count($tax_block) > 0 ) ? $tax_block[0]->slug : self::$name_default_block_category['slug'];
 
                     acf_register_block([
                         'name'				=> $block->post_name,
@@ -127,7 +406,7 @@ class GutenbergBlock {
                         'description'		=> $block->post_excerpt,
                         'render_callback'	=> array($this, 'acf_gutenberg_block_render_callback'),
                         'category'			=> $category,
-                        'icon'				=> 'admin-comments',
+                        'icon'				=> get_field('icon_gutenberg_block', $block->ID),
                         'keywords'			=> []
                     ]);
                 }
@@ -136,6 +415,38 @@ class GutenbergBlock {
     }
 
 
+
+    /**
+     * Update Gutenberg blocks categories
+     * 
+     */
+    public function update_block_categories( $categories, $post ) {
+        
+        // Reset all block categories
+        $categories = [];
+
+        // Get all Gutenberg block taxonomies
+        $gutenberg_block_categories = get_terms([
+            'taxonomy' => self::$gutenberg_name_custom_post_type . '_category',
+            'hide_empty' => false
+        ]);
+        if( is_array($gutenberg_block_categories) && count($gutenberg_block_categories) > 0 ) {
+            foreach($gutenberg_block_categories as $tax) {
+                $categories[] = [
+                    'slug' => $tax->slug,
+                    'title' => $tax->name
+                ];
+            }
+        }
+
+        // Add Default categorie
+        $categories[] = self::$name_default_block_category;
+
+        // Return new categories
+        return $categories;
+    }
+
+    
 
     /**
      * Render function for each Gutenberg blocks
@@ -155,44 +466,6 @@ class GutenbergBlock {
             // Include controller part
             include( get_theme_file_path(self::$path_gutenberg_theme_controllers . $slug . '.php') );
         }
-    }
-
-    
-    
-    public static function my_plugin_allowed_block_types( $allowed_block_types, $post ) {
-
-        // if ( $post->post_type !== 'post' ) {
-            return $allowed_block_types;
-        // }
-        // return array( 'core/paragraph' );
-    }
-    
-    
-
-    /**
-     * 
-     */
-    public static function my_plugin_block_categories( $categories, $post ) {
-        
-        // Get all Gutenberg block taxonomies
-        $gutenberg_block_categories = get_terms( array(
-            'taxonomy' => self::$gutenberg_name_custom_post_type . '_category',
-            'hide_empty' => false,
-        ) );
-
-        if ( $post->post_type !== 'post' ) {
-            return $categories;
-        }
-        return array_merge(
-            $categories,
-            array(
-                array(
-                    'slug' => 'my-category',
-                    'title' => __( 'My category', 'my-plugin' ),
-                    'icon'  => 'wordpress',
-                ),
-            )
-        );
     }
 
 
