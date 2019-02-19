@@ -4,7 +4,7 @@
 * Plugin URI: https://github.com/PaulBalanche/WPextend
 * Description: Extends basic Wordpress features such as add general settings, easy creating custom post type, ...
 * Text Domain: wp-extend
-* Version: 2.0.6
+* Version: 2.0.5
 * Author: Paul Balanche
 **/
 
@@ -39,6 +39,11 @@ if( !defined('WPEXTEND_MAIN_SLUG_ADMIN_PAGE') ){
 // Enable or disable CUSTOM POST TYPE feature
 if( !defined('WPEXTEND_ENABLE_CUSTOM_POST_TYPE') ){
 	define( 'WPEXTEND_ENABLE_CUSTOM_POST_TYPE' , TRUE );
+}
+
+// Enable or disable Gutenberg feature
+if( !defined('WPEXTEND_ENABLE_GUTENBERG') ){
+	define( 'WPEXTEND_ENABLE_GUTENBERG' , TRUE );
 }
 
 // MultiPostThumbnails plugin integration

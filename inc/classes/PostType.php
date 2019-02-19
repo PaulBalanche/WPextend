@@ -43,7 +43,6 @@ class PostType {
 		if( !is_array( $this->custom_post_type_wpextend ) ) {
 			$this->custom_post_type_wpextend = array();
 		}
-		// pre($this->custom_post_type_wpextend);die;
 
 		// Load initial custom post type
 		$this->load_custom_post_defaut();
@@ -73,8 +72,8 @@ class PostType {
 	public function create_hooks() {
 
 		// Initialise les customs posts
-		add_action( 'init', array( $this, 'initialize') );
-		add_action( 'init', array( $this, 'initialize_multiple_post_thumbnails') );
+		add_action( 'init', array( $this, 'initialize'), 4 );
+		add_action( 'init', array( $this, 'initialize_multiple_post_thumbnails'), 4 );
 	  	add_action( 'admin_post_add_custom_post_type_wpextend', 'Wpextend\SinglePostType::add_new' );
 	  	add_action( 'admin_post_delete_custom_post_type', 'Wpextend\SinglePostType::delete' );
 	  	add_action( 'admin_post_import_wpextend_custom_post_type', array($this, 'import') );

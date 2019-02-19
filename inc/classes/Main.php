@@ -12,6 +12,7 @@ class Main {
 	public $instance_multilanguage;
 	public $instance_global_settings;
 	public $instance_post_type_wpextend;
+	public $instanceGutenbergBlockWpextend;
 
 	static public $admin_url_import = '_import';
 	static public $admin_url_export = '_export';
@@ -39,6 +40,7 @@ class Main {
 
 		$this->instance_multilanguage = Multilanguage::getInstance();
 		$this->instance_global_settings = GlobalSettings::getInstance();
+		if( WPEXTEND_ENABLE_GUTENBERG ) { $this->instanceGutenbergBlockWpextend = GutenbergBlock::getInstance(); }
 		if( WPEXTEND_ENABLE_CUSTOM_POST_TYPE ){ $this->instance_post_type_wpextend = PostType::getInstance(); }
 
 		add_action('admin_menu', array ( __CLASS__ ,  'define_admin_menu' ) );
