@@ -41,7 +41,7 @@ class Main {
 		$this->instance_multilanguage = Multilanguage::getInstance();
 		$this->instance_global_settings = GlobalSettings::getInstance();
 		if( WPEXTEND_ENABLE_GUTENBERG ) { $this->instanceGutenbergBlockWpextend = GutenbergBlock::getInstance(); }
-		if( WPEXTEND_ENABLE_CUSTOM_POST_TYPE ){ $this->instance_post_type_wpextend = PostType::getInstance(); }
+		if( WPEXTEND_ENABLE_CUSTOM_POST_TYPE || WPEXTEND_ENABLE_GUTENBERG ){ $this->instance_post_type_wpextend = PostType::getInstance(); }
 
 		add_action('admin_menu', array ( __CLASS__ ,  'define_admin_menu' ) );
 
