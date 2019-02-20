@@ -163,8 +163,10 @@ body.wp-admin .repeat_field{
     cursor: pointer;
 }
 
-
-
+#acf-gutenberg_block_settings .acf-radio-list .dashicons{
+	width: 40px;
+	height: 40px;
+}
 
 
 
