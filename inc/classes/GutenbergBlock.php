@@ -288,6 +288,9 @@ class GutenbergBlock {
 
         // Admin port to import Gutenberg blocks
         add_action( 'admin_post_import_wpextend_gutenberg_blocks', array($this, 'import') );
+
+        // Create controller file if missing when Gutenberg block post is saved
+        add_action( 'save_post', array($this, 'on_saving_block'), 10, 3 );
     }
 
 
@@ -586,6 +589,26 @@ class GutenbergBlock {
         }
 
         return false;
+    }
+
+
+
+    /**
+     * Create controller file if missing when Gutenberg block post is saved
+     * 
+     */
+    public function on_saving_block($post_id, $block, $update){
+
+        $post_type = get_post_type($post_id);
+        if( $post_type == self::$gutenberg_name_custom_post_type ){
+
+            $slug = str_replace('acf/', '', $block->post_name);
+            if( !file_exists( get_theme_file_path(self::$path_gutenberg_theme_controllers . $slug . '.php') ) ) {
+
+                $content = '<?php' . PHP_EOL . '/**' . PHP_EOL . ' * "' . $block->post_title . '" controller' . PHP_EOL . ' *' . PHP_EOL . ' */' . PHP_EOL . PHP_EOL . '// echo "<pre>"; print_r( $blocs_fields );';
+                file_put_contents( get_theme_file_path(self::$path_gutenberg_theme_controllers . $slug . '.php'), $content );
+            }
+        }
     }
 
 
