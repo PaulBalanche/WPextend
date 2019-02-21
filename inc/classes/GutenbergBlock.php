@@ -49,8 +49,9 @@ class GutenbergBlock {
         // Register ACF Gutenberg blocks
         add_action( 'acf/init', array($this, 'acf_init_register_gutenberg_blocks') );
 
-        // Update Gutenberg blocks categories
+        // Update Gutenberg blocks abnd block categories
         add_filter( 'block_categories', array($this, 'update_block_categories'), 10, 2 );
+        add_filter( 'allowed_block_types', array($this, 'allowed_specifics_block_types'), 10, 2 );
 
         // Admin port to import Gutenberg blocks
         add_action( 'admin_post_import_wpextend_gutenberg_blocks', array($this, 'import') );
@@ -60,6 +61,9 @@ class GutenbergBlock {
 
         // Timber init template locations
         add_action( 'init', array($this, 'timber_init_template_locations') );
+
+        // Filter render_block to update default Gutenberg blocks
+        // add_filter( 'render_block', array($this, 'filter_default_render_block'), 10, 2 );
     }
 
 
@@ -100,7 +104,10 @@ class GutenbergBlock {
      */
     public function acf_convert_to_friendly_slug($acf_full_name){
         
-        return str_replace('acf/', '', $acf_full_name);
+        return str_replace( [
+            'acf/',
+            'core/'
+        ], '', $acf_full_name);
     }
     
     
@@ -221,9 +228,14 @@ class GutenbergBlock {
      * 
      */
     public function update_block_categories( $categories, $post ) {
-        
+
         // Reset all block categories
-        $categories = [];
+        $categories = [
+            [
+                'slug' => 'common',
+                'title' => 'Common Blocks'
+            ]
+        ];
 
         // Get all Gutenberg block taxonomies
         $gutenberg_block_categories = get_terms([
@@ -246,6 +258,22 @@ class GutenbergBlock {
         return $categories;
     }
 
+
+
+    /**
+     * Allow some Gutenberg blocks
+     * 
+     */
+    public function allowed_specifics_block_types( $allowed_block_types, $post ) {
+
+        $allowed_block_types = [];
+        foreach( $this->get_all_blocks_saved() as $block_saved ){
+            $allowed_block_types[] = 'acf/' . $block_saved->post_name;
+        }
+
+        return apply_filters('gutenberg_blocks_allowed', $allowed_block_types);
+    }
+
     
 
     /**
@@ -255,7 +283,8 @@ class GutenbergBlock {
     public function acf_gutenberg_block_render_callback( $block, $content = '', $is_preview = false ) {
 
         // Create friendly slug based on block name
-        $friendly_slug = $this->acf_convert_to_friendly_slug($block['name']);
+        $label_block_name = ( isset($block['name']) ) ? 'name' : 'blockName';
+        $friendly_slug = $this->acf_convert_to_friendly_slug($block[$label_block_name]);
 
         // If controller exists
         if( file_exists( get_theme_file_path(self::$path_gutenberg_theme_controllers . $friendly_slug . '.php') ) ) {
@@ -423,6 +452,23 @@ class GutenbergBlock {
             \Timber::$locations = get_theme_file_path(self::$path_gutenberg_theme_views);
         }
     }
+
+
+
+    /**
+     * Filter render_block to update default Gutenberg blocks
+     * 
+     */
+    // public function filter_default_render_block($block_content, $block){
+
+    //     if( !defined('REST_REQUEST') && !is_admin() && $block['blockName'] == 'core/paragraph' ) {
+
+    //         $this->acf_gutenberg_block_render_callback($block);
+    //     }
+    //     else{
+    //         return $block_content;
+    //     }
+    // }
 
 
 
