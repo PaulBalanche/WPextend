@@ -11,16 +11,6 @@ class TypeField {
 	public static $class_input_link = 'input_link_wpextend';
 
 
-
-    /**
-     *
-     */
-    public function __construct()
-    {
-    }
-    
-
-
 	 /**
      *
      */
@@ -56,14 +46,18 @@ class TypeField {
 
 			 if( is_array($value) ){
 				 foreach($value as $single_value){
-					 $retour_html .= '<input name="'.$name.'[]" type="text" id="input_'.$name.'" class="input_'.$name.' repeatable_field '.self::$class_input_text.'" value="'.str_replace('"', '&quot;', $single_value).'" placeholder="'.$placeholder.'" class="regular-text ltr">';
+                    $retour_html .= '<div class="repeatable_field">
+                        <input name="'.$name.'[]" type="text" id="input_'.$name.'" class="input_'.$name.' '.self::$class_input_text.'" value="'.str_replace('"', '&quot;', $single_value).'" placeholder="'.$placeholder.'" class="regular-text ltr">
+                    </div>';
 				 }
 			 }
 			 else{
-			 	$retour_html .= '<input name="'.$name.'[]" type="text" id="input_'.$name.'" class="input_'.$name.' repeatable_field '.self::$class_input_text.'" value="" placeholder="'.$placeholder.'" class="regular-text ltr">';
+                $retour_html .= '<div class="repeatable_field">
+                    <input name="'.$name.'[]" type="text" id="input_'.$name.'" class="input_'.$name.' '.self::$class_input_text.'" value="" placeholder="'.$placeholder.'" class="regular-text ltr">
+                </div>';
 			}
 
-			 $retour_html .= '<span class="repeat_field">+</span>';
+			 $retour_html .= '<span class="repeat_field">+ Duplicate text</span>';
 		 }
 		 else{
 		 	$retour_html .= '<input name="'.$name.'" type="text" id="input_'.$name.'" class="input_'.$name.' '.self::$class_input_text.'" value="'.str_replace('"', '&quot;', $value).'" placeholder="'.$placeholder.'" class="regular-text ltr">';
@@ -110,59 +104,68 @@ class TypeField {
 
 
 
-	 /**
+	/**
      *
      */
     public static function render_input_cta( $label, $name, $value = '', $repeatable = false, $description = '', $placeholder_link = 'http://...', $placeholder_label = 'Titre du lien') {
 
-		 $retour_html = '<tr class="tr_'.$name.'">
-		 <th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label><i class="description">'.$description.'</i></th>
-		 <td>';
+		$retour_html = '<tr class="tr_'.$name.'">
+		<th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label><i class="description">'.$description.'</i></th>
+		<td>';
 
-		 if( $repeatable ){
+		if( $repeatable ){
 
 		 	if( is_array($value) ){
 
-				 foreach($value as $key_value => $single_value){
-					 if( is_array($single_value) ){
+				foreach($value as $key_value => $single_value){
+					if( is_array($single_value) ){
 
-						 $value_cta = ( array_key_exists('link', $single_value) ) ? $single_value['link'] : '';
-		   			 $label_cta = ( array_key_exists('label', $single_value) ) ? $single_value['label'] : '';
+						$value_cta = ( array_key_exists('link', $single_value) ) ? $single_value['link'] : '';
+		   			    $label_cta = ( array_key_exists('label', $single_value) ) ? $single_value['label'] : '';
 
-						 $retour_html .= '<div class="repeatable_field input_cta"><input name="'.$name.'['.$key_value.'][link]" type="text" id="input_'.$name.'" class="input_'.$name.' cta_link '.self::$class_input_link.'" value="'.str_replace('"', '&quot;', $value_cta).'" placeholder="'.$placeholder_link.'" class="regular-text ltr">
-						<input name="'.$name.'['.$key_value.'][label]" type="text" class="input_'.$name.' cta_label '.self::$class_input_link.'" value="'.str_replace('"', '&quot;', $label_cta).'" placeholder="'.$placeholder_label.'" class="regular-text ltr"></div>';
-					 }
-					 else{
+                        $retour_html .= '<div class="repeatable_field input_cta">
+                            <input name="'.$name.'['.$key_value.'][link]" type="text" id="input_'.$name.'" class="input_'.$name.' cta_link '.self::$class_input_link.'" value="'.str_replace('"', '&quot;', $value_cta).'" placeholder="'.$placeholder_link.'" class="regular-text ltr">
+                            <input name="'.$name.'['.$key_value.'][label]" type="text" class="input_'.$name.' cta_label '.self::$class_input_link.'" value="'.str_replace('"', '&quot;', $label_cta).'" placeholder="'.$placeholder_label.'" class="regular-text ltr">
+                        </div>';
+					}
+					else{
 
-	   				 $retour_html .= '<div class="repeatable_field input_cta"><input name="'.$name.'['.$key_value.'][link]" type="text" id="input_'.$name.'" class="input_'.$name.' cta_link '.self::$class_input_link.'" value="" placeholder="'.$placeholder_link.'" class="regular-text ltr">
-		   			  <input name="'.$name.'['.$key_value.'][label]" type="text" class="input_'.$name.' cta_label '.self::$class_input_link.'" value="" placeholder="'.$placeholder_label.'" class="regular-text ltr"></div>';
-					 }
-				 }
-			 }
-			 else{
+                        $retour_html .= '<div class="repeatable_field input_cta">
+                            <input name="'.$name.'['.$key_value.'][link]" type="text" id="input_'.$name.'" class="input_'.$name.' cta_link '.self::$class_input_link.'" value="" placeholder="'.$placeholder_link.'" class="regular-text ltr">
+                            <input name="'.$name.'['.$key_value.'][label]" type="text" class="input_'.$name.' cta_label '.self::$class_input_link.'" value="" placeholder="'.$placeholder_label.'" class="regular-text ltr">
+                        </div>';
+					}
+				}
+			}
+		    else{
 
-				$value_cta = '';
+			    $value_cta = '';
    				$label_cta = '';
 
-   			 $retour_html .= '<div class="repeatable_field input_cta"><input name="'.$name.'[0][link]" type="text" id="input_'.$name.'" class="input_'.$name.' cta_link '.self::$class_input_link.'" value="'.str_replace('"', '&quot;', $value_cta).'" placeholder="'.$placeholder_link.'" class="regular-text ltr">
-   		  <input name="'.$name.'[0][label]" type="text" class="input_'.$name.' cta_label '.self::$class_input_link.'" value="'.str_replace('"', '&quot;', $label_cta).'" placeholder="'.$placeholder_label.'" class="regular-text ltr"></div>';
-			 }
+                $retour_html .= '<div class="repeatable_field input_cta">
+                    <input name="'.$name.'[0][link]" type="text" id="input_'.$name.'" class="input_'.$name.' cta_link '.self::$class_input_link.'" value="'.str_replace('"', '&quot;', $value_cta).'" placeholder="'.$placeholder_link.'" class="regular-text ltr">
+                    <input name="'.$name.'[0][label]" type="text" class="input_'.$name.' cta_label '.self::$class_input_link.'" value="'.str_replace('"', '&quot;', $label_cta).'" placeholder="'.$placeholder_label.'" class="regular-text ltr">
+                </div>';
+			}
 
-			 $retour_html .= '<span class="repeat_field">+</span><input type="hidden" class="input_hidden_cta" value="'.$name.'[index]" />';
-		 }
-		 else{
+            $retour_html .= '<span class="repeat_field">+ Duplicate link</span>
+            <input type="hidden" class="input_hidden_cta" value="'.$name.'[index]" />';
+		}
+		else{
 
-			  $value_cta = ( is_array($value) && array_key_exists('link', $value) ) ? $value['link'] : '';
-			  $label_cta = ( is_array($value) && array_key_exists('label', $value) ) ? $value['label'] : '';
+			$value_cta = ( is_array($value) && array_key_exists('link', $value) ) ? $value['link'] : '';
+			$label_cta = ( is_array($value) && array_key_exists('label', $value) ) ? $value['label'] : '';
 
-			  $retour_html .= '<div class="input_cta"><input name="'.$name.'[link]" type="text" id="input_'.$name.'" class="input_'.$name.' cta_link '.self::$class_input_link.'" value="'.str_replace('"', '&quot;', $value_cta).'" placeholder="'.$placeholder_link.'" class="regular-text ltr">
-			<input name="'.$name.'[label]" type="text" class="input_'.$name.' cta_label '.self::$class_input_link.'" value="'.str_replace('"', '&quot;', $label_cta).'" placeholder="'.$placeholder_label.'" class="regular-text ltr"></div>';
-		 }
+            $retour_html .= '<div class="input_cta">
+                <input name="'.$name.'[link]" type="text" id="input_'.$name.'" class="input_'.$name.' cta_link '.self::$class_input_link.'" value="'.str_replace('"', '&quot;', $value_cta).'" placeholder="'.$placeholder_link.'" class="regular-text ltr">
+                <input name="'.$name.'[label]" type="text" class="input_'.$name.' cta_label '.self::$class_input_link.'" value="'.str_replace('"', '&quot;', $label_cta).'" placeholder="'.$placeholder_label.'" class="regular-text ltr">
+            </div>';
+		}
 
-		 $retour_html .= '</td>
-		 </tr>';
+		$retour_html .= '</td>
+		</tr>';
 
-		 return $retour_html;
+		return $retour_html;
     }
 
 
@@ -213,29 +216,76 @@ class TypeField {
     /**
      *
      */
-    public static function render_input_textarea( $label, $name, $value = '', $repeatable = false, $description = '', $tinymce = 'true'){
+    public static function render_input_textarea( $label, $name, $value = '', $repeatable = false, $description = '', $tinymce = true, $media_buttons = false ){
 
 		$retour_html = '<tr class="tr_'.$name.'">
 		<th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label><i class="description">'.$description.'</i></th>
 		<td>';
+		if( $repeatable ){
+            if( is_array($value) && count($value) > 0 ){
+                foreach( $value as $key => $val) {
+                    $retour_html .= '<div class="repeatable_field">';
+                    ob_start();
+                    wp_editor( stripslashes($val), $name . '_' . $key, [
+                        'textarea_name'         => $name . '[]',
+                        'wpautop'             	=> true,
+                        'media_buttons'       	=> $media_buttons,
+                        'default_editor'      	=> '',
+                        'drag_drop_upload'    	=> false,
+                        'editor_height'			=> 150,
+                        'teeny'               	=> true,
+                        'dfw'                 	=> false,
+                        '_content_editor_dfw' 	=> false,
+                        'tinymce'             	=> $tinymce,
+                        'quicktags'           	=> true
+                    ]);
+                    $retour_html .= ob_get_contents();
+                    ob_end_clean();
+                    $retour_html .= '</div>';
+                }
+            }
+            else{
+                $retour_html .= '<div class="repeatable_field">';
+                ob_start();
+                wp_editor( stripslashes($value), $name . '_0', [
+                    'textarea_name'         => $name . '[]',
+                    'wpautop'             	=> true,
+                    'media_buttons'       	=> $media_buttons,
+                    'default_editor'      	=> '',
+                    'drag_drop_upload'    	=> false,
+                    'editor_height'			=> 150,
+                    'teeny'               	=> true,
+                    'dfw'                 	=> false,
+                    '_content_editor_dfw' 	=> false,
+                    'tinymce'             	=> $tinymce,
+                    'quicktags'           	=> true
+                ]);
+                $retour_html .= ob_get_contents();
+                ob_end_clean();
+                $retour_html .= '</div>';
+            }
 
-		ob_start();
-		wp_editor( stripslashes($value), $name, [
-			'wpautop'             	=> true,
-			'media_buttons'       	=> true,
-			'default_editor'      	=> '',
-			'drag_drop_upload'    	=> false,
-			'textarea_rows'       	=> 20,
-			'teeny'               	=> false,
-			'dfw'                 	=> false,
-			'_content_editor_dfw' 	=> false,
-			'tinymce'             	=> $tinymce,
-			'quicktags'           	=> true,
-			'editor_height'					=> 120
-		]);
-		$retour_html .= ob_get_contents();
-		ob_end_clean();
-
+            $retour_html .= '<span class="repeat_field">+ Duplicate content</span>';
+        }
+        else{
+            
+            ob_start();
+			wp_editor( stripslashes($value), $name, [
+				'wpautop'             	=> true,
+				'media_buttons'       	=> $media_buttons,
+				'default_editor'      	=> '',
+				'drag_drop_upload'    	=> false,
+				'editor_height'			=> 150,
+				'teeny'               	=> true,
+				'dfw'                 	=> false,
+				'_content_editor_dfw' 	=> false,
+				'tinymce'             	=> $tinymce,
+				'quicktags'           	=> true
+			]);
+			$retour_html .= ob_get_contents();
+			ob_end_clean();
+        }
+			
 		$retour_html .= '</td>
 		</tr>';
 
@@ -259,52 +309,58 @@ class TypeField {
 
 		 		foreach( $defaut_value as $key => $val ){
 
-		 			$retour_html .= '<select id="input_'.$name.'" class="input_'.$name.' repeatable_field" name="'.$name.'[]"><option value="null"></option>';
+                    $retour_html .= '<div class="repeatable_field">
+                        <select id="input_'.$name.'" class="input_'.$name.'" name="'.$name.'[]">
+                            <option value="null"></option>';
 
-		 			if( isAssoc($list_option) ) {
+                        if( isAssoc($list_option) ) {
 
-		 				foreach( $list_option as $key2 => $val2) {
-							if($val && $val == $key2)
-								$retour_html .= '<option selected="selected" value="'.$key2.'">'.$val2.'</option>';
-							else
-		 						$retour_html .= '<option value="'.$key2.'">'.$val2.'</option>';
-		 		  		}
-		 			}
-		 			else{
-			 			foreach( $list_option as $val2) {
-							if($val && $val == $val2)
-								$retour_html .= '<option selected="selected" value="'.$val2.'">'.$val2.'</option>';
-							else
-		 						$retour_html .= '<option value="'.$val2.'">'.$val2.'</option>';
-		 		  		}
-		 		  	}
-		 		  	$retour_html .= '</select>';
+                            foreach( $list_option as $key2 => $val2) {
+                                if($val && $val == $key2)
+                                    $retour_html .= '<option selected="selected" value="'.$key2.'">'.$val2.'</option>';
+                                else
+                                    $retour_html .= '<option value="'.$key2.'">'.$val2.'</option>';
+                            }
+                        }
+                        else{
+                            foreach( $list_option as $val2) {
+                                if($val && $val == $val2)
+                                    $retour_html .= '<option selected="selected" value="'.$val2.'">'.$val2.'</option>';
+                                else
+                                    $retour_html .= '<option value="'.$val2.'">'.$val2.'</option>';
+                            }
+                        }
+                        $retour_html .= '</select>
+                    </div>';
 		 		}
 		 	}
 		 	else{
 
-		 		$retour_html .= '<select id="input_'.$name.'" class="input_'.$name.' repeatable_field" name="'.$name.'[]"><option value="null"></option>';
+                $retour_html .= '<div class="repeatable_field">
+                    <select id="input_'.$name.'" class="input_'.$name.'" name="'.$name.'[]">
+                        <option value="null"></option>';
 
-		 		if( isAssoc($list_option) ) {
-		 			foreach( $list_option as $key => $val) {
-						if($defaut_value && $defaut_value == $key)
-							$retour_html .= '<option selected="selected" value="'.$key.'">'.$val.'</option>';
-						else
-	 						$retour_html .= '<option value="'.$key.'">'.$val.'</option>';
-	 		  		}
-		 		}
-		 		else{
-		 			foreach( $list_option as $val) {
-						if($defaut_value && $defaut_value == $val)
-							$retour_html .= '<option selected="selected" value="'.$val.'">'.$val.'</option>';
-						else
-	 						$retour_html .= '<option value="'.$val.'">'.$val.'</option>';
-	 		  		}
-	 		  	}
-	 		  	$retour_html .= '</select>';
+                    if( isAssoc($list_option) ) {
+                        foreach( $list_option as $key => $val) {
+                            if($defaut_value && $defaut_value == $key)
+                                $retour_html .= '<option selected="selected" value="'.$key.'">'.$val.'</option>';
+                            else
+                                $retour_html .= '<option value="'.$key.'">'.$val.'</option>';
+                        }
+                    }
+                    else{
+                        foreach( $list_option as $val) {
+                            if($defaut_value && $defaut_value == $val)
+                                $retour_html .= '<option selected="selected" value="'.$val.'">'.$val.'</option>';
+                            else
+                                $retour_html .= '<option value="'.$val.'">'.$val.'</option>';
+                        }
+                    }
+                    $retour_html .= '</select>
+                </div>';
 		 	}
 
-	 		$retour_html .= '<span class="repeat_field">+</span>';
+	 		$retour_html .= '<span class="repeat_field">+ Duplicate select</span>';
 
 	 		$retour_html .= '</td>
 		 	</tr>';

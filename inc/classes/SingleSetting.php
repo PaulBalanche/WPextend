@@ -83,7 +83,13 @@ class SingleSetting {
 					break;
 
 				case 'textarea':
-					$retour_html .= TypeField::render_input_textarea( $this->name, 'textarea__fields__cat__'.$this->category.'__id__'.$this->id, $this->value, $this->repeatable, $this->description );
+
+					if( $this->repeatable ) {
+						$retour_html .= TypeField::render_input_textarea( $this->name, 'fields['.$this->category.']['.$this->id.']', $this->value, $this->repeatable, $this->description, false );
+					}
+					else{
+						$retour_html .= TypeField::render_input_textarea( $this->name, 'textarea__fields__cat__'.$this->category.'__id__'.$this->id, $this->value, $this->repeatable, $this->description );
+					}
 					break;
 
 				case 'select':

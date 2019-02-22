@@ -9,15 +9,6 @@ class RenderAdminHtml {
 
 
 
-    /**
-    * Construct method
-    */
-    private function __construct() {
-
-	}
-
-
-
 	/**
     * Reader header with open wrap
     */
@@ -41,9 +32,22 @@ class RenderAdminHtml {
 	/**
     * Close form
     */
-	static public function form_close($value_submit = 'Submit'){
+	static public function form_close($value_submit = 'Submit', $table_format = false){
 
-		return '<p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="'.$value_submit.'"></p></form>';
+		if( $table_format ) {
+			$retour_html = RenderAdminHtml::table_edit_open();
+			$retour_html .= '<tr>
+				<th class="submit" scope="row"></th>
+				<td class="submit"><input type="submit" name="submit" id="submit" class="button button-primary button-large" value="'.$value_submit.'"></td>
+			</tr>';
+			$retour_html .= RenderAdminHtml::table_edit_close();
+			$retour_html .= '</form>';
+		}
+		else {
+			$retour_html = '<p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary button-large" value="'.$value_submit.'"></p></form>';
+		}
+
+		return $retour_html;
 	}
 
 

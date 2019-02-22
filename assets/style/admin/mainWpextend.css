@@ -131,16 +131,43 @@ table tr.tr_input_hidden th, table tr.tr_input_hidden td{
 
 
 
-/**
-* Table
-*/
-body.wp-admin table.table_wpextend tbody tr th{ text-align: right; }
-body.wp-admin table.table_wpextend tbody tr th i.description{ display: block; font-weight: 400; }
+body.wp-admin .ui-accordion .ui-accordion-content{
+	padding: 0;
+}
 
 
+
 /**
-* input
-*/
+ * Table
+ *
+ */
+body.wp-admin table.table_wpextend{
+	margin: 0;
+}
+body.wp-admin table.table_wpextend tbody tr th{
+	text-align: right;
+	padding: 30px 30px 0 0;
+	border-right: 1px solid rgb(240,240,240);
+	border-bottom: 1px solid rgb(240,240,240);
+	background: rgb(250,250,250);
+}
+body.wp-admin table.table_wpextend tbody tr th i.description{ display: block; font-weight: 400; margin-top: 8px; }
+
+body.wp-admin table.table_wpextend tbody tr td{
+	padding: 25px 30px 35px 30px;
+    border-bottom: 1px solid rgb(240,240,240);
+}
+body.wp-admin table.table_wpextend tbody tr th.submit, body.wp-admin table.table_wpextend tbody tr td.submit{
+	border: none;
+	background: rgb(250,250,250);
+}
+
+
+
+/**
+ * input
+ *
+ */
 body.wp-admin .input_text_wpextend{ padding: 10px 0; text-indent: 10px; width: 100%; }
 body.wp-admin .input_link_wpextend{ padding: 10px 0; text-indent: 10px; width: 100%; }
 
@@ -150,7 +177,9 @@ body.wp-admin .input_link_wpextend{ padding: 10px 0; text-indent: 10px; width: 1
 * repeat_field
 */
 body.wp-admin .repeatable_field{
-	margin-right: 10px;
+	padding-bottom: 10px;
+	margin-bottom: 10px;
+    border-bottom: 1px dashed rgb(220,220,220);
 }
 body.wp-admin .repeat_field{
 	display: inline-block;

@@ -306,7 +306,7 @@ class GlobalSettings {
 				$retour_html .= $instance_category->render_html();
 
 				if($current_screen->parent_base != WPEXTEND_MAIN_SLUG_ADMIN_PAGE){
-					$retour_html .= RenderAdminHtml::form_close();
+					$retour_html .= RenderAdminHtml::form_close('Submit', true);
 				}
 
 				if($current_screen->parent_base == WPEXTEND_MAIN_SLUG_ADMIN_PAGE){
@@ -421,11 +421,6 @@ class GlobalSettings {
 
 		if( isset( $_POST['category'] ) ){
 
-			// Get GlobalSettings instance
-			$instance_global_settings = GlobalSettings::getInstance();
-
-			$all_category = $instance_global_settings->get_all_category();
-
 			// Textarea Traitement to include them in related fields
 			foreach( $_POST as $key => $val ){
 				if( preg_match( '/textarea__fields__cat__(.*)__id__(.*)/', $key, $matches ) ){
@@ -439,67 +434,38 @@ class GlobalSettings {
 				foreach( $_POST['fields'] as $key_category => $category ) {
 
 					// First test if category exists
-					if( array_key_exists( $key_category, $all_category ) && is_array( $category ) ){
+					if( array_key_exists( $key_category, GlobalSettings::getInstance()->get_all_category() ) && is_array( $category ) ){
 
 						foreach( $category as $key_field => $value ){
 
 							// Second test if setting exists
-							if( array_key_exists( $key_field, $instance_global_settings->wpextend_global_settings[$key_category]['fields'] ) ){
+							if( array_key_exists( $key_field, GlobalSettings::getInstance()->wpextend_global_settings[$key_category]['fields'] ) ){
 
-								// If multilangue settings
-								if( $instance_global_settings->wpextend_global_settings[$key_category]['wpml_compatible'] == 1 ){
+								// Cleanning repeatable variable
+								if( is_array($value) && GlobalSettings::getInstance()->wpextend_global_settings[$key_category]['fields'][$key_field]['repeatable'] == 1 && count($value) > 1 ){
 
-									if( is_array($value) ){
-
-										// Cleanning repeatble variable
-										if($instance_global_settings->wpextend_global_settings[$key_category]['fields'][$key_field]['repeatable'] == 1){
-											if($instance_global_settings->wpextend_global_settings[$key_category]['fields'][$key_field]['type'] == 'link'){
-												foreach($value as $key_tab_link => $val_tab_link){
-													if(count($value) > 1 && $val_tab_link['link'] == '' && $val_tab_link['label'] == ''){ unset($value[$key_tab_link]); }
-												}
-											}
-										}
-
-										$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->wordpress_current_langage] = $value;
-									}
-									elseif( $instance_global_settings->wpextend_global_settings[$key_category]['fields'][$key_field]['type'] == 'textarea' ){
-										$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->wordpress_current_langage] = $value;
-									}
-									else{
-										$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->wordpress_current_langage] = sanitize_text_field($value);
-									}
+									$element_is_link = ( GlobalSettings::getInstance()->wpextend_global_settings[$key_category]['fields'][$key_field]['type'] == 'link' ) ? true : false;
+									$value = Helper::clean_repeatable_element($value, $element_is_link);
 								}
-								else{
-
-									if( is_array($value) ){
-
-										// Cleanning repeatble variable
-										if($instance_global_settings->wpextend_global_settings[$key_category]['fields'][$key_field]['repeatable'] == 1){
-											if($instance_global_settings->wpextend_global_settings[$key_category]['fields'][$key_field]['type'] == 'link'){
-												foreach($value as $key_tab_link => $val_tab_link){
-													if(count($value) > 1 && $val_tab_link['link'] == '' && $val_tab_link['label'] == ''){ unset($value[$key_tab_link]); }
-												}
-											}
-										}
-
-										$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->wordpress_default_locale] = $value;
-									}
-									elseif( $instance_global_settings->wpextend_global_settings[$key_category]['fields'][$key_field]['type'] == 'textarea' ){
-										$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->wordpress_default_locale] = $value;
-									}
-									else{
-										$instance_global_settings->wpextend_global_settings_values[$key_category][$key_field][$instance_global_settings->wordpress_default_locale] = sanitize_text_field($value);
-									}
+								
+								// Sanitize value
+								if( !is_array($value) && GlobalSettings::getInstance()->wpextend_global_settings[$key_category]['fields'][$key_field]['type'] != 'textarea' ) {
+									$value = sanitize_text_field($value);
 								}
+
+								// Define key language
+								$key_language = ( GlobalSettings::getInstance()->wpextend_global_settings[$key_category]['wpml_compatible'] == 1 ) ? GlobalSettings::getInstance()->wordpress_current_langage : GlobalSettings::getInstance()->wordpress_default_locale;
+
+								// Update value in Global settings
+								GlobalSettings::getInstance()->wpextend_global_settings_values[$key_category][$key_field][$key_language] = $value;
 							}
 						}
-
 					}
 				}
 			}
 
 			// Save in Wordpress database
-			$instance_global_settings->save( $_POST['category'] );
+			GlobalSettings::getInstance()->save( $_POST['category'] );
 
 			$goback = add_query_arg( 'udpate', 'true', wp_get_referer() );
 			wp_safe_redirect( $goback );
