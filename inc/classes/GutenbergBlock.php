@@ -418,7 +418,7 @@ class GutenbergBlock {
     public function on_saving_block($post_id, $block, $update){
 
         $post_type = get_post_type($post_id);
-        if( $post_type == self::$gutenberg_name_custom_post_type ){
+        if( $post_type == self::$gutenberg_name_custom_post_type && get_post_status($post_id) == 'publish' ){
 
             // Create friendly slug based on block name
             $friendly_slug = $this->acf_convert_to_friendly_slug($block->post_name);
@@ -432,10 +432,10 @@ class GutenbergBlock {
             }
 
             // View
-            if( !file_exists( get_theme_file_path(self::$path_gutenberg_theme_views . $friendly_slug . '.twig') ) ) {
+            // if( !file_exists( get_theme_file_path(self::$path_gutenberg_theme_views . $friendly_slug . '.twig') ) ) {
 
-                file_put_contents( get_theme_file_path(self::$path_gutenberg_theme_views . $friendly_slug . '.twig'), '', FILE_APPEND );
-            }
+            //     file_put_contents( get_theme_file_path(self::$path_gutenberg_theme_views . $friendly_slug . '.twig'), '', FILE_APPEND );
+            // }
         }
     }
 
