@@ -9,13 +9,14 @@ class Main {
 
     private static $_instance;
 
-	public $instance_multilanguage;
-	public $instance_global_settings;
-	public $instance_post_type_wpextend;
-	public $instanceGutenbergBlockWpextend;
+	public $instance_multilanguage,
+	$instance_global_settings,
+	 $instance_post_type_wpextend,
+	 $instanceGutenbergBlockWpextend,
+	$instance_timber_wpextend;
 
-	static public $admin_url_import = '_import';
-	static public $admin_url_export = '_export';
+	static public $admin_url_import = '_import',
+	$admin_url_export = '_export';
 
 
 
@@ -40,7 +41,10 @@ class Main {
 
 		$this->instance_multilanguage = Multilanguage::getInstance();
 		$this->instance_global_settings = GlobalSettings::getInstance();
-		if( WPEXTEND_ENABLE_GUTENBERG ) { $this->instanceGutenbergBlockWpextend = GutenbergBlock::getInstance(); }
+		if( WPEXTEND_ENABLE_GUTENBERG ) {
+			$this->instanceGutenbergBlockWpextend = GutenbergBlock::getInstance();
+			$this->instance_timber_wpextend = Timber::getInstance();
+		}
 		if( WPEXTEND_ENABLE_CUSTOM_POST_TYPE || WPEXTEND_ENABLE_GUTENBERG ){ $this->instance_post_type_wpextend = PostType::getInstance(); }
 
 		add_action('admin_menu', array ( __CLASS__ ,  'define_admin_menu' ) );
@@ -59,7 +63,7 @@ class Main {
     */
     public static function define_admin_menu() {
 
-		add_menu_page(WPEXTEND_NAME_MENU_SETTINGS_EDITOR, WPEXTEND_NAME_MENU_SETTINGS_EDITOR, 'edit_posts', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . '_site_settings', array( GlobalSettings::getInstance(), 'render_admin_page' ), '', 3 );
+		add_menu_page(GlobalSettings::getInstance()->title_page_editor_global_settings, GlobalSettings::getInstance()->title_page_editor_global_settings, 'edit_posts', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . '_site_settings', array( GlobalSettings::getInstance(), 'render_admin_page' ), '', 3 );
 		add_submenu_page(WPEXTEND_MAIN_SLUG_ADMIN_PAGE . '_site_settings', 'Site settings', 'Site settings', 'edit_posts', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . '_site_settings', array( GlobalSettings::getInstance(), 'render_admin_page' ) );
 
 		add_menu_page('WP Extend', 'WP Extend', 'manage_options', WPEXTEND_MAIN_SLUG_ADMIN_PAGE, array( GlobalSettings::getInstance(), 'render_admin_page' ) );

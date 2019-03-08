@@ -9,14 +9,13 @@ class GlobalSettings {
 
 	private static $_instance;
 
-	public $wpextend_global_settings;
-	public $wpextend_global_settings_values = array();
-
-	public $name_option_in_database = '_buzzpress_global_settings';
-	public $name_option_value_in_database = '_buzzpress_global_settings_value_';
-
-	public $wordpress_default_locale = null;
-	public $wordpress_current_langage = null;
+	public $wpextend_global_settings,
+	$wpextend_global_settings_values = array(),
+	$name_option_in_database = '_buzzpress_global_settings',
+	$name_option_value_in_database = '_buzzpress_global_settings_value_',
+	$wordpress_default_locale = null,
+	$wordpress_current_langage = null,
+	$title_page_editor_global_settings = 'WP Extend';
 
 	static public $admin_url = '';
 
@@ -78,6 +77,9 @@ class GlobalSettings {
 
 		// Configure hooks
 		$this->create_hooks();
+
+		// Name page edirot cartegory settings
+		$this->title_page_editor_global_settings =  ( defined('WPEXTEND_NAME_MENU_SETTINGS_EDITOR') && WPEXTEND_NAME_MENU_SETTINGS_EDITOR ) ? WPEXTEND_NAME_MENU_SETTINGS_EDITOR : $this->title_page_editor_global_settings;
 	}
 
 
@@ -258,7 +260,7 @@ class GlobalSettings {
 		$current_screen = get_current_screen();
 
 		// Header page & open form
-		$retour_html = RenderAdminHtml::header(WPEXTEND_NAME_MENU_SETTINGS_EDITOR);
+		$retour_html = RenderAdminHtml::header($this->title_page_editor_global_settings);
 
 		$retour_html .= '<div class="accordion_wpextend">';
 
