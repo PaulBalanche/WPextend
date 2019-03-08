@@ -258,7 +258,7 @@ class GlobalSettings {
 		$current_screen = get_current_screen();
 
 		// Header page & open form
-		$retour_html = RenderAdminHtml::header('Site settings');
+		$retour_html = RenderAdminHtml::header(WPEXTEND_NAME_MENU_SETTINGS_EDITOR);
 
 		$retour_html .= '<div class="accordion_wpextend">';
 
