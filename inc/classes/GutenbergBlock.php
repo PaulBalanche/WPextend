@@ -294,11 +294,14 @@ class GutenbergBlock {
             // Store field values.
             $context_gutenberg_block['fields'] = get_fields();
 
-            // Store $is_preview value.
-            $context_gutenberg_block['is_preview'] = $is_preview;
-
-            // Include controller part
-            include( get_theme_file_path(self::$path_gutenberg_theme_controllers . $friendly_slug . '.php') );
+            // Preview mode
+            if( $is_preview ){
+                echo $block[$label_block_name];
+            }
+            else{
+                // Include controller part
+                include( get_theme_file_path(self::$path_gutenberg_theme_controllers . $friendly_slug . '.php') );
+            }
         }
     }
 
@@ -422,7 +425,7 @@ class GutenbergBlock {
             // Controller
             if( !file_exists( get_theme_file_path(self::$path_gutenberg_theme_controllers . $friendly_slug . '.php') ) ) {
 
-                $content = '<?php' . PHP_EOL . '/**' . PHP_EOL . ' * "' . $block->post_title . '" controller' . PHP_EOL . ' *' . PHP_EOL . ' */' . PHP_EOL . PHP_EOL . PHP_EOL. PHP_EOL . '/**' . PHP_EOL . ' * That\'s all, stop editing! Happy blogging.' . PHP_EOL . ' * One last thing to do: Timber render function' . PHP_EOL . ' *' . PHP_EOL . ' */' . PHP_EOL . 'if( class_exists("Timber", false) ) {' . PHP_EOL . '   Timber::render( "' . $friendly_slug . '.twig", $context );' . PHP_EOL . '}';
+                $content = '<?php' . PHP_EOL . '/**' . PHP_EOL . ' * "' . $block->post_title . '" controller' . PHP_EOL . ' *' . PHP_EOL . ' * Get block values : $context_gutenberg_block["block"]' . PHP_EOL . ' * Get field values : $context_gutenberg_block["fields"]' . PHP_EOL . ' *' . PHP_EOL . ' */' . PHP_EOL . PHP_EOL . '// Timber context global scope & initialize return HTML variable' . PHP_EOL . 'global $context;' . PHP_EOL . '$return_html_by_reference = null;' . PHP_EOL . PHP_EOL . PHP_EOL . PHP_EOL . '/**' . PHP_EOL . ' * It\'s your turn to write something :' . PHP_EOL . ' *' . PHP_EOL . ' */' . PHP_EOL . '$controller_temp_data = $context;' . PHP_EOL  . PHP_EOL . PHP_EOL . PHP_EOL . '/**' . PHP_EOL . ' * ----------------------------------------' . PHP_EOL . ' * That\'s all, stop editing! Happy blogging.' . PHP_EOL . ' * One last thing to do: Timber render function' . PHP_EOL . ' *' . PHP_EOL . ' */' . PHP_EOL . '$return_html_by_reference .= Wpextend\Timber::render_controller("' . $friendly_slug . '", $controller_temp_data);';
 
                 file_put_contents( get_theme_file_path(self::$path_gutenberg_theme_controllers . $friendly_slug . '.php'), $content, FILE_APPEND );
             }
