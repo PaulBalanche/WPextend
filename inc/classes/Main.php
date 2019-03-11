@@ -10,13 +10,14 @@ class Main {
     private static $_instance;
 
 	public $instance_multilanguage,
-	$instance_global_settings,
+	 $instance_global_settings,
 	 $instance_post_type_wpextend,
 	 $instanceGutenbergBlockWpextend,
-	$instance_timber_wpextend;
+	 $instance_timber_wpextend,
+	 $instance_thumbnail_api;
 
 	static public $admin_url_import = '_import',
-	$admin_url_export = '_export';
+	 $admin_url_export = '_export';
 
 
 
@@ -46,6 +47,7 @@ class Main {
 			$this->instance_timber_wpextend = Timber::getInstance();
 		}
 		if( WPEXTEND_ENABLE_CUSTOM_POST_TYPE || WPEXTEND_ENABLE_GUTENBERG ){ $this->instance_post_type_wpextend = PostType::getInstance(); }
+		if( WPEXTEND_PATH_THUMBNAIL_API ) { $this->instance_thumbnail_api = ThumbnailApi::getInstance(); }
 
 		add_action('admin_menu', array ( __CLASS__ ,  'define_admin_menu' ) );
 
