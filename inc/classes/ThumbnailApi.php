@@ -66,7 +66,42 @@ class ThumbnailApi {
      */
     public function catch_thumbnail_url_rewritted() {
 
-        pre($_GET);die;
+        if( isset($_GET['name_image']) && !empty($_GET['name_image']) && preg_match('/^(\d+)-(.*)$/', $_GET['name_image'], $matches) && is_array($matches) && count($matches) > 1 && is_numeric($matches[1]) ) {
+            
+            $size_image = 'large';
+
+            if( isset($_GET['w']) && is_numeric($_GET['w']) ) {
+                
+                $sizes_available = wp_get_attachment_metadata($matches[1])['sizes'];
+                $nearby_size = null;
+                foreach( $sizes_available as $key_size => $size ) {
+                    if( $size['width'] >= $_GET['w'] && (is_null($nearby_size) || $size['width'] < $nearby_size) ){
+                        $nearby_size = $size['width'];
+                        $size_image = $key_size;
+                    }
+                }
+
+                // If none size was selected, choose larger image
+                if( is_null($nearby_size) ) {
+                    foreach( $sizes_available as $key_size => $size ) {
+                        if( is_null($nearby_size) || $nearby_size < $size['width'] ){
+                            $nearby_size = $size['width'];
+                            $size_image = $key_size;
+                        }
+                    }
+                }
+            }
+
+            $data_image = wp_get_attachment_image_src($matches[1], $size_image);
+            if( $data_image && is_array($data_image) && count($data_image) > 0 ) {
+                header('Content-type: image/jpeg');
+                echo file_get_contents($data_image[0], false, stream_context_create([
+                    'ssl' => [
+                        'verify_peer'   => false
+                    ]
+                ]));
+            }
+        }
     }
 
 
