@@ -230,6 +230,10 @@ class GutenbergBlock {
             [
                 'slug' => 'common',
                 'title' => 'Common Blocks'
+            ],
+            [
+                'slug' => 'formatting',
+                'title' => 'Formatting'
             ]
         ];
 
@@ -262,7 +266,10 @@ class GutenbergBlock {
      */
     public function allowed_specifics_block_types( $allowed_block_types, $post ) {
 
-        $allowed_block_types = [];
+        $allowed_block_types = [
+            'core/paragraph',
+            'core/freeform'
+        ];
         foreach( $this->get_all_blocks_saved() as $block_saved ){
             $allowed_block_types[] = 'acf/' . $block_saved->post_name;
         }
@@ -295,7 +302,7 @@ class GutenbergBlock {
             $context_gutenberg_block['fields'] = get_fields();
 
             // Preview mode
-            if( $is_preview ){
+            if( is_admin() || $is_preview ){
                 echo $block[$label_block_name];
             }
             else{

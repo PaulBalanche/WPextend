@@ -19,7 +19,7 @@ class Timber {
 
 
     /**
-	* First instance of class GutenbergBlock
+	 * First instance of class GutenbergBlock
 	 *
 	 */
 	public static function getInstance() {
