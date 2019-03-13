@@ -227,14 +227,14 @@ class GutenbergBlock {
 
         // Reset all block categories
         $categories = [
-            [
-                'slug' => 'common',
-                'title' => 'Common Blocks'
-            ],
-            [
-                'slug' => 'formatting',
-                'title' => 'Formatting'
-            ]
+            // [
+            //     'slug' => 'common',
+            //     'title' => 'Common Blocks'
+            // ],
+            // [
+            //     'slug' => 'formatting',
+            //     'title' => 'Formatting'
+            // ]
         ];
 
         // Get all Gutenberg block taxonomies
@@ -267,8 +267,8 @@ class GutenbergBlock {
     public function allowed_specifics_block_types( $allowed_block_types, $post ) {
 
         $allowed_block_types = [
-            'core/paragraph',
-            'core/freeform'
+            // 'core/paragraph',
+            // 'core/freeform'
         ];
         foreach( $this->get_all_blocks_saved() as $block_saved ){
             $allowed_block_types[] = 'acf/' . $block_saved->post_name;
