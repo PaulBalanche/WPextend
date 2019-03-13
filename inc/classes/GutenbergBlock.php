@@ -310,7 +310,13 @@ class GutenbergBlock {
                     'post_status'    => 'publish',
                     'posts_per_page' => 1
                 ]);
-                echo ( $post_gutenberg_block && is_array($post_gutenberg_block) && count($post_gutenberg_block) == 1 && has_post_thumbnail($post_gutenberg_block[0]->ID) ) ? get_the_post_thumbnail($post_gutenberg_block[0]->ID, 'medium_large') : $block[$label_block_name];
+                if( $post_gutenberg_block && is_array($post_gutenberg_block) && count($post_gutenberg_block) == 1 && has_post_thumbnail($post_gutenberg_block[0]->ID) ) {
+                    // echo '<i>' . $post_gutenberg_block[0]->post_title . ' :</i><hr>';
+                    echo get_the_post_thumbnail($post_gutenberg_block[0]->ID, 'medium_large');
+                }
+                else{
+                    echo $friendly_slug;
+                }
             }
             else{
                 // Include controller part
