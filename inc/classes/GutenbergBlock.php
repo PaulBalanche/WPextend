@@ -303,7 +303,14 @@ class GutenbergBlock {
 
             // Preview mode
             if( is_admin() || $is_preview ){
-                echo $block[$label_block_name];
+
+                $post_gutenberg_block = get_posts([
+                    'name'           => $friendly_slug,
+                    'post_type'      => self::$gutenberg_name_custom_post_type,
+                    'post_status'    => 'publish',
+                    'posts_per_page' => 1
+                ]);
+                echo ( $post_gutenberg_block && is_array($post_gutenberg_block) && count($post_gutenberg_block) == 1 && has_post_thumbnail($post_gutenberg_block[0]->ID) ) ? get_the_post_thumbnail($post_gutenberg_block[0]->ID, 'medium_large') : $block[$label_block_name];
             }
             else{
                 // Include controller part
