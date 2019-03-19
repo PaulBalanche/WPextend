@@ -134,6 +134,23 @@ class GutenbergBlock {
                 'description'       => 'Gutenberg block description',
                 'public'            => true,
                 'capability_type'   => 'post',
+                'capabilities'      => [
+                    'edit_post'		            => 'update_core',
+                    'read_post'		            => 'update_core',
+                    'delete_post'		        => 'update_core',
+                    'edit_posts'		        => 'update_core',
+                    'edit_others_posts'	        => 'update_core',
+                    'publish_posts'		        => 'update_core',
+                    'read_private_posts'        => 'update_core',
+                    'read'                      => 'update_core',
+                    'delete_posts'              => 'update_core',
+                    'delete_private_posts'      => 'update_core',
+                    'delete_published_posts'    => 'update_core',
+                    'delete_others_posts'       => 'update_core',
+                    'edit_private_posts'        => 'update_core',
+                    'edit_published_posts'      => 'update_core',
+                    'create_posts'              => 'update_core'
+                ],
                 'hierarchical'      => false,
                 'show_in_menu'      => true,
                 'menu_position'     => 'null',
@@ -346,7 +363,7 @@ class GutenbergBlock {
                 'post_excerpt'  => $block->post_excerpt,
                 'custom_data'   => [
                     'taxonomy'      => $this->get_category_block($block->ID)['title'],
-                    'icon'          => get_field('icon_gutenberg_block', $block->ID)
+                    'acf_data'      => get_fields($block->ID)
                 ]
             ];
         }
@@ -421,9 +438,7 @@ class GutenbergBlock {
                     'tax_input'     => [
                         self::$gutenberg_name_custom_post_type . '_category' => $block['custom_data']['taxonomy']
                     ],
-                    'meta_input'    => [
-                        'icon' => $block['custom_data']['icon']
-                    ]
+                    'meta_input'    => ( isset($block['custom_data']) && is_array($block['custom_data']) && isset($block['custom_data']['acf_data']) && is_array($block['custom_data']['acf_data']) ) ? $block['custom_data']['acf_data'] : null
                 ]
             ));
         }
