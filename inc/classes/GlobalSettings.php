@@ -275,6 +275,7 @@ class GlobalSettings {
 					 current_user_can('manage_options')
 				) &&
 				(
+					$current_screen->parent_base == WPEXTEND_MAIN_SLUG_ADMIN_PAGE ||
 					!$instance_category->wpml_compatible ||
 					(
 						$instance_category->wpml_compatible &&
