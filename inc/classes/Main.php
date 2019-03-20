@@ -194,15 +194,15 @@ class Main {
 		if( WPEXTEND_ENABLE_GUTENBERG ) {
 			// Gutenberg blocks
 
-			$retour_html .= RenderAdminHtml::form_open( admin_url( 'admin-post.php' ), 'import_wpextend_' . GutenbergBlock::getInstance()->$gutenberg_name_custom_post_type, 'import_wpextend_' . GutenbergBlock::getInstance()->$gutenberg_name_custom_post_type );
+			$retour_html .= RenderAdminHtml::form_open( admin_url( 'admin-post.php' ), 'import_wpextend_' . GutenbergBlock::$gutenberg_name_custom_post_type, 'import_wpextend_' . GutenbergBlock::$gutenberg_name_custom_post_type );
 
 			$retour_html .= RenderAdminHtml::table_edit_open();
-			$retour_html .= TypeField::render_input_textarea( 'Gutenberg blocks to import', 'wpextend_' . GutenbergBlock::getInstance()->$gutenberg_name_custom_post_type . '_to_import', '', false, '', false );
+			$retour_html .= TypeField::render_input_textarea( 'Gutenberg blocks to import', 'wpextend_' . GutenbergBlock::$gutenberg_name_custom_post_type . '_to_import', '', false, '', false );
 			$retour_html .= RenderAdminHtml::table_edit_close();
 
 			$retour_html .= RenderAdminHtml::form_close( 'Import' );
-			if( file_exists( WPEXTEND_IMPORT_DIR . GutenbergBlock::getInstance()->$gutenberg_name_custom_post_type . '.json' ) ){
-				$retour_html .= '<p><a href="' . add_query_arg( ['action' => 'import_wpextend_' . GutenbergBlock::getInstance()->$gutenberg_name_custom_post_type, 'file' => GutenbergBlock::getInstance()->$gutenberg_name_custom_post_type] , wp_nonce_url(admin_url( 'admin-post.php' ), 'import_wpextend_' . GutenbergBlock::getInstance()->$gutenberg_name_custom_post_type)) . '" class="button" >Import JSON file</a></p>';
+			if( file_exists( WPEXTEND_IMPORT_DIR . GutenbergBlock::$gutenberg_name_custom_post_type . '.json' ) ){
+				$retour_html .= '<p><a href="' . add_query_arg( ['action' => 'import_wpextend_' . GutenbergBlock::$gutenberg_name_custom_post_type, 'file' => GutenbergBlock::$gutenberg_name_custom_post_type] , wp_nonce_url(admin_url( 'admin-post.php' ), 'import_wpextend_' . GutenbergBlock::$gutenberg_name_custom_post_type)) . '" class="button" >Import JSON file</a></p>';
 			}
 		}
 
