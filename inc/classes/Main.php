@@ -89,9 +89,6 @@ class Main {
 		wp_enqueue_style( 'style_jquery-ui', WPEXTEND_ASSETS_URL . 'style/admin/jquery-ui.min.css', false, true );
 		wp_enqueue_style( 'style_jquery-ui-theme', WPEXTEND_ASSETS_URL . 'style/admin/jquery-ui.theme.min.css', false, true );
 
-		// Wpextend_Custom_Field Style and Script 
-		wp_enqueue_script( 'script_admin_wpextend_custom_field_setting_page', WPEXTEND_ASSETS_URL . 'js/admin/custom_field_setting_page.js', array('jquery'));
-
 		wp_enqueue_script( 'jquery-ui-accordion' );
 		wp_enqueue_script( 'jquery-ui-tabs' );
 		wp_enqueue_script( 'jquery-ui-datepicker' );
