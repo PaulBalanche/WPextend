@@ -70,28 +70,68 @@ class ThumbnailApi {
             
             $size_image = 'large';
 
-            if( isset($_GET['w']) && is_numeric($_GET['w']) ) {
+            $consider_width = ( isset($_GET['w']) && is_numeric($_GET['w']) );
+            $consider_height = ( isset($_GET['h']) && is_numeric($_GET['h']) );
+            
+            if( $consider_width || $consider_height ) {
                 
                 $sizes_available = wp_get_attachment_metadata($matches[1])['sizes'];
-                $nearby_size = null;
+
+                $nearby_size_w = null;
+                $nearby_size_h = null;
                 foreach( $sizes_available as $key_size => $size ) {
-                    if( $size['width'] >= $_GET['w'] && (is_null($nearby_size) || $size['width'] < $nearby_size) ){
-                        $nearby_size = $size['width'];
+                    if(
+                        (
+                            (
+                                $consider_width && 
+                                $size['width'] >= $_GET['w'] && (
+                                    is_null($nearby_size_w) || $size['width'] < $nearby_size_w
+                                )
+                            ) || !$consider_width
+                        )
+                        &&
+                        (
+                            (
+                                $consider_height && 
+                                $size['height'] >= $_GET['h'] && (
+                                    is_null($nearby_size_h) || $size['height'] < $nearby_size_h
+                                )
+                            ) || !$consider_height
+                        )
+                    ){
+                        $nearby_size_w = $size['width'];
+                        $nearby_size_h = $size['height'];
                         $size_image = $key_size;
                     }
                 }
 
                 // If none size was selected, choose larger image
-                if( is_null($nearby_size) ) {
+                if( is_null($nearby_size_w) && is_null($nearby_size_h) ) {
                     foreach( $sizes_available as $key_size => $size ) {
-                        if( is_null($nearby_size) || $nearby_size < $size['width'] ){
-                            $nearby_size = $size['width'];
+                        if(
+                            (
+                                is_null($nearby_size_w) && is_null($nearby_size_h)
+                            )
+                            ||
+                            (
+                                (
+                                    ( $consider_width && $nearby_size_w < $size['width'] ) || !$consider_width
+                                )
+                                &&
+                                (
+                                    ( $consider_height && $nearby_size_h < $size['height'] ) || !$consider_height
+                                )
+                            )
+                        ){
+                            $nearby_size_w = $size['width'];
+                            $nearby_size_h = $size['height'];
                             $size_image = $key_size;
                         }
                     }
                 }
             }
-
+            
+            // Render image
             $data_image = wp_get_attachment_image_src($matches[1], $size_image);
             if( $data_image && is_array($data_image) && count($data_image) > 0 ) {
                 header('Content-type: image/jpeg');
