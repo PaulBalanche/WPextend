@@ -244,16 +244,16 @@ class GutenbergBlock {
     public function update_block_categories( $categories, $post ) {
 
         // Reset all block categories
-        $categories = [
-            // [
-            //     'slug' => 'common',
-            //     'title' => 'Common Blocks'
-            // ],
-            // [
-            //     'slug' => 'formatting',
-            //     'title' => 'Formatting'
-            // ]
-        ];
+        // $categories = [
+        //     // [
+        //     //     'slug' => 'common',
+        //     //     'title' => 'Common Blocks'
+        //     // ],
+        //     // [
+        //     //     'slug' => 'formatting',
+        //     //     'title' => 'Formatting'
+        //     // ]
+        // ];
 
         // Get all Gutenberg block taxonomies
         $gutenberg_block_categories = get_terms([
