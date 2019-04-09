@@ -229,7 +229,8 @@ class GutenbergBlock {
                     'render_callback'	=> array($this, 'acf_gutenberg_block_render_callback'),
                     'category'			=> $this->get_category_block($block->ID)['slug'],
                     'icon'				=> get_field('icon_gutenberg_block', $block->ID),
-                    'keywords'			=> []
+                    'keywords'			=> [],
+                    'mode'	            => 'auto'
                 ]);
             }
         }
