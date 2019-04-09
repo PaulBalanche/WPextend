@@ -81,6 +81,7 @@ class ThumbnailApi {
                 $nearby_size_h = null;
                 foreach( $sizes_available as $key_size => $size ) {
                     if(
+                        $key_size != 'thumbnail' &&
                         (
                             (
                                 $consider_width && 
