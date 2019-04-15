@@ -277,7 +277,9 @@ class SinglePostType {
 			// Protect data
 			$labels = array();
 			if( isset($_POST['labels']) && is_array($_POST['labels']) ){
-				foreach( $_POST['labels'] as $key => $val ){
+
+				$POST_labels = stripslashes_deep($_POST['labels']);
+				foreach( $POST_labels as $key => $val ){
 					$labels[$key] = sanitize_text_field( $val );
 				}
 			}

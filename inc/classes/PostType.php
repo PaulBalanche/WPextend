@@ -39,10 +39,7 @@ class PostType {
 	private function __construct() {
 
 		// Get option from database
-		$this->custom_post_type_wpextend = get_option( $this->name_option_in_database );
-		if( !is_array( $this->custom_post_type_wpextend ) ) {
-			$this->custom_post_type_wpextend = array();
-		}
+		$this->custom_post_type_wpextend = $this->get_all_from_database();
 
 		// Load initial custom post type
 		$this->load_custom_post_defaut();
@@ -275,7 +272,24 @@ class PostType {
 
 		 $all_post_type = array_merge( self::$list_base_post_type, $this->get_all() );
 		 return $all_post_type;
-    }
+	}
+	
+
+
+	/**
+	 * Return all custom post type saved in database, before others will be added thanks to hook
+	 * 
+	 */
+	public function get_all_from_database(){
+
+		// Get option from database
+		$all_custom_post_type_wpextend_saved_in_database = get_option( $this->name_option_in_database );
+		if( is_array($all_custom_post_type_wpextend_saved_in_database) ) {
+			return $all_custom_post_type_wpextend_saved_in_database;
+		}
+
+		return [];
+	}
 
 
 

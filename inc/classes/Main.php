@@ -120,7 +120,7 @@ class Main {
 		if( WPEXTEND_ENABLE_CUSTOM_POST_TYPE ) {
 			// Custom post type
 			$retour_html .= RenderAdminHtml::table_edit_open();
-			$retour_html .= TypeField::render_input_textarea( 'WP Extend Custom Post Type', 'wpextend_custom_post_type_export', stripslashes( json_encode( PostType::getInstance()->custom_post_type_wpextend, JSON_UNESCAPED_UNICODE ) ), false, '', false );
+			$retour_html .= TypeField::render_input_textarea( 'WP Extend Custom Post Type', 'wpextend_custom_post_type_export', stripslashes( json_encode( PostType::getInstance()->get_all_from_database(), JSON_UNESCAPED_UNICODE ) ), false, '', false );
 			$retour_html .= RenderAdminHtml::table_edit_close();
 		}
 
