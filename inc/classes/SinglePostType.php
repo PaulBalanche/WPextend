@@ -96,7 +96,7 @@ class SinglePostType {
 
 
 
-	 /**
+	/**
 	 * Register new Post Type in Wordpress system
 	 *
 	 * @return void
@@ -161,8 +161,6 @@ class SinglePostType {
 
 
 
-
-
 	/**
 	* Render form to edit custom post type
 	*/
@@ -178,8 +176,6 @@ class SinglePostType {
 		$retour_html .= RenderAdminHtml::form_close( 'Edit post type' );
 		return $retour_html;
  	}
-
-
 
 
 
@@ -252,11 +248,6 @@ class SinglePostType {
 
 
 
-
-
-
-
-
 	/**
 	* Get POST and create new setting field
 	*
@@ -322,11 +313,8 @@ class SinglePostType {
 				}
 			}
 
-			// Add in Wpextend_Post_Type
-			$instance_Wpextend_Post_Type->add_new( $labels, $slug, $args, $taxonomy, $annex_args );
-
-			// Save in Wordpress database
-			$instance_Wpextend_Post_Type->save();
+			// Add in Wpextend_Post_Type and save
+			$instance_Wpextend_Post_Type->save( $instance_Wpextend_Post_Type->add_new( $labels, $slug, $args, $taxonomy, $annex_args ) );
 		
 			if( !isset( $_POST['ajax'] ) ) {
 				$goback = add_query_arg( 'udpate', 'true', wp_get_referer() );
@@ -338,22 +326,15 @@ class SinglePostType {
 
 
 
-
-
 	static public function delete(){
 
 		if( isset( $_GET['id'] ) ) {
 
 			$id_post_type = sanitize_text_field( $_GET['id'] );
 
-			// Get Wpextend_Post_Type instance
+			// Get Wpextend_Post_Type instance and remove targeted element
 			$instance_Wpextend_Post_Type = PostType::getInstance();
-
-			// Add in Wpextend_Post_Type
- 			$instance_Wpextend_Post_Type->delete( $id_post_type );
-
- 			// Save in Wordpress database
- 			$instance_Wpextend_Post_Type->save();
+			$instance_Wpextend_Post_Type->save( $instance_Wpextend_Post_Type->delete( $id_post_type, $instance_Wpextend_Post_Type->get_all_from_database() ) );
 
 			if( !isset( $_POST['ajax'] ) ) {
 	 			$goback = add_query_arg( 'udpate', 'true', wp_get_referer() );

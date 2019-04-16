@@ -38,8 +38,8 @@ class PostType {
 	*/
 	private function __construct() {
 
-		// Get option from database
-		$this->custom_post_type_wpextend = $this->get_all_from_database();
+		// Get custom post type from JSON file and database
+		$this->custom_post_type_wpextend = array_merge( $this->load_json(), $this->get_all_from_database() );
 
 		// Load initial custom post type
 		$this->load_custom_post_defaut();
@@ -94,8 +94,6 @@ class PostType {
 			}
 		}
 	}
-
-
 
 
 
@@ -208,9 +206,12 @@ class PostType {
  	*
  	* @return boolean
  	*/
- 	public function save() {
+ 	public function save($new_value = false) {
 
- 		return update_option( $this->name_option_in_database , $this->custom_post_type_wpextend);
+		$new_value = ( $new_value !== false ) ? $new_value : $this->custom_post_type_wpextend;
+		$new_value = ( $new_value ) ? $new_value : null;
+
+ 		return update_option( $this->name_option_in_database , $new_value);
  	}
 
 
@@ -227,19 +228,28 @@ class PostType {
 			is_array( $taxonomy ) &&
 			is_array( $annex_args )
 		) {
-			$this->custom_post_type_wpextend[$slug] = array( 'labels' => $labels, 'args' => $args, 'taxonomy' => $taxonomy, 'annex_args' => $annex_args );
+			$actual_from_database = $this->get_all_from_database();
+			$actual_from_database[$slug] = array( 'labels' => $labels, 'args' => $args, 'taxonomy' => $taxonomy, 'annex_args' => $annex_args );
+			return $actual_from_database;
 		}
+
+		return false;
 	}
 
 
+	
 	/**
  	* Update private variable PostType to add new setting
 	*/
-	public function delete($slug){
+	public function delete($slug, $origin_in_which_remove = false){
 
-		if( array_key_exists( $slug, $this->custom_post_type_wpextend ) ){
-			unset( $this->custom_post_type_wpextend[$slug] );
+		$origin_in_which_remove = ( $origin_in_which_remove !== false ) ? $origin_in_which_remove : $this->custom_post_type_wpextend;
+		if( array_key_exists( $slug, $origin_in_which_remove ) ){
+			unset( $origin_in_which_remove[$slug] );
+			return $origin_in_which_remove;
 		}
+
+		return false;
 	}
 
 
@@ -272,23 +282,6 @@ class PostType {
 
 		 $all_post_type = array_merge( self::$list_base_post_type, $this->get_all() );
 		 return $all_post_type;
-	}
-	
-
-
-	/**
-	 * Return all custom post type saved in database, before others will be added thanks to hook
-	 * 
-	 */
-	public function get_all_from_database(){
-
-		// Get option from database
-		$all_custom_post_type_wpextend_saved_in_database = get_option( $this->name_option_in_database );
-		if( is_array($all_custom_post_type_wpextend_saved_in_database) ) {
-			return $all_custom_post_type_wpextend_saved_in_database;
-		}
-
-		return [];
 	}
 
 
@@ -327,5 +320,37 @@ class PostType {
 			exit;
 		}
 	}
+
+
+
+	/**
+	 * Load JSON file in addition to database
+	 * 
+	 */
+	public function load_json() {
+
+		if( file_exists(WPEXTEND_JSON_DIR . 'custom_post_type.json') ) {
+			return json_decode(file_get_contents(WPEXTEND_JSON_DIR . 'custom_post_type.json'), true);
+		}
+		return [];
+	}
+
+
+
+	/**
+	 * Load custom post type saved in database
+	 * 
+	 */
+	public function get_all_from_database(){
+
+		// Get option from database
+		$all_custom_post_type_wpextend_saved_in_database = get_option( $this->name_option_in_database );
+		if( is_array($all_custom_post_type_wpextend_saved_in_database) ) {
+			return $all_custom_post_type_wpextend_saved_in_database;
+		}
+		return [];
+	}
+
+
 
 }
