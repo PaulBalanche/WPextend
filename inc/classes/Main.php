@@ -172,22 +172,6 @@ class Main {
 
 		$retour_html .= '<br /><hr><br />';
 
-		if( WPEXTEND_ENABLE_CUSTOM_POST_TYPE ){
-			// Formulaire d'import Custom Post type
-			$retour_html .= RenderAdminHtml::form_open( admin_url( 'admin-post.php' ), 'import_wpextend_custom_post_type', 'import_wpextend_custom_post_type' );
-
-			$retour_html .= RenderAdminHtml::table_edit_open();
-			$retour_html .= TypeField::render_input_textarea( 'WP Extend Custom Post Type to import', 'wpextend_custom_post_type_to_import', '', false, '', false );
-			$retour_html .= RenderAdminHtml::table_edit_close();
-
-			$retour_html .= RenderAdminHtml::form_close( 'Import' );
-			if( file_exists( WPEXTEND_IMPORT_DIR . 'custom_post_type.json' ) ){
-				$retour_html .= '<p><a href="' . add_query_arg( ['action' => 'import_wpextend_custom_post_type', 'file' => 'custom_post_type'] , wp_nonce_url(admin_url( 'admin-post.php' ), 'import_wpextend_custom_post_type')) . '" class="button" >Import JSON file</a></p>';
-			}
-
-			$retour_html .= '<br /><hr><br />';
-		}
-
 		if( WPEXTEND_ENABLE_GUTENBERG ) {
 			// Gutenberg blocks
 

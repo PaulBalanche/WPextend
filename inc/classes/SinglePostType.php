@@ -155,7 +155,6 @@ class SinglePostType {
 		$annex_args = self::$default_annex_args;
 
 		$retour_html = self::render_form( $tab_labels, $slug, $tab_args, $taxonomy, $annex_args );
-		$retour_html .= RenderAdminHtml::form_close( 'Add post type' );
 		return $retour_html;
  	}
 
@@ -173,7 +172,6 @@ class SinglePostType {
 		$annex_args = $this->annex_args;
 
 		$retour_html = self::render_form( $tab_labels, $slug, $tab_args, $taxonomy, $annex_args );
-		$retour_html .= RenderAdminHtml::form_close( 'Edit post type' );
 		return $retour_html;
  	}
 
@@ -184,55 +182,38 @@ class SinglePostType {
 	*/
 	static private function render_form( $tab_labels, $slug, $tab_args, $taxonomy, $annex_args ){
 
-		$retour_html = '<hr>';
- 		$retour_html .= RenderAdminHtml::form_open( admin_url( 'admin-post.php' ), 'add_custom_post_type_wpextend', 'add_custom_post_type_wpextend' );
+ 		$retour_html = RenderAdminHtml::form_open( admin_url( 'admin-post.php' ), 'add_custom_post_type_wpextend', 'add_custom_post_type_wpextend' );
 
  		$retour_html .= RenderAdminHtml::table_edit_open();
 		$retour_html .= ( !in_array($slug, PostType::$list_reserved_post_types) ) ? TypeField::render_input_text( 'Slug', 'slug', $slug) : TypeField::render_disable_input_text( 'Slug', 'slug', $slug);
-		$retour_html .= RenderAdminHtml::table_edit_close();
 
-		if( !in_array($slug, PostType::$list_reserved_post_types) ){
-
-			$retour_html .= '<br /><br /><br /><br /><h3>Informations:</h3><div style="float:left; width: 50%">';
-
-			$retour_html .= RenderAdminHtml::table_edit_open();
-			foreach( self::$default_labels as $key => $val) {
-				$retour_html .= TypeField::render_input_text( $key, 'labels['.$key.']', $tab_labels[$key] );
-			}
-			$retour_html .= RenderAdminHtml::table_edit_close();
-
-			$retour_html .= '</div><div style="float:right; width: 50%">';
-
-			$retour_html .= RenderAdminHtml::table_edit_open();
-			foreach( self::$default_args as $key => $val) {
-				if( is_array($val) ) {
-					if( isAssoc($val) ){
-						$defaut_value = (self::$default_args != $tab_args) ? $tab_args[$key] : false;
-						$retour_html .= TypeField::render_input_checkbox( $key, 'args['.$key.']', $val, $defaut_value );
-					}
-					else{
-						$defaut_value = (self::$default_args != $tab_args) ? $tab_args[$key] : false;
-						$retour_html .= TypeField::render_input_select( $key, 'args['.$key.']', $val, $defaut_value );
-					}
-				}
-				else {
-					$retour_html .= TypeField::render_input_text( $key, 'args['.$key.']', $tab_args[$key] );
-				}
-			}
-	 		$retour_html .= RenderAdminHtml::table_edit_close();
-
-			$retour_html .= '</div><div style="clear:both"></div><br /><br /><br /><br /><h3>Taxonomy:</h3>';
-		
-
-			$retour_html .= RenderAdminHtml::table_edit_open();
-			$retour_html .= TypeField::render_input_text( 'Taxonomy label', 'taxonomy[label]', $taxonomy['label']);
-			$retour_html .= TypeField::render_input_text( 'Taxonomy slug', 'taxonomy[slug]', $taxonomy['slug']);
-			$retour_html .= RenderAdminHtml::table_edit_close();
-
+		$retour_html .= TypeField::render_label_and_free_html('', '', '<h3>Labels:</h3>');
+		foreach( self::$default_labels as $key => $val) {
+			$retour_html .= TypeField::render_input_text( $key, 'labels['.$key.']', $tab_labels[$key] );
 		}
 
-		$retour_html .= '<br /><br /><br /><br /><h3>Multiple post thumbnails:</h3>';
-		$retour_html .= RenderAdminHtml::table_edit_open();
+		$retour_html .= TypeField::render_label_and_free_html('', '', '<h3>Args:</h3>');
+		foreach( self::$default_args as $key => $val) {
+			if( is_array($val) ) {
+				if( isAssoc($val) ){
+					$defaut_value = (self::$default_args != $tab_args) ? $tab_args[$key] : false;
+					$retour_html .= TypeField::render_input_checkbox( $key, 'args['.$key.']', $val, $defaut_value );
+				}
+				else{
+					$defaut_value = (self::$default_args != $tab_args) ? $tab_args[$key] : false;
+					$retour_html .= TypeField::render_input_select( $key, 'args['.$key.']', $val, $defaut_value );
+				}
+			}
+			else {
+				$retour_html .= TypeField::render_input_text( $key, 'args['.$key.']', $tab_args[$key] );
+			}
+		}
+
+		$retour_html .= TypeField::render_label_and_free_html('', '', '<h3>Taxonomy:</h3>');
+		$retour_html .= TypeField::render_input_text( 'Taxonomy label', 'taxonomy[label]', $taxonomy['label']);
+		$retour_html .= TypeField::render_input_text( 'Taxonomy slug', 'taxonomy[slug]', $taxonomy['slug']);
+
+		$retour_html .= TypeField::render_label_and_free_html('', '', '<h3>Multiple post thumbnails:</h3>');
 		foreach( self::$default_annex_args as $key => $val) {
 
 			if( $key == 'multiple_post_thumbnails' )
@@ -240,8 +221,9 @@ class SinglePostType {
 			else
 				$retour_html .= TypeField::render_input_text( $key, 'annex_args['.$key.']', $annex_args[$key] );
 		}
+
 		$retour_html .= RenderAdminHtml::table_edit_close();
-		
+		$retour_html .= RenderAdminHtml::form_close( 'Submit', true );
 
  		return $retour_html;
 	}
@@ -263,7 +245,7 @@ class SinglePostType {
 			// Get PostType instance
 			$instance_Wpextend_Post_Type = PostType::getInstance();
 
-			$slug = sanitize_text_field( $_POST['slug'] );
+			$slug = sanitize_title( $_POST['slug'] );
 
 			// Protect data
 			$labels = array();
@@ -313,8 +295,8 @@ class SinglePostType {
 				}
 			}
 
-			// Add in Wpextend_Post_Type and save
-			$instance_Wpextend_Post_Type->save( $instance_Wpextend_Post_Type->add_new( $labels, $slug, $args, $taxonomy, $annex_args ) );
+			// Add in Wpextend_Post_Type
+			$instance_Wpextend_Post_Type->add_new( $labels, $slug, $args, $taxonomy, $annex_args );
 		
 			if( !isset( $_POST['ajax'] ) ) {
 				$goback = add_query_arg( 'udpate', 'true', wp_get_referer() );
@@ -334,7 +316,7 @@ class SinglePostType {
 
 			// Get Wpextend_Post_Type instance and remove targeted element
 			$instance_Wpextend_Post_Type = PostType::getInstance();
-			$instance_Wpextend_Post_Type->save( $instance_Wpextend_Post_Type->delete( $id_post_type, $instance_Wpextend_Post_Type->get_all_from_database() ) );
+			$instance_Wpextend_Post_Type->delete( $id_post_type );
 
 			if( !isset( $_POST['ajax'] ) ) {
 	 			$goback = add_query_arg( 'udpate', 'true', wp_get_referer() );

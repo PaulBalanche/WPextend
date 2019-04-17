@@ -20,11 +20,16 @@ jQuery( document ).ready(function() {
 	 //  });
  
  
-	 jQuery( '.accordion_wpextend' ).accordion({
-		 heightStyle: "content",
-		 collapsible: true,
-		 active: false
-	 });
+	 jQuery( '.accordion_wpextend' ).each( function(){
+
+		var active_indice = ( jQuery(this).attr('active') !== 'undefined' ) ? parseInt(jQuery(this).attr('active')) : false;
+
+		jQuery(this).accordion( {
+			heightStyle: "content",
+			collapsible: true,
+			active: active_indice
+		} );
+	 } );
  
  
 	 jQuery( '.add_new_section, .add_new_category_section' ).click( function() {

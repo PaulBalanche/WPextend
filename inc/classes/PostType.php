@@ -38,11 +38,8 @@ class PostType {
 	*/
 	private function __construct() {
 
-		// Get custom post type from JSON file and database
-		$this->custom_post_type_wpextend = array_merge( $this->load_json(), $this->get_all_from_database() );
-
-		// Load initial custom post type
-		$this->load_custom_post_defaut();
+		// Load custom post type
+		$this->load_custom_post_type();
 
 		// Configure hooks
 		$this->create_hooks();
@@ -51,12 +48,31 @@ class PostType {
 
 
 	/**
-	* Get and load custom post type inital
+	* Get and load custom post type
 	*
 	*/
-	public function load_custom_post_defaut(){
+	public function load_custom_post_type(){
 
-		$this->custom_post_type_wpextend = apply_filters( 'load_custom_post_type_wpextend', $this->custom_post_type_wpextend );
+		$hooked = apply_filters( 'load_custom_post_type_wpextend', []);
+		foreach( $hooked as $key => $val ){
+			$hooked[$key]['origin'] = 'Filter "load_custom_post_type_wpextend"';
+		}
+
+		$load_json = $this->load_json();
+		foreach( $load_json as $key => $val ){
+			$load_json[$key]['origin'] = 'JSON file';
+		}
+
+		$from_database = $this->get_all_from_database();
+		foreach( $from_database as $key => $val ){
+			$from_database[$key]['origin'] = 'Database';
+		}
+
+		$this->custom_post_type_wpextend = array_merge(
+			$hooked,
+			$load_json,
+			$from_database
+		);
 	}
 
 
@@ -112,7 +128,7 @@ class PostType {
 					            'id' => 'featured-image-' . $indice_featured_image,
 					            'post_type' => $slug
 					        )
-				    )	;
+				    	);
 					}
 				}
 			}
@@ -131,44 +147,46 @@ class PostType {
 		// Header page & open form
 		$retour_html = RenderAdminHtml::header('Custom Post Type');
 
-
-
 		// Display table with all custom post type
-		$all_custom_post_type = $this->get_all_include_base_wordpress();
+		$all_custom_post_type = $this->get_all(true);
 		if( is_array($all_custom_post_type) && count($all_custom_post_type) > 0 ) {
 
 			$Wpextend_List_Table_data = [];
-			foreach( $all_custom_post_type as $key => $val) {
+			foreach( $all_custom_post_type as $slug => $val) {
 
 				$current_list_Table_data = [
-					'name'	=> $val,
-					'action_edit' => [
-						'id' => $key
-					]
+					'name'			=> '<strong>' . $val['labels']['name'] . '</strong>',
+					'slug'			=> $slug,
+					'origin'		=> $val['origin']
 				];
 
-				if( !in_array($key, self::$list_reserved_post_types) ){
-
-					$current_list_Table_data_delete = [
-						'action_delete' => [
-							'action' => 'delete_custom_post_type',
-							'id' => $key,
-							'_wpnonce' => wp_create_nonce( 'delete_custom_post_type' )
-						]
+				// Edit action
+				if( strpos($val['origin'], 'load_custom_post_type_wpextend') === false ) {
+					$current_list_Table_data['action_edit'] = [
+						'id' => $slug
 					];
 				}
-				else{
-					$current_list_Table_data_delete = [];
+				
+				// Delete action
+				if( $val['origin'] == 'Database' ){
+
+					$current_list_Table_data['action_delete'] = [
+						'action' => 'delete_custom_post_type',
+						'id' => $slug,
+						'_wpnonce' => wp_create_nonce( 'delete_custom_post_type' )
+					];
 				}
 				
-				$Wpextend_List_Table_data[] = array_merge($current_list_Table_data, $current_list_Table_data_delete);
+				$Wpextend_List_Table_data[] = $current_list_Table_data;
 			}
 
 			ob_start();
 			$args_Wpextend_List_Table = [
 				'data' 		=> $Wpextend_List_Table_data,
 				'columns'	=> [
-					'name'			=> 'Name'
+					'name'		=> 'Name',
+					'slug'		=> 'Slug',
+					'origin'	=> 'Origin'
 				],
 				'per_page'	=> 200
 			];
@@ -179,40 +197,23 @@ class PostType {
 			ob_end_clean();
 		}	
 		
-
-
 		// Add / edit custom post type form
 		if(isset($_GET['id'])){
 
-			$retour_html .= '<fieldset class="card" style="max-width:1400px"><h2>Edit</h2>';
+			$retour_html .= '<div class="accordion_wpextend" active="0"><h2>Edit</h2><div>';
 			$custom_post = ( isset($this->custom_post_type_wpextend[ $_GET['id'] ]) ) ? new SinglePostType( $_GET['id'], $this->custom_post_type_wpextend[ $_GET['id'] ] ) : new SinglePostType($_GET['id']);
 			$retour_html .= $custom_post->render_form_edit();
 		}
 		else{
 
-			$retour_html .= '<fieldset class="card" style="max-width:1400px"><h2>Add custom post type</h2>';
+			$retour_html .= '<div class="accordion_wpextend"><h2>Add</h2><div>';
 			$retour_html .= SinglePostType::render_form_create();
 		}
-		$retour_html .= '</fieldset>';
+		$retour_html .= '</div></div>';
 
 		// return
 		echo $retour_html;
 	}
-
-
-
-	/**
- 	* Use update_option to save in Wordpress database
- 	*
- 	* @return boolean
- 	*/
- 	public function save($new_value = false) {
-
-		$new_value = ( $new_value !== false ) ? $new_value : $this->custom_post_type_wpextend;
-		$new_value = ( $new_value ) ? $new_value : null;
-
- 		return update_option( $this->name_option_in_database , $new_value);
- 	}
 
 
 
@@ -228,9 +229,26 @@ class PostType {
 			is_array( $taxonomy ) &&
 			is_array( $annex_args )
 		) {
-			$actual_from_database = $this->get_all_from_database();
-			$actual_from_database[$slug] = array( 'labels' => $labels, 'args' => $args, 'taxonomy' => $taxonomy, 'annex_args' => $annex_args );
-			return $actual_from_database;
+
+			$new_item_to_add = [
+				$slug => [
+					'labels' => $labels,
+					'args' => $args,
+					'taxonomy' => $taxonomy,
+					'annex_args' => $annex_args
+				]
+			];
+			
+			if( file_exists(WPEXTEND_JSON_DIR . 'custom_post_type.json') ) {
+				$actual_content_json_file = json_decode(file_get_contents(WPEXTEND_JSON_DIR . 'custom_post_type.json'), true);
+				$new_content_json_file = array_merge($actual_content_json_file, $new_item_to_add);
+				return file_put_contents( WPEXTEND_JSON_DIR . 'custom_post_type.json', json_encode($new_content_json_file, JSON_PRETTY_PRINT) );
+			}
+			else {
+				$actual_content_from_database = $this->get_all_from_database();
+				$new_content_database = array_merge($actual_content_from_database, $new_item_to_add);
+				return update_option( $this->name_option_in_database , $new_content_database);
+			}
 		}
 
 		return false;
@@ -241,12 +259,13 @@ class PostType {
 	/**
  	* Update private variable PostType to add new setting
 	*/
-	public function delete($slug, $origin_in_which_remove = false){
+	public function delete($slug ){
 
-		$origin_in_which_remove = ( $origin_in_which_remove !== false ) ? $origin_in_which_remove : $this->custom_post_type_wpextend;
-		if( array_key_exists( $slug, $origin_in_which_remove ) ){
-			unset( $origin_in_which_remove[$slug] );
-			return $origin_in_which_remove;
+		$actual_content_from_database = $this->get_all_from_database();
+		if( array_key_exists( $slug, $actual_content_from_database ) ){
+			unset( $actual_content_from_database[$slug] );
+			$actual_content_from_database = ( $actual_content_from_database ) ?: null;
+			return update_option( $this->name_option_in_database , $actual_content_from_database);
 		}
 
 		return false;
@@ -257,13 +276,13 @@ class PostType {
     /**
     * Retrieve all custom post registered
     */
-	 public function get_all(){
+	 public function get_all($single = false){
 
 		$all_custom_post_wpextend = array();
 		if( is_array($this->custom_post_type_wpextend) ){
 			foreach($this->custom_post_type_wpextend as $slug => $val) {
 			 	if( !in_array($slug, self::$list_reserved_post_types) ){
-					$all_custom_post_wpextend[$slug] = $val['labels']['name'];
+					$all_custom_post_wpextend[$slug] = ( !$single ) ? $val['labels']['name'] : $val;
 				}
 			}
 		}
@@ -282,43 +301,6 @@ class PostType {
 
 		 $all_post_type = array_merge( self::$list_base_post_type, $this->get_all() );
 		 return $all_post_type;
-	}
-
-
-
-    /**
-    * Import function
-    */
-    public function import(){
-		
-		// Check valid nonce
-		$action_nonce = ( isset($_GET['action']) ) ? $_GET['action'] : $_POST['action'];
-		check_admin_referer($action_nonce);
-
-		if( isset( $_POST['wpextend_custom_post_type_to_import'] ) && !empty($_POST['wpextend_custom_post_type_to_import']) ) {
-
-			$this->custom_post_type_wpextend = json_decode( stripslashes($_POST['wpextend_custom_post_type_to_import']), true );
-		}
-		elseif( isset($_GET['file']) && file_exists( WPEXTEND_IMPORT_DIR . $_GET['file'] . '.json' ) ){
-
-			$data_json_file = file_get_contents( WPEXTEND_IMPORT_DIR . $_GET['file'] . '.json' );
-			$this->custom_post_type_wpextend = json_decode( $data_json_file, true );
-		}
-		else{
-			exit;
-		}
-
-		// Save in Wordpress database
-		if( is_array($this->custom_post_type_wpextend) ){
-
-			$this->save();
-
-			if( !isset( $_POST['ajax'] ) ) {
-				$goback = add_query_arg( 'udpate', 'true', wp_get_referer() );
-				wp_safe_redirect( $goback );
-			}
-			exit;
-		}
 	}
 
 
