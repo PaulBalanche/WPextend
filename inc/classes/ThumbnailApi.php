@@ -74,7 +74,14 @@ class ThumbnailApi {
             
             if( $consider_width || $consider_height ) {
                 
-                $sizes_available = wp_get_attachment_metadata($matches[1])['sizes'];
+                $attachment_metadata = wp_get_attachment_metadata($matches[1]);
+                $sizes_available = $attachment_metadata['sizes'];
+                if( !isset($sizes_available['large']) ) {
+                    $sizes_available['large'] = [
+                        'width'     => $attachment_metadata['width'],
+                        'height'    => $attachment_metadata['height']
+                    ];
+                }
 
                 $nearby_size_w = null;
                 $nearby_size_h = null;
@@ -109,17 +116,20 @@ class ThumbnailApi {
                 if( is_null($nearby_size_w) && is_null($nearby_size_h) ) {
                     foreach( $sizes_available as $key_size => $size ) {
                         if(
-                            (
-                                is_null($nearby_size_w) && is_null($nearby_size_h)
-                            )
-                            ||
+                            $key_size != 'thumbnail' &&
                             (
                                 (
-                                    ( $consider_width && $nearby_size_w < $size['width'] ) || !$consider_width
+                                    is_null($nearby_size_w) && is_null($nearby_size_h)
                                 )
-                                &&
+                                ||
                                 (
-                                    ( $consider_height && $nearby_size_h < $size['height'] ) || !$consider_height
+                                    (
+                                        ( $consider_width && $nearby_size_w < $size['width'] ) || !$consider_width
+                                    )
+                                    &&
+                                    (
+                                        ( $consider_height && $nearby_size_h < $size['height'] ) || !$consider_height
+                                    )
                                 )
                             )
                         ){
@@ -130,7 +140,7 @@ class ThumbnailApi {
                     }
                 }
             }
-            
+
             // Render image
             $data_image = wp_get_attachment_image_src($matches[1], $size_image);
             if( $data_image && is_array($data_image) && count($data_image) > 0 ) {
