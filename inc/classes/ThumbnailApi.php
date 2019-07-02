@@ -165,7 +165,7 @@ class ThumbnailApi {
                     // Else generate PHP image and return
                     header('Content-type: image/jpeg');
                     header('Last-Modified: ' . gmdate('D, d M Y H:i:s', filemtime($path_image)) . ' GMT');
-                    echo file_get_contents($data_image[0], false, stream_context_create([
+                    echo file_get_contents($path_image, false, stream_context_create([
                         'ssl' => [
                             'verify_peer'   => false
                         ]
