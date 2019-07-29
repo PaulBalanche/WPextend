@@ -149,27 +149,38 @@ class ThumbnailApi {
                 $wp_upload_dir = wp_upload_dir();
                 $path_image = str_replace($wp_upload_dir['baseurl'], $wp_upload_dir['basedir'], $data_image[0]);
                 if( file_exists($path_image) ) {
-                
-                    // Define some header data...
-                    header("Cache-Control: private, max-age=10800, pre-check=10800");
-                    header("Pragma: private");
-                    header("Expires: " . date(DATE_RFC822,strtotime(" 2 day")));
 
-                    // If browser has a cached version of this image and the image did not change, return it.
-                    if( isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) &&  (strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) == filemtime($path_image)) ) {
-                        header('Last-Modified: '.gmdate('D, d M Y H:i:s', filemtime($path_image)).' GMT', 
-                        true, 304);
-                        exit;
+                    $last_modified_time = filemtime($path_image);
+                    $cache_duration = 3600 * 24 * 30; // 30 days...
+                    $etag = 'W/"' . md5($last_modified_time) . '"';
+
+                    // Define some header
+                    header('Content-Type: image/jpeg');
+                    header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $last_modified_time) . ' GMT');
+                    header("Cache-Control: public, max-age=" . $cache_duration);
+                    header("Etag: $etag");
+
+                    // Send 304 if no update
+                    if (
+                        (isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) === $last_modified_time) ||
+                        (isset($_SERVER['HTTP_IF_NONE_MATCH']) && $etag === trim($_SERVER['HTTP_IF_NONE_MATCH']))
+                        ) {
+                            header('HTTP/1.1 304 Not Modified');
+                            exit();
                     }
-
-                    // Else generate PHP image and return
-                    header('Content-type: image/jpeg');
-                    header('Last-Modified: ' . gmdate('D, d M Y H:i:s', filemtime($path_image)) . ' GMT');
-                    echo file_get_contents($path_image, false, stream_context_create([
-                        'ssl' => [
-                            'verify_peer'   => false
-                        ]
-                    ]));
+                    else {
+                        // Else generate PHP image and return
+                        readfile($path_image, false, stream_context_create([
+                            'ssl' => [
+                                'verify_peer'   => false
+                            ]
+                        ]));
+                        // echo file_get_contents($path_image, false, stream_context_create([
+                        //     'ssl' => [
+                        //         'verify_peer'   => false
+                        //     ]
+                        // ]));
+                    }
                 }
             }
         }
