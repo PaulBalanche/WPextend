@@ -1,0 +1,63 @@
+/**
+ * Common
+ *
+ */
+.clear {
+    
+    clear: both;
+}
+
+ul {
+
+    li {
+
+        &.li_postType {
+
+            display: block;
+            float: left;
+            width: 33%;
+            margin: 0 0.5% 0.5% 0;
+            background: white;
+            border: 1px solid #ddd;
+            padding: 1rem;
+            box-sizing: border-box;
+
+            &:nth-child(3n) {
+                
+                margin-right: 0;
+            }
+        }
+
+        ul {
+
+            li {
+                
+                ul {
+
+                    &.ulSingle {
+
+                        border: 1px solid #ddd;
+			            padding: 1rem;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.fieldset_wpextend {
+
+    margin: 0 0.5% 0.5% 0;
+	background: white;
+	border: 1px solid #ddd;
+	padding: 1rem;
+	box-sizing: border-box;
+}
+
+.form_add_elt_wpextend {
+
+	border: 1px dashed rgb(220,220,220);
+	background: rgb(245,245,245);
+	padding: 1rem;
+	box-sizing: border-box;
+}

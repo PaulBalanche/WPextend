@@ -1,0 +1,38 @@
+/**
+ * Repeat field
+ *
+ */
+body.wp-admin {
+
+    .repeatable_field{
+
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+        border-bottom: 1px dashed rgb(220,220,220);
+    }
+
+    .repeat_field{
+
+        display: inline-block;
+        background: #0472aa;
+        color: white;
+        padding: 4px 10px 5px 10px;
+        -webkit-border-radius: 8px;
+        -moz-border-radius: 8px;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+} 
+
+#acf-gutenberg_block_settings {
+
+    .acf-radio-list {
+
+        .dashicons{
+            
+            width: 40px;
+            height: 40px;
+        }
+    }
+}
+

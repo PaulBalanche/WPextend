@@ -1,0 +1,28 @@
+/**
+ * Site settings
+ *
+ */
+.form_add_setting_wpextend {
+
+    .tr_category {
+
+        th, td {
+            display: none;
+        }
+    }
+
+    .tr_post_type_options {
+
+        th, td {
+            display: none;
+        }
+    }
+}
+
+.link_upload_img_wpextend {
+    
+    img {
+        max-width: 200px;
+        min-width: 140px;
+    }
+}

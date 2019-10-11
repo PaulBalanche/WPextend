@@ -144,8 +144,6 @@ class GlobalSettings {
 
 		wp_enqueue_script( 'script_admin_wpextend_global_settings', WPEXTEND_ASSETS_URL . 'js/admin/site-settings.js', array('jquery'));
 		wp_localize_script( 'script_admin_wpextend_global_settings', 'OBJECT', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
-
-		wp_enqueue_style( 'style_admin_wpextend_global_settings', WPEXTEND_ASSETS_URL . 'style/admin/site-settings.css', false, true );
 	}
 
 

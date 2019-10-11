@@ -1,0 +1,68 @@
+/**
+ * Accordion
+ *
+ */
+body.wp-admin {
+
+    .ui-accordion {
+
+        .ui-accordion-header {
+
+            background: white;
+            border: 1px solid #ddd;
+            padding: 1rem;
+            margin: 0;
+            outline: none;
+            cursor: pointer;
+            border-radius: 0;
+            font-weight: bold;
+            font-size: 14px;
+            margin-top: 10px;
+
+            &.ui-state-hover {
+                color: #0085ba;
+            }
+
+            &.ui-state-active {
+                color: #0085ba;
+                background: #ececec;
+            }
+        }
+    }
+
+    .ui-tabs-panel {
+
+        .ui-accordion {
+
+            .ui-accordion-header {
+
+                background: #ececec;
+            }
+        }
+    }
+
+    .ui-accordion-content {
+    
+        padding: 0;
+    }
+
+    .accordionPostType {
+        display: block;
+        background: white;
+        border: 1px solid #ddd;
+        border-top: none;
+        padding: 1rem;
+        box-sizing: border-box;
+    }
+}
+
+
+.accordionKeyType{
+
+	display: block;
+    background: white;
+    border: 1px solid #ddd;
+    border-top: none;
+    padding: 1rem;
+    box-sizing: border-box;
+}

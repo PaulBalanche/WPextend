@@ -1,0 +1,29 @@
+/**
+ * Tabs
+ *
+ */
+.ui-tabs-nav {
+
+    li {
+
+        display: inline-block;
+        cursor: pointer;
+        outline: none;
+
+        a {
+            display: inline-block;
+            text-decoration: none;
+            background: #ececec;
+            border: 1px solid #ddd;
+            padding: 1rem;
+        }
+
+        &.ui-state-active {
+
+            a {
+                background: #0085ba;
+                color: white;
+            }
+        }
+    }
+}
