@@ -40,6 +40,7 @@ class Main {
     */
     private function __construct() {
 
+		Settings::getInstance();
 		$this->instance_multilanguage = Multilanguage::getInstance();
 		$this->instance_global_settings = GlobalSettings::getInstance();
 		if( WPEXTEND_ENABLE_GUTENBERG ) {
@@ -71,6 +72,7 @@ class Main {
 		add_menu_page('WP Extend', 'WP Extend', 'manage_options', WPEXTEND_MAIN_SLUG_ADMIN_PAGE, array( GlobalSettings::getInstance(), 'render_admin_page' ) );
 		add_submenu_page(WPEXTEND_MAIN_SLUG_ADMIN_PAGE, 'WP Extend - Site settings', 'Site settings', 'manage_options', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . GlobalSettings::$admin_url, array( GlobalSettings::getInstance(), 'render_admin_page' ) );
 		if( WPEXTEND_ENABLE_CUSTOM_POST_TYPE ){ add_submenu_page(WPEXTEND_MAIN_SLUG_ADMIN_PAGE, 'WP Extend - Custom Post Type', 'Custom Post Type', 'manage_options', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . PostType::$admin_url, array( PostType::getInstance(), 'render_admin_page' ) ); }
+		add_submenu_page(WPEXTEND_MAIN_SLUG_ADMIN_PAGE, 'WP Extend - Settings', 'Settings', 'manage_options', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . Settings::$admin_url, array( Settings::getInstance(), 'render_admin_page' ) );
 		add_submenu_page(WPEXTEND_MAIN_SLUG_ADMIN_PAGE, 'WP Extend - Export', 'Export', 'manage_options', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . Main::$admin_url_export, array( Main::getInstance(), 'render_export' ) );
 		add_submenu_page(WPEXTEND_MAIN_SLUG_ADMIN_PAGE, 'WP Extend - Import', 'Import', 'manage_options', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . Main::$admin_url_import, array( Main::getInstance(), 'render_import' ) );
 	 }
