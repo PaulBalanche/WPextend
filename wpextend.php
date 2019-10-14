@@ -29,23 +29,8 @@ define( 'WPEXTEND_JSON_DIR'						, get_stylesheet_directory() . '/wpextend/json/
 define( 'WPEXTEND_PREFIX_DATA_IN_DB'			, 'meta_wpextend_' );
 define( 'WPEXTEND_TEXTDOMAIN'					, 'wp-extend' );
 
-if( !defined('WPEXTEND_MAIN_SLUG_ADMIN_PAGE') ){
+if( ! defined('WPEXTEND_MAIN_SLUG_ADMIN_PAGE') ){
 	define( 'WPEXTEND_MAIN_SLUG_ADMIN_PAGE' , 'wpextend' );
-}
-
-// Enable or disable CUSTOM POST TYPE feature
-if( !defined('WPEXTEND_ENABLE_CUSTOM_POST_TYPE') ){
-	define( 'WPEXTEND_ENABLE_CUSTOM_POST_TYPE' , TRUE );
-}
-
-// Enable or disable Gutenberg feature
-if( !defined('WPEXTEND_ENABLE_GUTENBERG') ){
-	define( 'WPEXTEND_ENABLE_GUTENBERG' , TRUE );
-}
-
-// Enable or disable thumbnail API feature
-if( !defined('WPEXTEND_PATH_THUMBNAIL_API') ){
-	define( 'WPEXTEND_PATH_THUMBNAIL_API' , FALSE );
 }
 
 // MultiPostThumbnails plugin integration

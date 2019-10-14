@@ -5,7 +5,6 @@ namespace Wpextend;
 /**
  * ThumbnailApi support
  * Add env variable to enable ThumbnailApi feature
- * Example : WPEXTEND_PATH_THUMBNAIL_API='images'
  * 
  */
 class ThumbnailApi {
@@ -13,9 +12,9 @@ class ThumbnailApi {
     /**
      * Properties declaration
      */
-    private static $_instance,
-    $path_base_thumbnail_api = WPEXTEND_PATH_THUMBNAIL_API;
+    private static $_instance;
 
+    public $path_base_thumbnail_api = 'images';
 
 
     /**
@@ -54,7 +53,7 @@ class ThumbnailApi {
      */
     public function rewrite_thumbnail_url() {
 
-        add_rewrite_rule( self::$path_base_thumbnail_api . '/(.+)$', str_replace(home_url() . '/', '', admin_url()) . 'admin-post.php?action=' . WPEXTEND_MAIN_SLUG_ADMIN_PAGE . '_thumbnail_api&name_image=$1', 'top');
+        add_rewrite_rule( $this->path_base_thumbnail_api . '/(.+)$', str_replace(home_url() . '/', '', admin_url()) . 'admin-post.php?action=' . WPEXTEND_MAIN_SLUG_ADMIN_PAGE . '_thumbnail_api&name_image=$1', 'top');
     }
 
 

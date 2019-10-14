@@ -446,8 +446,10 @@ class TypeField {
     /**
      *
      */
-    public static function render_input_radio( $label, $name, $list_option = array(), $defaut_value = false, $repeatable = false, $description = '' ) {
+    public static function render_input_radio( $label, $name, $list_option = array(), $defaut_value = false, $repeatable = false, $description = '', $disabled = false ) {
 
+		$attr_disable = ( $disabled ) ? 'disabled="disabled"' : '';
+		
 		$retour_html = '<tr class="tr_'.$name.'">
 		<th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label><i class="description">'.$description.'</i></th>
 		<td>';
@@ -455,11 +457,12 @@ class TypeField {
 
 			$incide = 0;
 			if( isAssoc($list_option) ) {
+
 				foreach( $list_option as $key => $val) {
 					if( ($defaut_value && $defaut_value == $key) || ($defaut_value == false && $incide == 0) )
-				 		$retour_html .= '<input type="radio" name="'.$name.'" value="'.$key.'" checked> '.$val.'<br>';
+				 		$retour_html .= '<input type="radio" name="'.$name.'" value="'.$key.'" checked '.$attr_disable.'> '.$val.'<br>';
 					else
-						$retour_html .= '<input type="radio" name="'.$name.'" value="'.$key.'"> '.$val.'<br>';
+						$retour_html .= '<input type="radio" name="'.$name.'" value="'.$key.'" '.$attr_disable.'> '.$val.'<br>';
 
 					$incide++;
 				}
@@ -467,9 +470,9 @@ class TypeField {
 			else{
 				foreach( $list_option as $val) {
 					if( ($defaut_value && $defaut_value == $val) || ($defaut_value == false && $incide == 0) )
-						$retour_html .= '<input type="radio" name="'.$name.'" value="'.$val.'" checked> '.$val.'<br>';
+						$retour_html .= '<input type="radio" name="'.$name.'" value="'.$val.'" checked '.$attr_disable.'> '.$val.'<br>';
 				  	else
-				  		$retour_html .= '<input type="radio" name="'.$name.'" value="'.$val.'"> '.$val.'<br>';
+				  		$retour_html .= '<input type="radio" name="'.$name.'" value="'.$val.'" '.$attr_disable.'> '.$val.'<br>';
 
 				  	$incide++;
 				}
@@ -488,34 +491,36 @@ class TypeField {
     /**
      *
      */
-    public static function render_input_checkbox( $label, $name, $list_option = array(), $defaut_value = false, $repeatable = false, $description = '' ) {
+    public static function render_input_checkbox( $label, $name, $list_option = array(), $defaut_value = false, $repeatable = false, $description = '', $disabled = false ) {
+		
+		$attr_disable = ( $disabled ) ? 'disabled="disabled"' : '';
 
-		 $retour_html = '<tr class="tr_'.$name.'">
-		 <th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label><i class="description">'.$description.'</i></th>
-		 <td>';
-		 if( is_array($list_option) && count($list_option) > 0 ) {
+		$retour_html = '<tr class="tr_'.$name.'">
+		<th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label><i class="description">'.$description.'</i></th>
+		<td>';
+		if( is_array($list_option) && count($list_option) > 0 ) {
 
-			if( isAssoc($list_option) ) {
-				foreach( $list_option as $key => $val) {
-					if( is_array($defaut_value) && in_array($key, $defaut_value) )
-						$retour_html .= '<label for="'.$name.'_'.$key.'"><input type="checkbox" name="'.$name.'[]" id="'.$name.'_'.$key.'" value="'.$key.'" checked> '.$val.'</label><br>';
-					else
-				  		$retour_html .= '<label for="'.$name.'_'.$key.'"><input type="checkbox" name="'.$name.'[]" id="'.$name.'_'.$key.'" value="'.$key.'"> '.$val.'</label><br>';
-				}
+		if( isAssoc($list_option) ) {
+			foreach( $list_option as $key => $val) {
+				if( is_array($defaut_value) && in_array($key, $defaut_value) )
+					$retour_html .= '<label for="'.$name.'_'.$key.'"><input type="checkbox" name="'.$name.'[]" id="'.$name.'_'.$key.'" value="'.$key.'" checked '.$attr_disable.'> '.$val.'</label><br>';
+				else
+					$retour_html .= '<label for="'.$name.'_'.$key.'"><input type="checkbox" name="'.$name.'[]" id="'.$name.'_'.$key.'" value="'.$key.'" '.$attr_disable.'> '.$val.'</label><br>';
 			}
-			else{
-			  foreach( $list_option as $val) {
-				  if( is_array($defaut_value) && in_array($val, $defaut_value) )
-					  $retour_html .= '<label for="'.$name.'_'.$val.'"><input type="checkbox" name="'.$name.'[]" id="'.$name.'_'.$val.'" value="'.$val.'" checked> '.$val.'</label><br>';
-				  else
-					  $retour_html .= '<label for="'.$name.'_'.$val.'"><input type="checkbox" name="'.$name.'[]" id="'.$name.'_'.$val.'" value="'.$val.'"> '.$val.'</label><br>';
-				}
-		  }
-		 }
-		 $retour_html .= '</td>
-		 </tr>';
+		}
+		else{
+			foreach( $list_option as $val) {
+				if( is_array($defaut_value) && in_array($val, $defaut_value) )
+					$retour_html .= '<label for="'.$name.'_'.$val.'"><input type="checkbox" name="'.$name.'[]" id="'.$name.'_'.$val.'" value="'.$val.'" checked '.$attr_disable.'> '.$val.'</label><br>';
+				else
+					$retour_html .= '<label for="'.$name.'_'.$val.'"><input type="checkbox" name="'.$name.'[]" id="'.$name.'_'.$val.'" value="'.$val.'" '.$attr_disable.'> '.$val.'</label><br>';
+			}
+		}
+		}
+		$retour_html .= '</td>
+		</tr>';
 
-		 return $retour_html;
+		return $retour_html;
     }
 
 

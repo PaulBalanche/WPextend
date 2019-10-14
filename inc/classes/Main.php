@@ -40,14 +40,16 @@ class Main {
     */
     private function __construct() {
 
+		Settings::getInstance();
+
 		$this->instance_multilanguage = Multilanguage::getInstance();
 		$this->instance_global_settings = GlobalSettings::getInstance();
-		if( WPEXTEND_ENABLE_GUTENBERG ) {
+		if( Settings::getInstance()->enable_gutenberg ) {
 			$this->instanceGutenbergBlockWpextend = GutenbergBlock::getInstance();
 			$this->instance_timber_wpextend = Timber::getInstance();
 		}
-		if( WPEXTEND_ENABLE_CUSTOM_POST_TYPE || WPEXTEND_ENABLE_GUTENBERG ){ $this->instance_post_type_wpextend = PostType::getInstance(); }
-		if( WPEXTEND_PATH_THUMBNAIL_API ) { $this->instance_thumbnail_api = ThumbnailApi::getInstance(); }
+		if( Settings::getInstance()->enable_custom_post_type || Settings::getInstance()->enable_gutenberg ){ $this->instance_post_type_wpextend = PostType::getInstance(); }
+		if( Settings::getInstance()->enable_thumbnail_api ) { $this->instance_thumbnail_api = ThumbnailApi::getInstance(); }
 
 		add_action('admin_menu', array ( __CLASS__ ,  'define_admin_menu' ) );
 
@@ -65,12 +67,13 @@ class Main {
     */
     public static function define_admin_menu() {
 
-		add_menu_page(GlobalSettings::getInstance()->title_page_editor_global_settings, GlobalSettings::getInstance()->title_page_editor_global_settings, 'edit_posts', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . '_site_settings', array( GlobalSettings::getInstance(), 'render_admin_page' ), '', 3 );
+		add_menu_page(Settings::getInstance()->get_site_settings_name(), Settings::getInstance()->get_site_settings_name(), 'edit_posts', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . '_site_settings', array( GlobalSettings::getInstance(), 'render_admin_page' ), '', 3 );
 		add_submenu_page(WPEXTEND_MAIN_SLUG_ADMIN_PAGE . '_site_settings', 'Site settings', 'Site settings', 'edit_posts', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . '_site_settings', array( GlobalSettings::getInstance(), 'render_admin_page' ) );
 
-		add_menu_page('WP Extend', 'WP Extend', 'manage_options', WPEXTEND_MAIN_SLUG_ADMIN_PAGE, array( GlobalSettings::getInstance(), 'render_admin_page' ) );
+		add_menu_page('WPE config', 'WPE config', 'manage_options', WPEXTEND_MAIN_SLUG_ADMIN_PAGE, array( GlobalSettings::getInstance(), 'render_admin_page' ) );
 		add_submenu_page(WPEXTEND_MAIN_SLUG_ADMIN_PAGE, 'WP Extend - Site settings', 'Site settings', 'manage_options', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . GlobalSettings::$admin_url, array( GlobalSettings::getInstance(), 'render_admin_page' ) );
-		if( WPEXTEND_ENABLE_CUSTOM_POST_TYPE ){ add_submenu_page(WPEXTEND_MAIN_SLUG_ADMIN_PAGE, 'WP Extend - Custom Post Type', 'Custom Post Type', 'manage_options', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . PostType::$admin_url, array( PostType::getInstance(), 'render_admin_page' ) ); }
+		if( Settings::getInstance()->enable_custom_post_type ){ add_submenu_page(WPEXTEND_MAIN_SLUG_ADMIN_PAGE, 'WP Extend - Custom Post Type', 'Custom Post Type', 'manage_options', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . PostType::$admin_url, array( PostType::getInstance(), 'render_admin_page' ) ); }
+		add_submenu_page(WPEXTEND_MAIN_SLUG_ADMIN_PAGE, 'WP Extend - Settings', 'Settings', 'manage_options', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . Settings::$admin_url, array( Settings::getInstance(), 'render_admin_page' ) );
 		add_submenu_page(WPEXTEND_MAIN_SLUG_ADMIN_PAGE, 'WP Extend - Export', 'Export', 'manage_options', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . Main::$admin_url_export, array( Main::getInstance(), 'render_export' ) );
 		add_submenu_page(WPEXTEND_MAIN_SLUG_ADMIN_PAGE, 'WP Extend - Import', 'Import', 'manage_options', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . Main::$admin_url_import, array( Main::getInstance(), 'render_import' ) );
 	 }
@@ -117,14 +120,14 @@ class Main {
 		$retour_html .= TypeField::render_input_textarea( 'WP Extend Global settings values', 'wpextend_global_settings_value_export', GlobalSettings::getInstance()->prepare_values_to_export(), false, '', false );
 		$retour_html .= RenderAdminHtml::table_edit_close();
 
-		if( WPEXTEND_ENABLE_CUSTOM_POST_TYPE ) {
+		if( Settings::getInstance()->enable_custom_post_type ) {
 			// Custom post type
 			$retour_html .= RenderAdminHtml::table_edit_open();
 			$retour_html .= TypeField::render_input_textarea( 'WP Extend Custom Post Type', 'wpextend_custom_post_type_export', stripslashes( json_encode( PostType::getInstance()->get_all_from_database(), JSON_UNESCAPED_UNICODE ) ), false, '', false );
 			$retour_html .= RenderAdminHtml::table_edit_close();
 		}
 
-		if( WPEXTEND_ENABLE_GUTENBERG ) {
+		if( Settings::getInstance()->enable_gutenberg ) {
 			// Gutenberg blocks
 			$retour_html .= RenderAdminHtml::table_edit_open();
 			$retour_html .= TypeField::render_input_textarea( 'Gutenberg blocks', 'wpextend_gutenberg_blocks_export', stripslashes( GutenbergBlock::getInstance()->export_blocks_saved() ), false, '', false );
@@ -172,7 +175,7 @@ class Main {
 
 		$retour_html .= '<br /><hr><br />';
 
-		if( WPEXTEND_ENABLE_GUTENBERG ) {
+		if( Settings::getInstance()->enable_gutenberg ) {
 			// Gutenberg blocks
 
 			$retour_html .= RenderAdminHtml::form_open( admin_url( 'admin-post.php' ), 'import_wpextend_' . GutenbergBlock::$gutenberg_name_custom_post_type, 'import_wpextend_' . GutenbergBlock::$gutenberg_name_custom_post_type );
