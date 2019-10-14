@@ -41,7 +41,6 @@ class Main {
     private function __construct() {
 
 		Settings::getInstance();
-
 		$this->instance_multilanguage = Multilanguage::getInstance();
 		$this->instance_global_settings = GlobalSettings::getInstance();
 		if( Settings::getInstance()->enable_gutenberg ) {

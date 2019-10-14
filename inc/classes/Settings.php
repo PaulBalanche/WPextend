@@ -112,7 +112,6 @@ class Settings {
 
         check_admin_referer($_POST['action']);
 
-        pre($_POST);
         if( isset($_POST[self::$wpe_settings_post_name]) ) {
             foreach( $_POST[self::$wpe_settings_post_name] as $key => $val ) {
                 
