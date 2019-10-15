@@ -10,6 +10,15 @@ body.wp-admin {
 
             margin: 0;
 
+            caption {
+
+                text-align: left;
+                padding: 2rem 260px;
+                border-bottom: 1px solid #f0f0f0;
+                background: #fafafa;
+                font-weight: 600;
+            }
+
             tbody {
 
                 tr {

@@ -14,7 +14,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 error_reporting(E_ALL | E_STRICT);
 
-
+// Start new or resume existing session
+session_start();
 
 /**
 * Define variables
@@ -26,7 +27,7 @@ define( 'WPEXTEND_PLUGIN_URL'					, plugins_url('', __FILE__) . '/' );
 define( 'WPEXTEND_ASSETS_URL'					, WPEXTEND_PLUGIN_URL . 'assets' . '/' );
 define( 'WPEXTEND_IMPORT_DIR'					, get_stylesheet_directory() . '/wpextend/import/' );
 define( 'WPEXTEND_JSON_DIR'						, get_stylesheet_directory() . '/wpextend/json/' );
-define( 'WPEXTEND_PREFIX_DATA_IN_DB'			, 'meta_wpextend_' );
+define( 'WPEXTEND_PREFIX_DATA_IN_DB'			, 'wpe_' );
 define( 'WPEXTEND_TEXTDOMAIN'					, 'wp-extend' );
 
 if( ! defined('WPEXTEND_MAIN_SLUG_ADMIN_PAGE') ){
@@ -35,8 +36,6 @@ if( ! defined('WPEXTEND_MAIN_SLUG_ADMIN_PAGE') ){
 
 // MultiPostThumbnails plugin integration
 define( 'WPEXTEND_MultiPostThumbnails' , ( class_exists('MultiPostThumbnails') ) ? TRUE : FALSE );
-
-
 
 /**
 * Initialize WPextend plugin

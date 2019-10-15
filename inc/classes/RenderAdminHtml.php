@@ -38,13 +38,13 @@ class RenderAdminHtml {
 			$retour_html = RenderAdminHtml::table_edit_open();
 			$retour_html .= '<tr>
 				<th class="submit" scope="row"></th>
-				<td class="submit"><input type="submit" name="submit" id="submit" class="button button-primary button-large" value="'.$value_submit.'"></td>
+				<td class="submit"><input type="submit" name="submit" id="submit" class="button button-primary button-hero" value="'.$value_submit.'"></td>
 			</tr>';
 			$retour_html .= RenderAdminHtml::table_edit_close();
 			$retour_html .= '</form>';
 		}
 		else {
-			$retour_html = '<p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary button-large" value="'.$value_submit.'"></p></form>';
+			$retour_html = '<p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary button-hero" value="'.$value_submit.'"></p></form>';
 		}
 
 		return $retour_html;
@@ -55,9 +55,17 @@ class RenderAdminHtml {
 	/**
     * Open edition table
     */
-	static public function table_edit_open(){
+	static public function table_edit_open( $title = '' ){
 
-		return '<table class="form-table table_wpextend"><tbody>';
+		$retour_html = '<table class="form-table table_wpextend">';
+
+		if( !empty($title) )
+			$retour_html .= '<caption>' . $title . '</caption>';
+		
+		$retour_html .= '<tbody>';
+		
+		
+		return $retour_html;
 	}
 
 

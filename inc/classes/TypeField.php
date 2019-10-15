@@ -37,35 +37,43 @@ class TypeField {
     /**
      *
      */
-    public static function render_input_text( $label, $name, $value = '', $placeholder = '', $repeatable = false, $description = '' ) {
+    public static function render_input_text( $label, $name, $value = '', $placeholder = '', $repeatable = false, $description = '', $in_tab = true ) {
 
-		 $retour_html = '<tr class="tr_'.$name.'">
-		 <th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label><i class="description">'.$description.'</i></th>
-		 <td>';
-		 if( $repeatable ){
+		if( $in_tab ) {
+			$retour_html = '<tr class="tr_'.$name.'">
+			<th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label><i class="description">'.$description.'</i></th>
+			<td>';
+		}
+		else
+			$retour_html = '<label for="input_'.$name.'">'.stripslashes($label).'</label>';
 
-			 if( is_array($value) ){
-				 foreach($value as $single_value){
-                    $retour_html .= '<div class="repeatable_field">
-                        <input name="'.$name.'[]" type="text" id="input_'.$name.'" class="input_'.$name.' '.self::$class_input_text.'" value="'.str_replace('"', '&quot;', $single_value).'" placeholder="'.$placeholder.'" class="regular-text ltr">
-                    </div>';
-				 }
-			 }
-			 else{
-                $retour_html .= '<div class="repeatable_field">
-                    <input name="'.$name.'[]" type="text" id="input_'.$name.'" class="input_'.$name.' '.self::$class_input_text.'" value="" placeholder="'.$placeholder.'" class="regular-text ltr">
-                </div>';
+		if( $repeatable ){
+
+			if( is_array($value) ){
+				foreach($value as $single_value){
+				$retour_html .= '<div class="repeatable_field">
+					<input name="'.$name.'[]" type="text" id="input_'.$name.'" class="input_'.$name.' '.self::$class_input_text.'" value="'.str_replace('"', '&quot;', $single_value).'" placeholder="'.$placeholder.'" class="regular-text ltr">
+				</div>';
+				}
 			}
+			else{
+			$retour_html .= '<div class="repeatable_field">
+				<input name="'.$name.'[]" type="text" id="input_'.$name.'" class="input_'.$name.' '.self::$class_input_text.'" value="" placeholder="'.$placeholder.'" class="regular-text ltr">
+			</div>';
+		}
 
-			 $retour_html .= '<span class="repeat_field">+ Duplicate text</span>';
-		 }
-		 else{
-		 	$retour_html .= '<input name="'.$name.'" type="text" id="input_'.$name.'" class="input_'.$name.' '.self::$class_input_text.'" value="'.str_replace('"', '&quot;', $value).'" placeholder="'.$placeholder.'" class="regular-text ltr">';
-		 }
-		 $retour_html .= '</td>
-		 </tr>';
+			$retour_html .= '<span class="repeat_field">+ Duplicate text</span>';
+		}
+		else{
+		$retour_html .= '<input name="'.$name.'" type="text" id="input_'.$name.'" class="input_'.$name.' '.self::$class_input_text.'" value="'.str_replace('"', '&quot;', $value).'" placeholder="'.$placeholder.'" class="regular-text ltr">';
+		}
 
-		 return $retour_html;
+		if( $in_tab ) {
+			$retour_html .= '</td>
+			</tr>';
+		}
+
+		return $retour_html;
     }
 
 
@@ -95,7 +103,7 @@ class TypeField {
     public static function render_label_and_free_html( $label, $name, $html = '', $description = '' ) {
 
 		$retour_html = '<tr class="tr_'.$name.'">
-		<th scope="row"><label>'.stripslashes($label).'</label><i class="description">'.$description.'</i></th>
+			<th scope="row"><label>'.stripslashes($label).'</label><i class="description">'.$description.'</i></th>
 			<td>' . $html . '</td>
 		</tr>';
 
@@ -297,7 +305,7 @@ class TypeField {
     /**
      *
      */
-    public static function render_input_select( $label, $name, $list_option = array(), $defaut_value = false, $repeatable = false, $description = '' ) {
+    public static function render_input_select( $label, $name, $list_option = array(), $defaut_value = false, $repeatable = false, $description = '', $in_tab = true ) {
 
 		if( $repeatable ){
 			
@@ -367,9 +375,13 @@ class TypeField {
 		}
 		else{
 
-		 	$retour_html = '<tr class="tr_'.$name.'">
-		 	<th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label></th>
-		 	<td><select id="input_'.$name.'" class="input_'.$name.'" name="'.$name.'"><option value="null"></option>';
+			if( $in_tab ) {
+				$retour_html = '<tr class="tr_'.$name.'">
+				<th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label></th>
+				<td><select id="input_'.$name.'" class="input_'.$name.'" name="'.$name.'"><option value="null"></option>';
+			}
+			else
+				$retour_html = '<label for="input_'.$name.'">'.stripslashes($label).'</label><select id="input_'.$name.'" class="input_'.$name.'" name="'.$name.'"><option value="null"></option>';
 
 			 if( is_array($list_option) && count($list_option) > 0 ) {
 
@@ -432,8 +444,12 @@ class TypeField {
 				}
 			 }
 
-			$retour_html .= '</select></td>
-		 </tr>';
+			if( $in_tab ) {
+				$retour_html .= '</select></td>
+			</tr>';
+			}
+			else
+				$retour_html .= '</select>';
 		}
 		return $retour_html;
     }
@@ -451,7 +467,7 @@ class TypeField {
 		$attr_disable = ( $disabled ) ? 'disabled="disabled"' : '';
 		
 		$retour_html = '<tr class="tr_'.$name.'">
-		<th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label><i class="description">'.$description.'</i></th>
+		<th scope="row"><label>'.stripslashes($label).'</label><i class="description">'.$description.'</i></th>
 		<td>';
 		if( is_array($list_option) && count($list_option) > 0 ) {
 
@@ -460,9 +476,9 @@ class TypeField {
 
 				foreach( $list_option as $key => $val) {
 					if( ($defaut_value && $defaut_value == $key) || ($defaut_value == false && $incide == 0) )
-				 		$retour_html .= '<input type="radio" name="'.$name.'" value="'.$key.'" checked '.$attr_disable.'> '.$val.'<br>';
+				 		$retour_html .= '<input type="radio" name="'.$name.'" id="radio_'.$key.'" value="'.$key.'" checked '.$attr_disable.' /> <label for="radio_'.$key.'">'.$val.'</label><br>';
 					else
-						$retour_html .= '<input type="radio" name="'.$name.'" value="'.$key.'" '.$attr_disable.'> '.$val.'<br>';
+						$retour_html .= '<input type="radio" name="'.$name.'" id="radio_'.$key.'" value="'.$key.'" '.$attr_disable.' /> <label for="radio_'.$key.'">'.$val.'<br>';
 
 					$incide++;
 				}
@@ -470,9 +486,9 @@ class TypeField {
 			else{
 				foreach( $list_option as $val) {
 					if( ($defaut_value && $defaut_value == $val) || ($defaut_value == false && $incide == 0) )
-						$retour_html .= '<input type="radio" name="'.$name.'" value="'.$val.'" checked '.$attr_disable.'> '.$val.'<br>';
+						$retour_html .= '<input type="radio" name="'.$name.'" id="radio_'.$val.'" value="'.$val.'" checked '.$attr_disable.' /> <label for="radio_'.$val.'">'.$val.'</label><br>';
 				  	else
-				  		$retour_html .= '<input type="radio" name="'.$name.'" value="'.$val.'" '.$attr_disable.'> '.$val.'<br>';
+				  		$retour_html .= '<input type="radio" name="'.$name.'" id="radio_'.$val.'" value="'.$val.'" '.$attr_disable.' /> <label for="radio_'.$val.'">'.$val.'</label><br>';
 
 				  	$incide++;
 				}
@@ -491,34 +507,42 @@ class TypeField {
     /**
      *
      */
-    public static function render_input_checkbox( $label, $name, $list_option = array(), $defaut_value = false, $repeatable = false, $description = '', $disabled = false ) {
+    public static function render_input_checkbox( $label, $name, $list_option = array(), $defaut_value = false, $repeatable = false, $description = '', $disabled = false, $in_tab = true  ) {
 		
 		$attr_disable = ( $disabled ) ? 'disabled="disabled"' : '';
 
-		$retour_html = '<tr class="tr_'.$name.'">
-		<th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label><i class="description">'.$description.'</i></th>
-		<td>';
+		if( $in_tab ) {
+			$retour_html = '<tr class="tr_'.$name.'">
+			<th scope="row"><label for="input_'.$name.'">'.stripslashes($label).'</label><i class="description">'.$description.'</i></th>
+			<td>';
+		}
+		else
+			$retour_html = '<label for="input_'.$name.'">'.stripslashes($label).'</label>';
+		
 		if( is_array($list_option) && count($list_option) > 0 ) {
 
-		if( isAssoc($list_option) ) {
-			foreach( $list_option as $key => $val) {
-				if( is_array($defaut_value) && in_array($key, $defaut_value) )
-					$retour_html .= '<label for="'.$name.'_'.$key.'"><input type="checkbox" name="'.$name.'[]" id="'.$name.'_'.$key.'" value="'.$key.'" checked '.$attr_disable.'> '.$val.'</label><br>';
-				else
-					$retour_html .= '<label for="'.$name.'_'.$key.'"><input type="checkbox" name="'.$name.'[]" id="'.$name.'_'.$key.'" value="'.$key.'" '.$attr_disable.'> '.$val.'</label><br>';
+			if( isAssoc($list_option) ) {
+				foreach( $list_option as $key => $val) {
+					if( is_array($defaut_value) && in_array($key, $defaut_value) )
+						$retour_html .= '<label><input type="checkbox" name="'.$name.'[]" id="'.$name.'_'.$key.'" value="'.$key.'" checked '.$attr_disable.'> '.$val.'</label><br>';
+					else
+						$retour_html .= '<label><input type="checkbox" name="'.$name.'[]" id="'.$name.'_'.$key.'" value="'.$key.'" '.$attr_disable.'> '.$val.'</label><br>';
+				}
+			}
+			else{
+				foreach( $list_option as $val) {
+					if( is_array($defaut_value) && in_array($val, $defaut_value) )
+						$retour_html .= '<label><input type="checkbox" name="'.$name.'[]" id="'.$name.'_'.$val.'" value="'.$val.'" checked '.$attr_disable.'> '.$val.'</label><br>';
+					else
+						$retour_html .= '<label><input type="checkbox" name="'.$name.'[]" id="'.$name.'_'.$val.'" value="'.$val.'" '.$attr_disable.'> '.$val.'</label><br>';
+				}
 			}
 		}
-		else{
-			foreach( $list_option as $val) {
-				if( is_array($defaut_value) && in_array($val, $defaut_value) )
-					$retour_html .= '<label for="'.$name.'_'.$val.'"><input type="checkbox" name="'.$name.'[]" id="'.$name.'_'.$val.'" value="'.$val.'" checked '.$attr_disable.'> '.$val.'</label><br>';
-				else
-					$retour_html .= '<label for="'.$name.'_'.$val.'"><input type="checkbox" name="'.$name.'[]" id="'.$name.'_'.$val.'" value="'.$val.'" '.$attr_disable.'> '.$val.'</label><br>';
-			}
+
+		if( $in_tab ) {
+			$retour_html .= '</td>
+			</tr>';
 		}
-		}
-		$retour_html .= '</td>
-		</tr>';
 
 		return $retour_html;
     }

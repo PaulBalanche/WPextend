@@ -405,8 +405,10 @@ class GutenbergBlock {
             }
 
 			if( !isset( $_POST['ajax'] ) ) {
-				$goback = add_query_arg( 'udpate', 'true', wp_get_referer() );
-				wp_safe_redirect( $goback );
+                
+                AdminNotice::add_notice( '007', 'File successfully imported.', 'success' );
+
+				wp_safe_redirect( wp_get_referer() );
 			}
 			exit;
 		}

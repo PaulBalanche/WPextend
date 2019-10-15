@@ -73,7 +73,7 @@ class SingleSetting {
 		$retour_html = '';
 
 		if($current_screen->parent_base == WPEXTEND_MAIN_SLUG_ADMIN_PAGE){
-			$retour_html .= TypeField::render_label_and_free_html( $this->name, 'fields['.$this->category.']['.$this->id.']', '<a href="'.add_query_arg( array( 'action' => 'delete_setting', 'category' => $this->category, 'key' => $this->id, '_wpnonce' => wp_create_nonce( 'delete_setting' ) ), admin_url( 'admin-post.php' ) ).'">Delete</a>' );
+			$retour_html .= TypeField::render_label_and_free_html( $this->name, 'fields['.$this->category.']['.$this->id.']', '<a class="button" href="'.add_query_arg( array( 'action' => 'delete_setting', 'category' => $this->category, 'key' => $this->id, '_wpnonce' => wp_create_nonce( 'delete_setting' ) ), admin_url( 'admin-post.php' ) ).'">Remove</a>', $this->type );
 		}
 		else {
 			switch( $this->type ) {
@@ -151,24 +151,24 @@ class SingleSetting {
 	/**
 	* Render form to add new field
 	*/
-	static public function render_form_create( $tab_list_category = array(), $key_category = false ){
+	static public function render_form_create( $key_category  ){
 
 		$retour_html = '<div class="form_add_setting_wpextend">';
 
-		$retour_html .= '<input type="button" class="add_new_settings button button-primary" value="New setting">';
+		$retour_html .= '<input type="button" class="add_new_settings button button-primary" value="New field">';
 
 		$retour_html .= RenderAdminHtml::form_open( admin_url( 'admin-post.php' ), 'add_settings_wpextend', '', 'hidden');
 
-		$retour_html .= RenderAdminHtml::table_edit_open();
+		$retour_html .= RenderAdminHtml::table_edit_open( 'New field' );
 		$retour_html .= TypeField::render_input_text( 'Name', 'name' );
 		$retour_html .= TypeField::render_input_text( 'Description', 'description' );
 		$retour_html .= TypeField::render_input_select('Type', 'type_field', TypeField::get_available_fields() );
 		$retour_html .= TypeField::render_input_select('Post type select', 'post_type_options', PostType::getInstance()->get_all_include_base_wordpress() );
 		$retour_html .= TypeField::render_input_checkbox( 'Repeatable ?', 'repeatable', array( 'true' => 'Ce champ pourra être dupliqué') );
-		$retour_html .= TypeField::render_input_select('Catégorie', 'category', $tab_list_category, $key_category );
+		$retour_html .= TypeField::render_input_hidden( 'category', $key_category );
 		$retour_html .= RenderAdminHtml::table_edit_close();
 
-		$retour_html .= RenderAdminHtml::form_close( 'Add settings' );
+		$retour_html .= RenderAdminHtml::form_close( 'Add', true );
 
 		$retour_html .= '</div>';
 
@@ -228,6 +228,9 @@ class SingleSetting {
 
 			if( !isset( $_POST['ajax'] ) ) {
 				$goback = add_query_arg( 'udpate', 'true', wp_get_referer() );
+
+				AdminNotice::add_notice( '009', 'Field successfully added.', 'success' );
+
 				wp_safe_redirect( $goback );
 				exit;
 			}
@@ -261,8 +264,10 @@ class SingleSetting {
 			$instance_global_settings->save();
 
 			if( !isset( $_POST['ajax'] ) ) {
-				$goback = add_query_arg( 'udpate', 'true', wp_get_referer() );
-				wp_safe_redirect( $goback );
+
+				AdminNotice::add_notice( '011', 'Field successfully removed', 'success' );
+
+				wp_safe_redirect( wp_get_referer() );
 				exit;
 			}
 		}

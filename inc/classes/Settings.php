@@ -10,7 +10,7 @@ class Settings {
     private static $_instance;
     
     static public $admin_url = '_settings',
-        $wpe_settings_post_name = 'wpextend_settings',
+        $wpe_settings_post_name = WPEXTEND_PREFIX_DATA_IN_DB . 'settings',
         $default_site_settings_name = 'WP Extend';
 
     public $enable_custom_post_type,
@@ -127,8 +127,9 @@ class Settings {
             }
         }
 
-        $goback = add_query_arg( 'udpate', 'true', wp_get_referer() );
-        wp_safe_redirect( $goback );
+        AdminNotice::add_notice( '008', 'The changes have been saved.', 'success' );
+
+        wp_safe_redirect( wp_get_referer() );
         exit;
     }
 

@@ -12,18 +12,18 @@ class SinglePostType {
 	public $args;
 	public $taxonomy;
 	public static $default_labels = array(
-		'name'						=> 'New custom post',
-		'singular_name'				=> 'New custom post',
+		'name'						=> '%s',
+		'singular_name'				=> 'New %s',
 		'add_new'					=> 'Add',
-		'add_new_item'				=> 'Add new item',
+		'add_new_item'				=> 'Add new %s',
 		'new_item'					=> 'New',
-		'edit_item'					=> 'Edit custom post',
-		'view_item'					=> 'View custom post',
-		'all_items'					=> 'All custom post',
-		'search_items'				=> 'Search custom post',
-		'parent_item_colon'			=> 'Custom post parent',
-		'not_found'					=> 'None custom post',
-		'not_found_in_trash'		=> 'None custom post deleted'
+		'edit_item'					=> 'Edit %s',
+		'view_item'					=> 'View %s',
+		'all_items'					=> 'All %p',
+		'search_items'				=> 'Search %s',
+		'parent_item_colon'			=> '%s parent',
+		'not_found'					=> 'None %s',
+		'not_found_in_trash'		=> 'None %s deleted'
 	);
 
 	public static $default_args = array(
@@ -52,7 +52,7 @@ class SinglePostType {
 	);
 
 	public static $default_args_on_creation = array(
-		'description'			=> 'Custom post description',
+		'description'			=> '',
 		'public'				=> 'true',
 		'capability_type'		=> 'post',
 		'hierarchical'			=> 'false',
@@ -187,40 +187,52 @@ class SinglePostType {
  		$retour_html .= RenderAdminHtml::table_edit_open();
 		$retour_html .= ( !in_array($slug, PostType::$list_reserved_post_types) ) ? TypeField::render_input_text( 'Slug', 'slug', $slug) : TypeField::render_disable_input_text( 'Slug', 'slug', $slug);
 
-		$retour_html .= TypeField::render_label_and_free_html('', '', '<h3>Labels:</h3>');
-		foreach( self::$default_labels as $key => $val) {
-			$retour_html .= TypeField::render_input_text( $key, 'labels['.$key.']', $tab_labels[$key] );
-		}
+		// Regex naming
+		$free_html = '<div class="flex_item mb-2">' . TypeField::render_input_text( '<strong>Singular</strong>', 'regex_naming[singular]', '', '', false, '', false ) . '</div>';
+		$free_html .= '<div class="flex_item mb-2">' . TypeField::render_input_text( '<strong>Plural</strong>', 'regex_naming[plural]', '', '', false, '', false ) . '</div>';
+		$retour_html .= TypeField::render_label_and_free_html( 'Regex naming', '', '<div class="flex-container">' . $free_html . '</div>' );
 
-		$retour_html .= TypeField::render_label_and_free_html('', '', '<h3>Args:</h3>');
+		// Labels
+		$free_html = '';
+		foreach( self::$default_labels as $key => $val) {
+			$free_html .= '<div class="flex_item mb-2">' . TypeField::render_input_text( '<strong>' . $key . '</strong>', 'labels['.$key.']', $tab_labels[$key], '', false, '', false ) . '</div>';
+		}
+		$retour_html .= TypeField::render_label_and_free_html( 'Labels', '', '<div class="flex-container">' . $free_html . '</div>' );
+
+		// Args
+		$free_html = '';
 		foreach( self::$default_args as $key => $val) {
 			if( is_array($val) ) {
 				if( isAssoc($val) ){
 					$defaut_value = (self::$default_args != $tab_args) ? $tab_args[$key] : false;
-					$retour_html .= TypeField::render_input_checkbox( $key, 'args['.$key.']', $val, $defaut_value );
+					$free_html .= '<div class="flex_item mb-2">' . TypeField::render_input_checkbox( '<strong>' . $key . '</strong><br />', 'args['.$key.']', $val, $defaut_value, false, '', false, false ) . '</div>';
 				}
 				else{
 					$defaut_value = (self::$default_args != $tab_args) ? $tab_args[$key] : false;
-					$retour_html .= TypeField::render_input_select( $key, 'args['.$key.']', $val, $defaut_value );
+					$free_html .= '<div class="flex_item mb-2">' . TypeField::render_input_select( '<strong>' . $key . '</strong><br />', 'args['.$key.']', $val, $defaut_value, false, '', false ) . '</div>';
 				}
 			}
 			else {
-				$retour_html .= TypeField::render_input_text( $key, 'args['.$key.']', $tab_args[$key] );
+				$free_html .= '<div class="flex_item mb-2">' . TypeField::render_input_text( '<strong>' . $key . '</strong>', 'args['.$key.']', $tab_args[$key], '', false, '', false ) . '</div>';
 			}
 		}
+		$retour_html .= TypeField::render_label_and_free_html( 'Args', '', '<div class="flex-container">' . $free_html . '</div>' );
 
-		$retour_html .= TypeField::render_label_and_free_html('', '', '<h3>Taxonomy:</h3>');
-		$retour_html .= TypeField::render_input_text( 'Taxonomy label', 'taxonomy[label]', $taxonomy['label']);
-		$retour_html .= TypeField::render_input_text( 'Taxonomy slug', 'taxonomy[slug]', $taxonomy['slug']);
+		// Taxonomy
+		$free_html = '<div class="flex_item mb-2">' . TypeField::render_input_text( '<strong>Taxonomy label</strong>', 'taxonomy[label]', $taxonomy['label'], '', false, '', false ) . '</div>';
+		$free_html .= '<div class="flex_item mb-2">' . TypeField::render_input_text( '<strong>Taxonomy slug</strong>', 'taxonomy[slug]', $taxonomy['slug'], '', false, '', false ) . '</div>';
+		$retour_html .= TypeField::render_label_and_free_html( 'Taxonomy', '', '<div class="flex-container">' . $free_html . '</div>' );
 
-		$retour_html .= TypeField::render_label_and_free_html('', '', '<h3>Multiple post thumbnails:</h3>');
+		// Multiple post thumbnails
+		$free_html = '';
 		foreach( self::$default_annex_args as $key => $val) {
 
 			if( $key == 'multiple_post_thumbnails' )
-				$retour_html .= TypeField::render_input_text( $key, 'annex_args['.$key.']', $annex_args[$key], '', false, 'Require "Multiple Post Thumbnails" plugin' );
+				$free_html .= TypeField::render_input_text( '<strong>' . $key . '</strong>', 'annex_args['.$key.']', $annex_args[$key], '', false, 'Require "Multiple Post Thumbnails" plugin', false );
 			else
-				$retour_html .= TypeField::render_input_text( $key, 'annex_args['.$key.']', $annex_args[$key] );
+				$free_html .= TypeField::render_input_text( '<strong>' . $key . '</strong>', 'annex_args['.$key.']', $annex_args[$key], '', false, '', false );
 		}
+		$retour_html .= TypeField::render_label_and_free_html('Multiple post thumbnails', '', $free_html);
 
 		$retour_html .= RenderAdminHtml::table_edit_close();
 		$retour_html .= RenderAdminHtml::form_close( 'Submit', true );
@@ -240,12 +252,21 @@ class SinglePostType {
 		// Check valid nonce
 		check_admin_referer($_POST['action']);
 
-		if( isset($_POST['slug']) ) {
+		if( isset($_POST['slug']) && ! empty($_POST['slug']) ) {
 
 			// Get PostType instance
 			$instance_Wpextend_Post_Type = PostType::getInstance();
 
 			$slug = sanitize_title( $_POST['slug'] );
+
+			// Use regex naming
+			foreach( $_POST['labels'] as $key => $val ){
+				
+				$_POST['labels'][$key] = preg_replace( '/^(%s)(.*)/', ucfirst($_POST['regex_naming']['singular']) . '$2', $_POST['labels'][$key] );
+				$_POST['labels'][$key] = preg_replace( '/^(.*)(%s)/', '$1' . strtolower($_POST['regex_naming']['singular']), $_POST['labels'][$key] );
+				$_POST['labels'][$key] = preg_replace( '/^(%p)(.*)/', ucfirst($_POST['regex_naming']['plural']) . '$2', $_POST['labels'][$key] );
+				$_POST['labels'][$key] = preg_replace( '/^(.*)(%p)/', '$1' . strtolower($_POST['regex_naming']['plural']), $_POST['labels'][$key] );
+			}
 
 			// Protect data
 			$labels = array();
@@ -299,11 +320,18 @@ class SinglePostType {
 			$instance_Wpextend_Post_Type->add_new( $labels, $slug, $args, $taxonomy, $annex_args );
 		
 			if( !isset( $_POST['ajax'] ) ) {
-				$goback = add_query_arg( 'udpate', 'true', wp_get_referer() );
-				wp_safe_redirect( $goback );
+
+				AdminNotice::add_notice( '010', 'Post type successfully added.', 'success' );
+
+				wp_safe_redirect( wp_get_referer() );
 			}
 			exit;
 		}
+
+		if( !isset( $_POST['ajax'] ) ) {
+			wp_safe_redirect( wp_get_referer() );
+		}
+		exit;
 	}
 
 
@@ -319,8 +347,10 @@ class SinglePostType {
 			$instance_Wpextend_Post_Type->delete( $id_post_type );
 
 			if( !isset( $_POST['ajax'] ) ) {
-	 			$goback = add_query_arg( 'udpate', 'true', wp_get_referer() );
-	 			wp_safe_redirect( $goback );
+				
+				AdminNotice::add_notice( '012', 'Post type successfully removed.', 'success' );
+
+	 			wp_safe_redirect( wp_get_referer() );
 			}
  			exit;
 		}

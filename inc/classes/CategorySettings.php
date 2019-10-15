@@ -19,6 +19,7 @@ class CategorySettings {
 
 	/**
 	 *
+	 * 
 	 */
 	public function __construct($id) {
 
@@ -35,77 +36,61 @@ class CategorySettings {
 
 
 
-
 	/**
-	* Render HTML field depend on type
-	*/
+	 * Render HTML field depend on type
+	 * 
+	 */
 	public function render_html() {
 
 		// Get info current screen
 		$current_screen = get_current_screen();
 		
 		$retour_html = RenderAdminHtml::table_edit_open();
-		if($current_screen->parent_base == WPEXTEND_MAIN_SLUG_ADMIN_PAGE){ $Wpextend_List_Table_data = []; }
 		foreach( $this->list_settings as $key => $val) {
 
-			if($current_screen->parent_base != WPEXTEND_MAIN_SLUG_ADMIN_PAGE){
-				$instance_field_setting = new SingleSetting($key, $this->id);
-				$retour_html .= $instance_field_setting->render_html();
-			}
-			else{
-				$Wpextend_List_Table_data[] = array_merge($val, [
-					'action_delete' => [
-						'action' => 'delete_setting',
-						'category' => $this->id,
-						'key' => $key,
-						'_wpnonce' => wp_create_nonce( 'delete_setting' )
-					]
-				] );
-			}
+			$instance_field_setting = new SingleSetting($key, $this->id);
+			$retour_html .= $instance_field_setting->render_html();
 		}
-
-		if($current_screen->parent_base == WPEXTEND_MAIN_SLUG_ADMIN_PAGE){
-			ob_start();
-			$args_Wpextend_List_Table = [
-				'data' 		=> $Wpextend_List_Table_data,
-				'columns'	=> [
-					'name'			=> 'Name',
-					'description' 	=> 'Description',
-					'type' 			=> 'Type',
-					'repeatable' 	=> 'Repeatable'
-				],
-				'per_page'	=> 200
-			];
-			$Wpextend_List_Table = new ListTable($args_Wpextend_List_Table);
-			$Wpextend_List_Table->prepare_items();
-			$Wpextend_List_Table->display();
-			$retour_html .= ob_get_contents();
-			ob_end_clean();
-		}
-
 		$retour_html .= RenderAdminHtml::table_edit_close();
+
+		if($current_screen->parent_base == WPEXTEND_MAIN_SLUG_ADMIN_PAGE) {
+
+			$retour_html .= RenderAdminHtml::table_edit_open();
+			$retour_html .= '<tr>
+					<th scope="row"></th>
+					<td>' . SingleSetting::render_form_create( $this->id ) . '</td></tr>';
+			$retour_html .= '<tr>
+				<th class="submit" scope="row"></th>
+				<td class="submit"><a href="'.add_query_arg( array( 'action' => 'delete_category_setting', 'category' => $this->id, '_wpnonce' => wp_create_nonce( 'delete_category_setting' ) ), admin_url( 'admin-post.php' ) ).'" class="button button-link-delete">Delete the category entirely</a></td>
+			</tr>';
+			$retour_html .= RenderAdminHtml::table_edit_close();
+			$retour_html .= '</form>';
+		}
 
 		return $retour_html;
 	}
 
 
 
-
-
 	/**
-	* Render form to add new category
-	*/
+	 * Render form to add new category
+	 * 
+	 */
 	static public function render_form_create(){
 
-		$retour_html = RenderAdminHtml::form_open( admin_url( 'admin-post.php' ), 'add_category_setting_wpextend', 'add_category_setting_wpextend' );
+		$retour_html = '<div class="mt-1 white">';
 
-		$retour_html .= RenderAdminHtml::table_edit_open();
+		$retour_html .= RenderAdminHtml::form_open( admin_url( 'admin-post.php' ), 'add_category_setting_wpextend', 'add_category_setting_wpextend' );
+
+		$retour_html .= RenderAdminHtml::table_edit_open( 'New settings category' );
 		$retour_html .= TypeField::render_input_text( __('Name', WPEXTEND_TEXTDOMAIN), 'name' );
 		$retour_html .= TypeField::render_input_checkbox( __('Multilanguage compatibility', WPEXTEND_TEXTDOMAIN), 'wpml_compatible', array( 'true' => __('Must be multilingual?', WPEXTEND_TEXTDOMAIN) ) );
 		$retour_html .= TypeField::render_input_radio( __('Capabilities', WPEXTEND_TEXTDOMAIN), 'capabilities', array( 'all' => __('Everyone', WPEXTEND_TEXTDOMAIN), 'only_administrator' => __('Only administrator', WPEXTEND_TEXTDOMAIN) ), 'all' );
 		$retour_html .= RenderAdminHtml::table_edit_close();
 
-		$retour_html .= RenderAdminHtml::form_close( __('Add category', WPEXTEND_TEXTDOMAIN) );
+		$retour_html .= RenderAdminHtml::form_close( __('Add category', WPEXTEND_TEXTDOMAIN), true );
+
+		$retour_html .= '</div>';
 
 		return $retour_html;
 	}
@@ -115,10 +100,10 @@ class CategorySettings {
 
 
 	/**
-	* Get POST and create new category
-	*
-	* @return boolean
-	*/
+	 * Get POST and create new category
+	 *
+	 * @return boolean
+	 */
 	static public function add_new() {
 
 		// Check valid nonce
@@ -141,8 +126,10 @@ class CategorySettings {
 			$instance_global_settings->save();
 
 			if( !isset( $_POST['ajax'] ) ) {
-				$goback = add_query_arg( 'udpate', 'true', wp_get_referer() );
-				wp_safe_redirect( $goback );
+				
+				AdminNotice::add_notice( '003', 'Category successfully added.', 'success' );
+
+				wp_safe_redirect( wp_get_referer() );
 				exit;
 			}
 		}
@@ -171,8 +158,10 @@ class CategorySettings {
 			$instance_global_settings->save();
 
 			if( !isset( $_POST['ajax'] ) ) {
-				$goback = add_query_arg( 'udpate', 'true', wp_get_referer() );
-				wp_safe_redirect( $goback );
+
+				AdminNotice::add_notice( '004', 'Category successfully removed.', 'success' );
+				
+				wp_safe_redirect( wp_get_referer() );
 				exit;
 			}
 		}

@@ -40,6 +40,7 @@ class Main {
     */
     private function __construct() {
 
+		AdminNotice::getInstance();
 		Settings::getInstance();
 		$this->instance_multilanguage = Multilanguage::getInstance();
 		$this->instance_global_settings = GlobalSettings::getInstance();
@@ -50,15 +51,26 @@ class Main {
 		if( Settings::getInstance()->enable_custom_post_type || Settings::getInstance()->enable_gutenberg ){ $this->instance_post_type_wpextend = PostType::getInstance(); }
 		if( Settings::getInstance()->enable_thumbnail_api ) { $this->instance_thumbnail_api = ThumbnailApi::getInstance(); }
 
-		add_action('admin_menu', array ( __CLASS__ ,  'define_admin_menu' ) );
-
-		// admin_enqueue_scripts
-		add_action('admin_enqueue_scripts', array( __CLASS__, 'script_admin' ) );
-
 		add_theme_support('post-thumbnails');
+
+		// Configure hooks
+        $this->create_hooks();
     }
 
 
+
+	/**
+	 * Register some Hooks
+	 *
+	 * @return void
+	 */
+	public function create_hooks() {
+
+		add_action('admin_menu', array ( __CLASS__ ,  'define_admin_menu' ) );
+		add_action('admin_enqueue_scripts', array( __CLASS__, 'script_admin' ) );
+        add_action( 'admin_post_generate_autoload_json_file', 'Wpextend\Main::generate_autoload_json_file' );
+	}
+	
 
 
 	/**
@@ -107,7 +119,10 @@ class Main {
 	 */
 	 public static function render_export() {
 
-	 	$retour_html = '';
+	 	// Header page & open form
+		$retour_html = RenderAdminHtml::header('Export');
+
+        $retour_html .= '<div class="mt-1 white">';
 
 	 	// Global settings
 		$retour_html .= RenderAdminHtml::table_edit_open();
@@ -133,6 +148,8 @@ class Main {
 			$retour_html .= RenderAdminHtml::table_edit_close();
 		}
 
+		$retour_html .= '</div>';
+
 	 	echo $retour_html;
 	 }
 
@@ -144,7 +161,10 @@ class Main {
 	 */
 	 public static function render_import() {
 
-	 	$retour_html = '';
+	 	// Header page & open form
+		$retour_html = RenderAdminHtml::header('Import');
+
+        $retour_html .= '<div class="mt-1 white">';
 
 	 	// Formulaire d'import Global settings
 		$retour_html .= RenderAdminHtml::form_open( admin_url( 'admin-post.php' ), 'import_wpextend_global_settings', 'import_wpextend_global_settings' );
@@ -153,12 +173,12 @@ class Main {
 		$retour_html .= TypeField::render_input_textarea( 'WP Extend Global settings to import', 'wpextend_global_settings_to_import', '', false, '', false );
 		$retour_html .= RenderAdminHtml::table_edit_close();
 
-		$retour_html .= RenderAdminHtml::form_close( 'Import' );
+		$retour_html .= RenderAdminHtml::form_close( 'Import', true );
 		if( file_exists( WPEXTEND_IMPORT_DIR . 'global_settings.json' ) ){
 			$retour_html .= '<p><a href="' . add_query_arg( ['action' => 'import_wpextend_global_settings', 'file' => 'global_settings'] , wp_nonce_url(admin_url( 'admin-post.php' ), 'import_wpextend_global_settings')) . '" class="button" >Import JSON file</a></p>';
 		}
 
-		$retour_html .= '<br /><hr><br />';
+		$retour_html .= '</div><div class="mt-1 white">';
 
 		// Formulaire d'import Global settings values
 		$retour_html .= RenderAdminHtml::form_open( admin_url( 'admin-post.php' ), 'import_wpextend_global_settings_values', 'import_wpextend_global_settings_values' );
@@ -167,12 +187,12 @@ class Main {
 		$retour_html .= TypeField::render_input_textarea( 'WP Extend Global settings values to import', 'wpextend_global_settings_values_to_import', '', false, '', false );
 		$retour_html .= RenderAdminHtml::table_edit_close();
 
-		$retour_html .= RenderAdminHtml::form_close( 'Import' );
+		$retour_html .= RenderAdminHtml::form_close( 'Import', true );
 		if( file_exists( WPEXTEND_IMPORT_DIR . 'global_settings_value.json' ) ){
 			$retour_html .= '<p><a href="' . add_query_arg( ['action' => 'import_wpextend_global_settings_values', 'file' => 'global_settings_value'] , wp_nonce_url(admin_url( 'admin-post.php' ), 'import_wpextend_global_settings_values')) . '" class="button" >Import JSON file</a></p>';
 		}
 
-		$retour_html .= '<br /><hr><br />';
+		$retour_html .= '</div><div class="mt-1 white">';
 
 		if( Settings::getInstance()->enable_gutenberg ) {
 			// Gutenberg blocks
@@ -183,14 +203,56 @@ class Main {
 			$retour_html .= TypeField::render_input_textarea( 'Gutenberg blocks to import', 'wpextend_' . GutenbergBlock::$gutenberg_name_custom_post_type . '_to_import', '', false, '', false );
 			$retour_html .= RenderAdminHtml::table_edit_close();
 
-			$retour_html .= RenderAdminHtml::form_close( 'Import' );
+			$retour_html .= RenderAdminHtml::form_close( 'Import', true );
 			if( file_exists( WPEXTEND_IMPORT_DIR . GutenbergBlock::$gutenberg_name_custom_post_type . '.json' ) ){
 				$retour_html .= '<p><a href="' . add_query_arg( ['action' => 'import_wpextend_' . GutenbergBlock::$gutenberg_name_custom_post_type, 'file' => GutenbergBlock::$gutenberg_name_custom_post_type] , wp_nonce_url(admin_url( 'admin-post.php' ), 'import_wpextend_' . GutenbergBlock::$gutenberg_name_custom_post_type)) . '" class="button" >Import JSON file</a></p>';
 			}
 		}
 
+		$retour_html .= '</div>';
+
 	 	echo $retour_html;
 	 }
+
+
+
+	/**
+	 * Function which create all missing JSON file
+	 * 
+	 */
+	static public function generate_autoload_json_file() {
+
+		check_admin_referer($_GET['action']);
+
+		
+		if( ! file_exists( WPEXTEND_JSON_DIR ) ) {
+			mkdir( WPEXTEND_JSON_DIR, 0777, true );
+		}
+
+		// echo get_stylesheet_directory() . '<br />';
+		// echo WPEXTEND_JSON_DIR . '<br />';
+
+		
+
+		// $dirs_json_files = str_replace( get_stylesheet_directory() . '/', '', WPEXTEND_JSON_DIR );
+		// echo $dirs_json_files;
+
+		// $dirs_json_files = explode( '/', trim($dirs_json_files, '/') );
+		// pre($dirs_json_files);
+
+		// foreach( $dirs_json_files as $key => $val ) {
+
+		// 	$path_current_dir = '';
+		// 	for( $i = 0; $i <= $key; $i++ ) {
+		// 		$path_current_dir .= '/' . $dirs_json_files[$i];
+		// 	}
+
+		// 	if( ! file_exists( get_stylesheet_directory() . $path_current_dir ) )
+		// 	string $pathname [, int $mode = 0777 [, bool $recursive = FALSE
+		// }
+
+		exit;
+	}
 
 
 

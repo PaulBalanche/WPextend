@@ -9,13 +9,14 @@ class PostType {
 
 
 
-	 private static $_instance;
-	 public $intial_post_type;
-	 public $custom_post_type_wpextend;
-	 public $name_option_in_database = '_custom_post_type_buzzpress';
-	 static public $admin_url = '_custom_post_type';
-	 static public $list_base_post_type = array('post' => 'Post', 'page' => 'Page');
-	 static public $list_reserved_post_types = array('post', 'page', 'attachment', 'revision', 'nav_menu_item', 'custom_css', 'customize_changeset', 'action', 'author', 'order', 'theme');
+	private static $_instance;
+	public $intial_post_type;
+	public $custom_post_type_wpextend;
+	public $name_option_in_database = '_custom_post_type_buzzpress';
+	static public $admin_url = '_custom_post_type',
+	 	$json_file_name = 'custom_post_type.json',
+		$list_base_post_type = array('post' => 'Post', 'page' => 'Page'),
+		$list_reserved_post_types = array('post', 'page', 'attachment', 'revision', 'nav_menu_item', 'custom_css', 'customize_changeset', 'action', 'author', 'order', 'theme');
 
 
 
@@ -239,10 +240,10 @@ class PostType {
 				]
 			];
 			
-			if( file_exists(WPEXTEND_JSON_DIR . 'custom_post_type.json') ) {
-				$actual_content_json_file = json_decode(file_get_contents(WPEXTEND_JSON_DIR . 'custom_post_type.json'), true);
+			if( file_exists(WPEXTEND_JSON_DIR . self::$json_file_name) ) {
+				$actual_content_json_file = json_decode(file_get_contents(WPEXTEND_JSON_DIR . self::$json_file_name), true);
 				$new_content_json_file = array_merge($actual_content_json_file, $new_item_to_add);
-				return file_put_contents( WPEXTEND_JSON_DIR . 'custom_post_type.json', json_encode($new_content_json_file, JSON_PRETTY_PRINT) );
+				return file_put_contents( WPEXTEND_JSON_DIR . self::$json_file_name, json_encode($new_content_json_file, JSON_PRETTY_PRINT) );
 			}
 			else {
 				$actual_content_from_database = $this->get_all_from_database();
@@ -311,8 +312,11 @@ class PostType {
 	 */
 	public function load_json() {
 
-		if( file_exists(WPEXTEND_JSON_DIR . 'custom_post_type.json') ) {
-			return json_decode(file_get_contents(WPEXTEND_JSON_DIR . 'custom_post_type.json'), true);
+		if( file_exists(WPEXTEND_JSON_DIR . self::$json_file_name) ) {
+
+			$json_content = json_decode(file_get_contents(WPEXTEND_JSON_DIR . self::$json_file_name), true);
+			if( is_array($json_content) )
+				return $json_content;
 		}
 		return [];
 	}

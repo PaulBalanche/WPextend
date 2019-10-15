@@ -16,7 +16,9 @@ class GlobalSettings {
 	$wordpress_default_locale = null,
 	$wordpress_current_langage = null;
 
-	static public $admin_url = '';
+	static public $admin_url = '',
+		$json_file_name = 'site_settings.json';
+
 
 
 	/**
@@ -49,11 +51,8 @@ class GlobalSettings {
 		// Mutlilanguages initialisation
 		$this->multilanguages_initialisation();
 
-		// Set option from database
-		$this->wpextend_global_settings = get_option( $this->name_option_in_database );
-		if( !is_array( $this->wpextend_global_settings ) ) {
-			$this->wpextend_global_settings = array();
-		}
+		// Get site settings definition from database (legacy) and JSON file
+		$this->load_site_settings();
 
 		// Get value in database and assign to $wpextend_global_settings_values
 		foreach( $this->wpextend_global_settings as $key => $val){
@@ -70,7 +69,7 @@ class GlobalSettings {
 			}
 
 			$this->wpextend_global_settings_values[$key] = $value_in_database;
-			if( !is_array($this->wpextend_global_settings_values[$key]) )
+			if( ! is_array($this->wpextend_global_settings_values[$key]) )
 				$this->wpextend_global_settings_values[$key] = array();
 		}
 
@@ -104,6 +103,31 @@ class GlobalSettings {
 
 
 	/**
+	 * Get site settings definition from database (legacy) and JSON file
+	 * 
+	 */
+	public function load_site_settings() {
+
+		// Getting from database (legacy)
+		$this->wpextend_global_settings = get_option( $this->name_option_in_database );
+		
+		// Getting from JSON file
+		if( file_exists(WPEXTEND_JSON_DIR . self::$json_file_name) ) {
+			$site_settings_json_file_content = json_decode(file_get_contents(WPEXTEND_JSON_DIR . self::$json_file_name), true);
+
+			if( is_array( $site_settings_json_file_content ) )
+				$this->wpextend_global_settings = array_merge($this->wpextend_global_settings, $site_settings_json_file_content);
+		}
+		else
+			AdminNotice::add_notice( '001', 'Some JSON configuration files do not exist yet. Click <a href="' . add_query_arg( array( 'action' => 'generate_autoload_json_file', '_wpnonce' => wp_create_nonce( 'generate_autoload_json_file' ) ), admin_url( 'admin-post.php' ) ) . '">here</a> to generate them.', 'warning', false, false );
+
+		if( ! is_array( $this->wpextend_global_settings ) )
+			$this->wpextend_global_settings = array();
+	}
+
+
+
+	/**
 	* Register some Hooks
 	*
 	* @return void
@@ -125,9 +149,9 @@ class GlobalSettings {
 	   	// AJAX $_POST traitment if necessary
 	   	add_action( 'wp_ajax_update_settings_wpextend', 'Wpextend\GlobalSettings::udpate_values' );
 	   	add_action( 'wp_ajax_add_category_setting_wpextend', 'Wpextend\CategorySettings::add_new' );
-	   	add_action( 'wp_ajax_add_settings_wpextend', 'Wpextend\SingleSetting::add_new' );
+		add_action( 'wp_ajax_add_settings_wpextend', 'Wpextend\SingleSetting::add_new' );
 	}
-
+	
 
 
 	/**
@@ -262,7 +286,7 @@ class GlobalSettings {
 		 $all_category = $this->get_all_category();
 		 foreach( $all_category as $key => $val) {
 
-		 	$instance_category = new CategorySettings($key);
+			$instance_category = new CategorySettings($key);
 		 	if(
 		 		(
 					 $instance_category->capabilities == 'all' ||
@@ -270,45 +294,40 @@ class GlobalSettings {
 				) &&
 				(
 					$current_screen->parent_base == WPEXTEND_MAIN_SLUG_ADMIN_PAGE ||
-					!$instance_category->wpml_compatible ||
+					! $instance_category->wpml_compatible ||
 					(
 						$instance_category->wpml_compatible &&
-						!empty( apply_filters('wpml_current_language', NULL) )
+						! empty( apply_filters('wpml_current_language', NULL) )
 					)
+				) &&
+				(
+					$current_screen->parent_base == WPEXTEND_MAIN_SLUG_ADMIN_PAGE ||
+					( $current_screen->parent_base != WPEXTEND_MAIN_SLUG_ADMIN_PAGE && is_array($instance_category->list_settings) && count($instance_category->list_settings) > 0 )
 				)
-		 	){
+		 	) {
 
 			 	$retour_html .= '<h2>'.$val;
-			 	if( $current_screen->parent_base != WPEXTEND_MAIN_SLUG_ADMIN_PAGE && $instance_category->wpml_compatible && !empty(apply_filters('wpml_current_language', NULL )) ){
-			 		$retour_html .= ' ('.apply_filters('wpml_current_language', NULL ).')';
-			 	}
+			 	if( $instance_category->wpml_compatible && !empty(apply_filters('wpml_current_language', NULL )) ){
+			 		$retour_html .= ' ('. apply_filters('wpml_current_language', NULL ) .')';
+				}
+				 
+				if( $current_screen->parent_base == WPEXTEND_MAIN_SLUG_ADMIN_PAGE ){
+					$retour_html .= ' ('. $instance_category->capabilities .')';
+				}
 			 	$retour_html .= '</h2><div>';
 
 			 	if($current_screen->parent_base != WPEXTEND_MAIN_SLUG_ADMIN_PAGE){
 					$retour_html .= RenderAdminHtml::form_open( admin_url( 'admin-post.php' ), 'update_settings_wpextend');
 				}
-				else{
-					$retour_html .= RenderAdminHtml::table_edit_open();
-					$retour_html .= TypeField::render_input_checkbox( __('Multilanguage compatibility', WPEXTEND_TEXTDOMAIN), 'wpml_compatible', array( 'true' => __('Must be multilingual?', WPEXTEND_TEXTDOMAIN) ), [ $instance_category->wpml_compatible ] );
-					$retour_html .= TypeField::render_input_radio( __('Capabilities', WPEXTEND_TEXTDOMAIN), 'capabilities', array( 'all' => __('Everyone', WPEXTEND_TEXTDOMAIN), 'only_administrator' => __('Only administrator', WPEXTEND_TEXTDOMAIN) ), 'all' );
-					$retour_html .= RenderAdminHtml::table_edit_close();
-				}
 				
 				$retour_html .= TypeField::render_input_hidden( 'category', $key );
 
-				if($current_screen->parent_base == WPEXTEND_MAIN_SLUG_ADMIN_PAGE){
-					$retour_html .= '<p style="text-align:right"><a href="'.add_query_arg( array( 'action' => 'delete_category_setting', 'category' => $key, '_wpnonce' => wp_create_nonce( 'delete_category_setting' ) ), admin_url( 'admin-post.php' ) ).'" class="button button-primary">Delete entire category</a></p>';
-				}
-
 				$retour_html .= $instance_category->render_html();
 
-				if($current_screen->parent_base != WPEXTEND_MAIN_SLUG_ADMIN_PAGE){
-					$retour_html .= RenderAdminHtml::form_close('Submit', true);
+				if( $current_screen->parent_base != WPEXTEND_MAIN_SLUG_ADMIN_PAGE ){
+					$retour_html .= RenderAdminHtml::form_close('Save', true);
 				}
 
-				if($current_screen->parent_base == WPEXTEND_MAIN_SLUG_ADMIN_PAGE){
-				 	$retour_html .= SingleSetting::render_form_create( $this->get_all_category(), $key );
-			 	}
 				$retour_html .= '</div>';
 			}
 		}
@@ -316,10 +335,8 @@ class GlobalSettings {
 		$retour_html .= '</div>';
 
 		// Add catergory form & add setting form
-		if($current_screen->parent_base == WPEXTEND_MAIN_SLUG_ADMIN_PAGE){
-			$retour_html .= '<fieldset class="card"><h2>New settings category</h2>';
+		if( $current_screen->parent_base == WPEXTEND_MAIN_SLUG_ADMIN_PAGE ) {
 			$retour_html .= CategorySettings::render_form_create();
-			$retour_html .= '</fieldset>';
 		}
 
 		// return
@@ -335,13 +352,13 @@ class GlobalSettings {
 	*/
 	public function add_new_category($name, $traduisible = false, $capabilities = false) {
 
-		if( !empty($name) && is_bool($traduisible) ) {
+		if( ! empty($name) && is_bool($traduisible) ) {
 
 			// Create ID
 			$id_new_category = sanitize_title($name);
 
 			// Test if no already exists
-			if( !array_key_exists($id_new_category, $this->wpextend_global_settings) ) {
+			if( ! array_key_exists($id_new_category, $this->wpextend_global_settings) ) {
 				$this->wpextend_global_settings[$id_new_category] = array('name' => $name, 'wpml_compatible' => $traduisible, 'capabilities' => $capabilities, 'fields' => array() );
 			}
 		}
@@ -356,7 +373,7 @@ class GlobalSettings {
 	*/
 	public function add_new_setting($name, $description, $type, $id_category, $options = false, $repeatable = false) {
 
-		if( !empty($name) &&
+		if( ! empty($name) &&
 			array_key_exists( $type, TypeField::get_available_fields() ) &&
 		 	array_key_exists( $id_category, $this->get_all_category() )
 		) {
@@ -378,10 +395,10 @@ class GlobalSettings {
 
 
 	/**
-	* Use update_option to save in Wordpress database
-	*
-	* @return boolean
-	*/
+	 * Use update_option to save in Wordpress database
+	 *
+	 * @return boolean
+	 */
 	public function save($key_category = false) {
 
 		global $wp_rewrite;
@@ -389,10 +406,20 @@ class GlobalSettings {
 
 		if( $key_category == false ){
 
-			if( count($this->wpextend_global_settings) == 0)
-				$this->wpextend_global_settings = false;
+			if( file_exists(WPEXTEND_JSON_DIR . self::$json_file_name) ) {
 
-			return update_option( $this->name_option_in_database , $this->wpextend_global_settings);
+				if( count($this->wpextend_global_settings) == 0)
+					$this->wpextend_global_settings = [];
+
+				return file_put_contents( WPEXTEND_JSON_DIR . self::$json_file_name, json_encode($this->wpextend_global_settings, JSON_PRETTY_PRINT) );
+			}
+			else{
+
+				if( count($this->wpextend_global_settings) == 0)
+					$this->wpextend_global_settings = false;
+
+				return update_option( $this->name_option_in_database , $this->wpextend_global_settings);
+			}
 		}
 		else{
 
@@ -462,10 +489,10 @@ class GlobalSettings {
 			}
 
 			// Save in Wordpress database
-			GlobalSettings::getInstance()->save( $_POST['category'] );
+			if( GlobalSettings::getInstance()->save( $_POST['category'] ) )
+				AdminNotice::add_notice( '002', 'The changes have been saved.', 'success' );
 
-			$goback = add_query_arg( 'udpate', 'true', wp_get_referer() );
-			wp_safe_redirect( $goback );
+			wp_safe_redirect( wp_get_referer() );
 			exit;
 		}
 	}
@@ -522,8 +549,10 @@ class GlobalSettings {
 			$this->save();
 
 			if( !isset( $_POST['ajax'] ) ) {
-				$goback = add_query_arg( 'udpate', 'true', wp_get_referer() );
-				wp_safe_redirect( $goback );
+
+				AdminNotice::add_notice( '005', 'File successfully imported.', 'success' );
+				
+				wp_safe_redirect( wp_get_referer() );
 			}
 			exit;
 		}
@@ -559,8 +588,10 @@ class GlobalSettings {
 			}
 
 			if( !isset( $_POST['ajax'] ) ) {
-				$goback = add_query_arg( 'udpate', 'true', wp_get_referer() );
-				wp_safe_redirect( $goback );
+
+				AdminNotice::add_notice( '006', 'Value successfully imported.', 'success' );
+
+				wp_safe_redirect( wp_get_referer() );
 			}
 			exit;
 		}
