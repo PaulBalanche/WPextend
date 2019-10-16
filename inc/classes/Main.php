@@ -224,33 +224,12 @@ class Main {
 
 		check_admin_referer($_GET['action']);
 
-		
-		if( ! file_exists( WPEXTEND_JSON_DIR ) ) {
+		if( ! file_exists( WPEXTEND_JSON_DIR ) )
 			mkdir( WPEXTEND_JSON_DIR, 0777, true );
-		}
 
-		// echo get_stylesheet_directory() . '<br />';
-		// echo WPEXTEND_JSON_DIR . '<br />';
+		do_action( 'wpextend_generate_autoload_json_file' );
 
-		
-
-		// $dirs_json_files = str_replace( get_stylesheet_directory() . '/', '', WPEXTEND_JSON_DIR );
-		// echo $dirs_json_files;
-
-		// $dirs_json_files = explode( '/', trim($dirs_json_files, '/') );
-		// pre($dirs_json_files);
-
-		// foreach( $dirs_json_files as $key => $val ) {
-
-		// 	$path_current_dir = '';
-		// 	for( $i = 0; $i <= $key; $i++ ) {
-		// 		$path_current_dir .= '/' . $dirs_json_files[$i];
-		// 	}
-
-		// 	if( ! file_exists( get_stylesheet_directory() . $path_current_dir ) )
-		// 	string $pathname [, int $mode = 0777 [, bool $recursive = FALSE
-		// }
-
+		wp_safe_redirect( wp_get_referer() ); 
 		exit;
 	}
 

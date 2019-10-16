@@ -60,7 +60,9 @@ class AdminNotice {
 	 * 
 	 */
 	public function admin_notice() {
-		
+
+        // session_unset();
+        
 		if( isset($_SESSION[self::$session_name]) && is_array($_SESSION[self::$session_name]) && count($_SESSION[self::$session_name]) > 0 ) {
 			
             foreach( $_SESSION[self::$session_name] as $key_admin_notice => $admin_notice ) {
@@ -108,8 +110,6 @@ class AdminNotice {
      * 
      */
     public static function add_notice( $key, $message, $type = 'neutral', $dismissible = true, $single_display = true ) {
-
-        // unset( $_SESSION[self::$session_name] );
 
         if( empty($key) || empty($message) )
             return;

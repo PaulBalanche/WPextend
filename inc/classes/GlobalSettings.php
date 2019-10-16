@@ -119,7 +119,7 @@ class GlobalSettings {
 				$this->wpextend_global_settings = array_merge($this->wpextend_global_settings, $site_settings_json_file_content);
 		}
 		else
-			AdminNotice::add_notice( '001', 'Some JSON configuration files do not exist yet. Click <a href="' . add_query_arg( array( 'action' => 'generate_autoload_json_file', '_wpnonce' => wp_create_nonce( 'generate_autoload_json_file' ) ), admin_url( 'admin-post.php' ) ) . '">here</a> to generate them.', 'warning', false, false );
+			AdminNotice::add_notice( '001', 'Some JSON configuration files do not exist yet. Click <a href="' . add_query_arg( array( 'action' => 'generate_autoload_json_file', '_wpnonce' => wp_create_nonce( 'generate_autoload_json_file' ) ), admin_url( 'admin-post.php' ) ) . '">here</a> to generate them.', 'warning', false );
 
 		if( ! is_array( $this->wpextend_global_settings ) )
 			$this->wpextend_global_settings = array();
@@ -150,6 +150,8 @@ class GlobalSettings {
 	   	add_action( 'wp_ajax_update_settings_wpextend', 'Wpextend\GlobalSettings::udpate_values' );
 	   	add_action( 'wp_ajax_add_category_setting_wpextend', 'Wpextend\CategorySettings::add_new' );
 		add_action( 'wp_ajax_add_settings_wpextend', 'Wpextend\SingleSetting::add_new' );
+
+		add_action( 'wpextend_generate_autoload_json_file', array($this, 'generate_autoload_json_file') );
 	}
 	
 
@@ -630,6 +632,23 @@ class GlobalSettings {
 
 		return $values_to_export;
 	}
+
+
+
+	/**
+	 * Create JSON file if doesn't exist
+	 * 
+	 */
+	public function generate_autoload_json_file() {
+
+		if( ! file_exists(WPEXTEND_JSON_DIR . self::$json_file_name) ) {
+			
+			if( touch(WPEXTEND_JSON_DIR . self::$json_file_name) )
+				AdminNotice::add_notice( '013', self::$json_file_name .' file successfully created.', 'success' );
+			else
+				AdminNotice::add_notice( '014', 'unable to create ' . self::$json_file_name, 'error' );
+		}
+    }
 
 
 

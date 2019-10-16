@@ -90,7 +90,9 @@ class PostType {
 		add_action( 'init', array( $this, 'initialize_multiple_post_thumbnails'), 4 );
 	  	add_action( 'admin_post_add_custom_post_type_wpextend', 'Wpextend\SinglePostType::add_new' );
 	  	add_action( 'admin_post_delete_custom_post_type', 'Wpextend\SinglePostType::delete' );
-	  	add_action( 'admin_post_import_wpextend_custom_post_type', array($this, 'import') );
+		add_action( 'admin_post_import_wpextend_custom_post_type', array($this, 'import') );
+		
+		add_action( 'wpextend_generate_autoload_json_file', array($this, 'generate_autoload_json_file') );
 	}
 
 
@@ -318,6 +320,9 @@ class PostType {
 			if( is_array($json_content) )
 				return $json_content;
 		}
+		else
+			AdminNotice::add_notice( '017', 'Some JSON configuration files do not exist yet. Click <a href="' . add_query_arg( array( 'action' => 'generate_autoload_json_file', '_wpnonce' => wp_create_nonce( 'generate_autoload_json_file' ) ), admin_url( 'admin-post.php' ) ) . '">here</a> to generate them.', 'warning', false );
+
 		return [];
 	}
 
@@ -337,6 +342,21 @@ class PostType {
 		return [];
 	}
 
+
+
+	/**
+	 * Create JSON file if doesn't exist
+	 * 
+	 */
+	public function generate_autoload_json_file() {
+
+		if( ! file_exists(WPEXTEND_JSON_DIR . self::$json_file_name) ) {
+			if( touch(WPEXTEND_JSON_DIR . self::$json_file_name) )
+				AdminNotice::add_notice( '015', self::$json_file_name .' file successfully created.', 'success' );
+			else
+				AdminNotice::add_notice( '016', 'unable to create ' . self::$json_file_name, 'error' );
+		}
+    }
 
 
 }

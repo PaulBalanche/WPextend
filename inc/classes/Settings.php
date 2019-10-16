@@ -71,7 +71,7 @@ class Settings {
 	*/
 	public function create_hooks() {
 
-		add_action( 'admin_post_wpextend_settings_update', array($this, 'update') );
+        add_action( 'admin_post_wpextend_settings_update', array($this, 'update') );
 	}
 
 
@@ -145,7 +145,7 @@ class Settings {
         return ( $view == 'editor' ) ? '' : self::$default_site_settings_name;
     }
 
-
     
+
 }
 
