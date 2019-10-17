@@ -81,10 +81,10 @@ class Main {
 		add_menu_page(Settings::getInstance()->get_site_settings_name(), Settings::getInstance()->get_site_settings_name(), 'edit_posts', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . '_site_settings', array( GlobalSettings::getInstance(), 'render_admin_page' ), '', 3 );
 		add_submenu_page(WPEXTEND_MAIN_SLUG_ADMIN_PAGE . '_site_settings', 'Site settings', 'Site settings', 'edit_posts', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . '_site_settings', array( GlobalSettings::getInstance(), 'render_admin_page' ) );
 
-		add_menu_page('WPE config', 'WPE config', 'manage_options', WPEXTEND_MAIN_SLUG_ADMIN_PAGE, array( GlobalSettings::getInstance(), 'render_admin_page' ) );
-		add_submenu_page(WPEXTEND_MAIN_SLUG_ADMIN_PAGE, 'WP Extend - Site settings', 'Site settings', 'manage_options', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . GlobalSettings::$admin_url, array( GlobalSettings::getInstance(), 'render_admin_page' ) );
-		if( Settings::getInstance()->enable_custom_post_type ){ add_submenu_page(WPEXTEND_MAIN_SLUG_ADMIN_PAGE, 'WP Extend - Custom Post Type', 'Custom Post Type', 'manage_options', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . PostType::$admin_url, array( PostType::getInstance(), 'render_admin_page' ) ); }
-		add_submenu_page(WPEXTEND_MAIN_SLUG_ADMIN_PAGE, 'WP Extend - Settings', 'Settings', 'manage_options', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . Settings::$admin_url, array( Settings::getInstance(), 'render_admin_page' ) );
+		add_menu_page('WPE config', 'WPE config', 'manage_options', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . Settings::$admin_url, array( Settings::getInstance(), 'render_admin_page' ) );
+		
+		do_action( 'wpextend_define_admin_menu' );
+
 		add_submenu_page(WPEXTEND_MAIN_SLUG_ADMIN_PAGE, 'WP Extend - Export', 'Export', 'manage_options', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . Main::$admin_url_export, array( Main::getInstance(), 'render_export' ) );
 		add_submenu_page(WPEXTEND_MAIN_SLUG_ADMIN_PAGE, 'WP Extend - Import', 'Import', 'manage_options', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . Main::$admin_url_import, array( Main::getInstance(), 'render_import' ) );
 	 }
@@ -164,20 +164,6 @@ class Main {
 	 	// Header page & open form
 		$retour_html = RenderAdminHtml::header('Import');
 
-        $retour_html .= '<div class="mt-1 white">';
-
-	 	// Formulaire d'import Global settings
-		$retour_html .= RenderAdminHtml::form_open( admin_url( 'admin-post.php' ), 'import_wpextend_global_settings', 'import_wpextend_global_settings' );
-
-		$retour_html .= RenderAdminHtml::table_edit_open();
-		$retour_html .= TypeField::render_input_textarea( 'WP Extend Global settings to import', 'wpextend_global_settings_to_import', '', false, '', false );
-		$retour_html .= RenderAdminHtml::table_edit_close();
-
-		$retour_html .= RenderAdminHtml::form_close( 'Import', true );
-		if( file_exists( WPEXTEND_IMPORT_DIR . 'global_settings.json' ) ){
-			$retour_html .= '<p><a href="' . add_query_arg( ['action' => 'import_wpextend_global_settings', 'file' => 'global_settings'] , wp_nonce_url(admin_url( 'admin-post.php' ), 'import_wpextend_global_settings')) . '" class="button" >Import JSON file</a></p>';
-		}
-
 		$retour_html .= '</div><div class="mt-1 white">';
 
 		// Formulaire d'import Global settings values
@@ -190,23 +176,6 @@ class Main {
 		$retour_html .= RenderAdminHtml::form_close( 'Import', true );
 		if( file_exists( WPEXTEND_IMPORT_DIR . 'global_settings_value.json' ) ){
 			$retour_html .= '<p><a href="' . add_query_arg( ['action' => 'import_wpextend_global_settings_values', 'file' => 'global_settings_value'] , wp_nonce_url(admin_url( 'admin-post.php' ), 'import_wpextend_global_settings_values')) . '" class="button" >Import JSON file</a></p>';
-		}
-
-		$retour_html .= '</div><div class="mt-1 white">';
-
-		if( Settings::getInstance()->enable_gutenberg ) {
-			// Gutenberg blocks
-
-			$retour_html .= RenderAdminHtml::form_open( admin_url( 'admin-post.php' ), 'import_wpextend_' . GutenbergBlock::$gutenberg_name_custom_post_type, 'import_wpextend_' . GutenbergBlock::$gutenberg_name_custom_post_type );
-
-			$retour_html .= RenderAdminHtml::table_edit_open();
-			$retour_html .= TypeField::render_input_textarea( 'Gutenberg blocks to import', 'wpextend_' . GutenbergBlock::$gutenberg_name_custom_post_type . '_to_import', '', false, '', false );
-			$retour_html .= RenderAdminHtml::table_edit_close();
-
-			$retour_html .= RenderAdminHtml::form_close( 'Import', true );
-			if( file_exists( WPEXTEND_IMPORT_DIR . GutenbergBlock::$gutenberg_name_custom_post_type . '.json' ) ){
-				$retour_html .= '<p><a href="' . add_query_arg( ['action' => 'import_wpextend_' . GutenbergBlock::$gutenberg_name_custom_post_type, 'file' => GutenbergBlock::$gutenberg_name_custom_post_type] , wp_nonce_url(admin_url( 'admin-post.php' ), 'import_wpextend_' . GutenbergBlock::$gutenberg_name_custom_post_type)) . '" class="button" >Import JSON file</a></p>';
-			}
 		}
 
 		$retour_html .= '</div>';

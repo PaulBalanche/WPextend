@@ -16,7 +16,7 @@ class GlobalSettings {
 	$wordpress_default_locale = null,
 	$wordpress_current_langage = null;
 
-	static public $admin_url = '',
+	static public $admin_url = '_admin_site_settings',
 		$json_file_name = 'site_settings.json';
 
 
@@ -152,8 +152,22 @@ class GlobalSettings {
 		add_action( 'wp_ajax_add_settings_wpextend', 'Wpextend\SingleSetting::add_new' );
 
 		add_action( 'wpextend_generate_autoload_json_file', array($this, 'generate_autoload_json_file') );
+
+		// Add sub-menu page into WPExtend menu
+		add_action( 'wpextend_define_admin_menu', array($this, 'define_admin_menu') );
 	}
 	
+
+
+	/**
+     * Add sub-menu page into WPExtend menu
+     * 
+     */
+    public function define_admin_menu() {
+
+		add_submenu_page(WPEXTEND_MAIN_SLUG_ADMIN_PAGE, 'WP Extend - Site settings', 'Site settings', 'manage_options', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . self::$admin_url, array( $this, 'render_admin_page' ) );
+	}
+
 
 
 	/**

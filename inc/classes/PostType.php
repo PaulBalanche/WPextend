@@ -93,6 +93,9 @@ class PostType {
 		add_action( 'admin_post_import_wpextend_custom_post_type', array($this, 'import') );
 		
 		add_action( 'wpextend_generate_autoload_json_file', array($this, 'generate_autoload_json_file') );
+
+		// Add sub-menu page into WPExtend menu
+		add_action( 'wpextend_define_admin_menu', array($this, 'define_admin_menu') );
 	}
 
 
@@ -138,6 +141,17 @@ class PostType {
 		}
 	}
 
+
+
+	/**
+     * Add sub-menu page into WPExtend menu
+     * 
+     */
+    public function define_admin_menu() {
+
+		add_submenu_page(WPEXTEND_MAIN_SLUG_ADMIN_PAGE, 'WP Extend - Custom Post Type', 'Custom Post Type', 'manage_options', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . self::$admin_url, array( $this, 'render_admin_page' ) );
+	}
+	
 
 
 	/**
@@ -321,7 +335,7 @@ class PostType {
 				return $json_content;
 		}
 		else
-			AdminNotice::add_notice( '017', 'Some JSON configuration files do not exist yet. Click <a href="' . add_query_arg( array( 'action' => 'generate_autoload_json_file', '_wpnonce' => wp_create_nonce( 'generate_autoload_json_file' ) ), admin_url( 'admin-post.php' ) ) . '">here</a> to generate them.', 'warning', false );
+			AdminNotice::add_notice( '001', 'Some JSON configuration files do not exist yet. Click <a href="' . add_query_arg( array( 'action' => 'generate_autoload_json_file', '_wpnonce' => wp_create_nonce( 'generate_autoload_json_file' ) ), admin_url( 'admin-post.php' ) ) . '">here</a> to generate them.', 'warning', false );
 
 		return [];
 	}

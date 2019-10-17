@@ -12,11 +12,13 @@ class GutenbergBlock {
      * Properties declaration
      */
     private static $_instance,
-    $path_gutenberg_theme_controllers = 'gutenberg-blocks/controllers/',
-    $name_default_block_category = [ 'slug' => 'default', 'title' => 'Default' ],
-    $wp_icon = [ 'dashicons-menu', 'dashicons-admin-site', 'dashicons-dashboard', 'dashicons-admin-post', 'dashicons-admin-media', 'dashicons-admin-links', 'dashicons-admin-page', 'dashicons-admin-comments', 'dashicons-admin-appearance', 'dashicons-admin-plugins', 'dashicons-admin-users', 'dashicons-admin-tools', 'dashicons-admin-settings', 'dashicons-admin-network', 'dashicons-admin-home', 'dashicons-admin-generic', 'dashicons-admin-collapse', 'dashicons-filter', 'dashicons-admin-customizer', 'dashicons-admin-multisite', 'dashicons-welcome-write-blog', 'dashicons-welcome-add-page', 'dashicons-welcome-view-site', 'dashicons-welcome-widgets-menus', 'dashicons-welcome-comments', 'dashicons-welcome-learn-more', 'dashicons-format-aside', 'dashicons-format-image', 'dashicons-format-gallery', 'dashicons-format-video', 'dashicons-format-status', 'dashicons-format-quote', 'dashicons-format-chat', 'dashicons-format-audio', 'dashicons-camera', 'dashicons-images-alt', 'dashicons-images-alt2', 'dashicons-video-alt', 'dashicons-video-alt2', 'dashicons-video-alt3', 'dashicons-media-archive', 'dashicons-media-audio', 'dashicons-media-code', 'dashicons-media-default', 'dashicons-media-document', 'dashicons-media-interactive', 'dashicons-media-spreadsheet', 'dashicons-media-text', 'dashicons-media-video', 'dashicons-playlist-audio', 'dashicons-playlist-video', 'dashicons-controls-play', 'dashicons-controls-pause', 'dashicons-controls-forward', 'dashicons-controls-skipforward', 'dashicons-controls-back', 'dashicons-controls-skipback', 'dashicons-controls-repeat', 'dashicons-controls-volumeon', 'dashicons-controls-volumeoff', 'dashicons-image-crop', 'dashicons-image-rotate', 'dashicons-image-rotate-left', 'dashicons-image-rotate-right', 'dashicons-image-flip-vertical', 'dashicons-image-flip-horizontal', 'dashicons-image-filter', 'dashicons-undo', 'dashicons-redo', 'dashicons-editor-bold', 'dashicons-editor-italic', 'dashicons-editor-ul', 'dashicons-editor-ol', 'dashicons-editor-quote', 'dashicons-editor-alignleft', 'dashicons-editor-aligncenter', 'dashicons-editor-alignright', 'dashicons-editor-insertmore', 'dashicons-editor-spellcheck', 'dashicons-editor-expand', 'dashicons-editor-contract', 'dashicons-editor-kitchensink', 'dashicons-editor-underline', 'dashicons-editor-justify', 'dashicons-editor-textcolor', 'dashicons-editor-paste-word', 'dashicons-editor-paste-text', 'dashicons-editor-removeformatting', 'dashicons-editor-video', 'dashicons-editor-customchar', 'dashicons-editor-outdent', 'dashicons-editor-indent', 'dashicons-editor-help', 'dashicons-editor-strikethrough', 'dashicons-editor-unlink', 'dashicons-editor-rtl', 'dashicons-editor-break', 'dashicons-editor-code', 'dashicons-editor-paragraph', 'dashicons-editor-table', 'dashicons-align-left', 'dashicons-align-right', 'dashicons-align-center', 'dashicons-align-none', 'dashicons-lock', 'dashicons-unlock', 'dashicons-calendar', 'dashicons-calendar-alt', 'dashicons-visibility', 'dashicons-hidden', 'dashicons-post-status', 'dashicons-edit', 'dashicons-trash', 'dashicons-sticky', 'dashicons-external', 'dashicons-arrow-up', 'dashicons-arrow-down', 'dashicons-arrow-right', 'dashicons-arrow-left', 'dashicons-arrow-up-alt', 'dashicons-arrow-down-alt', 'dashicons-arrow-right-alt', 'dashicons-arrow-left-alt', 'dashicons-arrow-up-alt2', 'dashicons-arrow-down-alt2', 'dashicons-arrow-right-alt2', 'dashicons-arrow-left-alt2', 'dashicons-sort', 'dashicons-leftright', 'dashicons-randomize', 'dashicons-list-view', 'dashicons-exerpt-view', 'dashicons-grid-view', 'dashicons-move', 'dashicons-share', 'dashicons-share-alt', 'dashicons-share-alt2', 'dashicons-twitter', 'dashicons-rss', 'dashicons-email', 'dashicons-email-alt', 'dashicons-facebook', 'dashicons-facebook-alt', 'dashicons-googleplus', 'dashicons-networking', 'dashicons-hammer', 'dashicons-art', 'dashicons-migrate', 'dashicons-performance', 'dashicons-universal-access', 'dashicons-universal-access-alt', 'dashicons-tickets', 'dashicons-nametag', 'dashicons-clipboard', 'dashicons-heart', 'dashicons-megaphone', 'dashicons-schedule', 'dashicons-wordpress', 'dashicons-wordpress-alt', 'dashicons-pressthis', 'dashicons-update', 'dashicons-screenoptions', 'dashicons-info', 'dashicons-cart', 'dashicons-feedback', 'dashicons-cloud', 'dashicons-translation', 'dashicons-tag', 'dashicons-category', 'dashicons-archive', 'dashicons-tagcloud', 'dashicons-text', 'dashicons-yes', 'dashicons-no', 'dashicons-no-alt', 'dashicons-plus', 'dashicons-plus-alt', 'dashicons-minus', 'dashicons-dismiss', 'dashicons-marker', 'dashicons-star-filled', 'dashicons-star-half', 'dashicons-star-empty', 'dashicons-flag', 'dashicons-warning', 'dashicons-location', 'dashicons-location-alt', 'dashicons-vault', 'dashicons-shield', 'dashicons-shield-alt', 'dashicons-sos', 'dashicons-search', 'dashicons-slides', 'dashicons-analytics', 'dashicons-chart-pie', 'dashicons-chart-bar', 'dashicons-chart-line', 'dashicons-chart-area', 'dashicons-groups', 'dashicons-businessman', 'dashicons-id', 'dashicons-id-alt', 'dashicons-products', 'dashicons-awards', 'dashicons-forms', 'dashicons-testimonial', 'dashicons-portfolio', 'dashicons-book', 'dashicons-book-alt', 'dashicons-download', 'dashicons-upload', 'dashicons-backup', 'dashicons-clock', 'dashicons-lightbulb', 'dashicons-microphone', 'dashicons-desktop', 'dashicons-laptop', 'dashicons-tablet', 'dashicons-smartphone', 'dashicons-phone', 'dashicons-index-card', 'dashicons-carrot', 'dashicons-building', 'dashicons-store', 'dashicons-album', 'dashicons-palmtree', 'dashicons-tickets-alt', 'dashicons-money', 'dashicons-smiley', 'dashicons-thumbs-up', 'dashicons-thumbs-down', 'dashicons-layout', 'dashicons-paperclip' ];
+        $path_gutenberg_theme_controllers = 'gutenberg-blocks/controllers/',
+        $name_default_block_category = [ 'slug' => 'default', 'title' => 'Default' ],
+        $wp_icon = [ 'dashicons-menu', 'dashicons-admin-site', 'dashicons-dashboard', 'dashicons-admin-post', 'dashicons-admin-media', 'dashicons-admin-links', 'dashicons-admin-page', 'dashicons-admin-comments', 'dashicons-admin-appearance', 'dashicons-admin-plugins', 'dashicons-admin-users', 'dashicons-admin-tools', 'dashicons-admin-settings', 'dashicons-admin-network', 'dashicons-admin-home', 'dashicons-admin-generic', 'dashicons-admin-collapse', 'dashicons-filter', 'dashicons-admin-customizer', 'dashicons-admin-multisite', 'dashicons-welcome-write-blog', 'dashicons-welcome-add-page', 'dashicons-welcome-view-site', 'dashicons-welcome-widgets-menus', 'dashicons-welcome-comments', 'dashicons-welcome-learn-more', 'dashicons-format-aside', 'dashicons-format-image', 'dashicons-format-gallery', 'dashicons-format-video', 'dashicons-format-status', 'dashicons-format-quote', 'dashicons-format-chat', 'dashicons-format-audio', 'dashicons-camera', 'dashicons-images-alt', 'dashicons-images-alt2', 'dashicons-video-alt', 'dashicons-video-alt2', 'dashicons-video-alt3', 'dashicons-media-archive', 'dashicons-media-audio', 'dashicons-media-code', 'dashicons-media-default', 'dashicons-media-document', 'dashicons-media-interactive', 'dashicons-media-spreadsheet', 'dashicons-media-text', 'dashicons-media-video', 'dashicons-playlist-audio', 'dashicons-playlist-video', 'dashicons-controls-play', 'dashicons-controls-pause', 'dashicons-controls-forward', 'dashicons-controls-skipforward', 'dashicons-controls-back', 'dashicons-controls-skipback', 'dashicons-controls-repeat', 'dashicons-controls-volumeon', 'dashicons-controls-volumeoff', 'dashicons-image-crop', 'dashicons-image-rotate', 'dashicons-image-rotate-left', 'dashicons-image-rotate-right', 'dashicons-image-flip-vertical', 'dashicons-image-flip-horizontal', 'dashicons-image-filter', 'dashicons-undo', 'dashicons-redo', 'dashicons-editor-bold', 'dashicons-editor-italic', 'dashicons-editor-ul', 'dashicons-editor-ol', 'dashicons-editor-quote', 'dashicons-editor-alignleft', 'dashicons-editor-aligncenter', 'dashicons-editor-alignright', 'dashicons-editor-insertmore', 'dashicons-editor-spellcheck', 'dashicons-editor-expand', 'dashicons-editor-contract', 'dashicons-editor-kitchensink', 'dashicons-editor-underline', 'dashicons-editor-justify', 'dashicons-editor-textcolor', 'dashicons-editor-paste-word', 'dashicons-editor-paste-text', 'dashicons-editor-removeformatting', 'dashicons-editor-video', 'dashicons-editor-customchar', 'dashicons-editor-outdent', 'dashicons-editor-indent', 'dashicons-editor-help', 'dashicons-editor-strikethrough', 'dashicons-editor-unlink', 'dashicons-editor-rtl', 'dashicons-editor-break', 'dashicons-editor-code', 'dashicons-editor-paragraph', 'dashicons-editor-table', 'dashicons-align-left', 'dashicons-align-right', 'dashicons-align-center', 'dashicons-align-none', 'dashicons-lock', 'dashicons-unlock', 'dashicons-calendar', 'dashicons-calendar-alt', 'dashicons-visibility', 'dashicons-hidden', 'dashicons-post-status', 'dashicons-edit', 'dashicons-trash', 'dashicons-sticky', 'dashicons-external', 'dashicons-arrow-up', 'dashicons-arrow-down', 'dashicons-arrow-right', 'dashicons-arrow-left', 'dashicons-arrow-up-alt', 'dashicons-arrow-down-alt', 'dashicons-arrow-right-alt', 'dashicons-arrow-left-alt', 'dashicons-arrow-up-alt2', 'dashicons-arrow-down-alt2', 'dashicons-arrow-right-alt2', 'dashicons-arrow-left-alt2', 'dashicons-sort', 'dashicons-leftright', 'dashicons-randomize', 'dashicons-list-view', 'dashicons-exerpt-view', 'dashicons-grid-view', 'dashicons-move', 'dashicons-share', 'dashicons-share-alt', 'dashicons-share-alt2', 'dashicons-twitter', 'dashicons-rss', 'dashicons-email', 'dashicons-email-alt', 'dashicons-facebook', 'dashicons-facebook-alt', 'dashicons-googleplus', 'dashicons-networking', 'dashicons-hammer', 'dashicons-art', 'dashicons-migrate', 'dashicons-performance', 'dashicons-universal-access', 'dashicons-universal-access-alt', 'dashicons-tickets', 'dashicons-nametag', 'dashicons-clipboard', 'dashicons-heart', 'dashicons-megaphone', 'dashicons-schedule', 'dashicons-wordpress', 'dashicons-wordpress-alt', 'dashicons-pressthis', 'dashicons-update', 'dashicons-screenoptions', 'dashicons-info', 'dashicons-cart', 'dashicons-feedback', 'dashicons-cloud', 'dashicons-translation', 'dashicons-tag', 'dashicons-category', 'dashicons-archive', 'dashicons-tagcloud', 'dashicons-text', 'dashicons-yes', 'dashicons-no', 'dashicons-no-alt', 'dashicons-plus', 'dashicons-plus-alt', 'dashicons-minus', 'dashicons-dismiss', 'dashicons-marker', 'dashicons-star-filled', 'dashicons-star-half', 'dashicons-star-empty', 'dashicons-flag', 'dashicons-warning', 'dashicons-location', 'dashicons-location-alt', 'dashicons-vault', 'dashicons-shield', 'dashicons-shield-alt', 'dashicons-sos', 'dashicons-search', 'dashicons-slides', 'dashicons-analytics', 'dashicons-chart-pie', 'dashicons-chart-bar', 'dashicons-chart-line', 'dashicons-chart-area', 'dashicons-groups', 'dashicons-businessman', 'dashicons-id', 'dashicons-id-alt', 'dashicons-products', 'dashicons-awards', 'dashicons-forms', 'dashicons-testimonial', 'dashicons-portfolio', 'dashicons-book', 'dashicons-book-alt', 'dashicons-download', 'dashicons-upload', 'dashicons-backup', 'dashicons-clock', 'dashicons-lightbulb', 'dashicons-microphone', 'dashicons-desktop', 'dashicons-laptop', 'dashicons-tablet', 'dashicons-smartphone', 'dashicons-phone', 'dashicons-index-card', 'dashicons-carrot', 'dashicons-building', 'dashicons-store', 'dashicons-album', 'dashicons-palmtree', 'dashicons-tickets-alt', 'dashicons-money', 'dashicons-smiley', 'dashicons-thumbs-up', 'dashicons-thumbs-down', 'dashicons-layout', 'dashicons-paperclip' ];
 
-    public static $gutenberg_name_custom_post_type = 'gutenberg_block';
+    public static $gutenberg_name_custom_post_type = 'gutenberg_block',
+        $json_file_name = 'gutenberg_block.json',
+        $admin_url = '_gutenberg_block';
 
 
     
@@ -40,7 +42,20 @@ class GutenbergBlock {
     */
     private function __construct() {
 
-        // Automatically add gutenberg blocks custom_post_type
+        // Configure hooks
+        $this->create_hooks();
+    }
+
+
+
+    /**
+	* Register some Hooks
+	*
+	* @return void
+	*/
+	public function create_hooks() {
+
+		// Automatically add gutenberg blocks custom_post_type
         add_filter( 'load_custom_post_type_wpextend', array($this, 'add_gutenberg_block_to_intial_custom_post_type'), 10, 1);
 
         // Add custom fields to Gutenberg blocks
@@ -58,9 +73,179 @@ class GutenbergBlock {
 
         // Create controller file if missing when Gutenberg block post is saved
         add_action( 'save_post', array($this, 'on_saving_block'), 10, 3 );
+        add_action( 'trashed_post', array($this, 'on_trashed_post') );
 
         // Filter render_block to update default Gutenberg blocks
         // add_filter( 'render_block', array($this, 'filter_default_render_block'), 10, 2 );
+
+        add_action( 'current_screen', array($this, 'load_json') );
+        add_action( 'wpextend_generate_autoload_json_file', array($this, 'generate_autoload_json_file') );
+
+        // Add sub-menu page into WPExtend menu
+		add_action( 'wpextend_define_admin_menu', array($this, 'define_admin_menu') );
+	}
+
+
+
+    /**
+     * Add sub-menu page into WPExtend menu
+     * 
+     */
+    public function define_admin_menu() {
+
+        add_submenu_page(WPEXTEND_MAIN_SLUG_ADMIN_PAGE, 'WP Extend - Gutenberg', 'Gutenberg', 'manage_options', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . self::$admin_url, array( $this, 'render_admin_page' ) );
+    }
+
+
+
+    /**
+	* Render HTML admin page
+	*
+	* @return string
+	*/
+	public function render_admin_page() {
+
+		// Header page & open form
+		$retour_html = RenderAdminHtml::header('Gutenberg');
+
+        $retour_html .= '<div class="mt-1 white">';
+        
+        $retour_html .= RenderAdminHtml::form_open('action...', 'action_hidden..');
+        $retour_html .= RenderAdminHtml::table_edit_open();
+        $all_block_types = [
+            'common_blocks' => [
+                'core/paragraph',
+                'core/image',
+                'core/gallery',
+                'core/cover',
+                'core/heading',
+                'core/list',
+                'core/quote',
+                'core/audio',
+                'core/file',
+                'core/video',
+                'core/missing'
+            ],
+            'formatting' => [
+                'core/pullquote',
+                'core/code',
+                'core/html',
+                'core/preformatted',
+                'core/table',
+                'core/verse'
+            ],
+            'layout' => [
+                'core/button',
+                'core/media-text',
+                'core/nextpage',
+                'core/columns',
+                'core/separator',
+                'core/spacer',
+                'core/column'
+            ],
+            'widgets' => [
+                'core/calendar',
+                'core/shortcode',
+                'core/archives',
+                'core/categories',
+                'core/latest-comments',
+                'core/latest-posts',
+                'core/rss',
+                'core/search',
+                'core/tag-cloud'
+            ],
+            'embeds' => [
+                'core/embed',
+                'core-embed/twitter',
+                'core-embed/youtube',
+                'core-embed/facebook',
+                'core-embed/instagram',
+                'core-embed/wordpress',
+                'core-embed/soundcloud',
+                'core-embed/spotify',
+                'core-embed/flickr',
+                'core-embed/vimeo',
+                'core-embed/animoto',
+                'core-embed/cloudup',
+                'core-embed/collegehumor',
+                'core-embed/crowdsignal',
+                'core-embed/polldaddy',
+                'core-embed/dailymotion',
+                'core-embed/hulu',
+                'core-embed/imgur',
+                'core-embed/issuu',
+                'core-embed/kickstarter',
+                'core-embed/meetup-com',
+                'core-embed/mixcloud',
+                'core-embed/reddit',
+                'core-embed/reverbnation',
+                'core-embed/screencast',
+                'core-embed/scribd',
+                'core-embed/slideshare',
+                'core-embed/smugmug',
+                'core-embed/speaker',
+                'core-embed/speaker-deck',
+                'core-embed/ted',
+                'core-embed/tumblr',
+                'core-embed/videopress',
+                'core-embed/wordpress-tv',
+                'core-embed/amazon-kindle'
+            ]
+        ];
+        foreach( $all_block_types as $cat => $block ) {
+            $retour_html .= TypeField::render_input_checkbox( $cat, $cat, $block, false, false, '', false, true );
+        }
+        $retour_html .= RenderAdminHtml::table_edit_close();
+        $retour_html .= RenderAdminHtml::form_close( 'Submit', true );
+
+        $retour_html .= '</div>';
+
+		// return
+		echo $retour_html;
+	}
+
+
+
+    /**
+	 * Load JSON file
+	 * 
+	 */
+	public function load_json( $current_screen ) {
+
+        if( 'gutenberg_block' == $current_screen->post_type || strpos($current_screen->base, 'wpextend') !== FALSE ) {
+
+            if( file_exists(WPEXTEND_JSON_DIR . self::$json_file_name) ) {
+
+                $data_json_file = file_get_contents( WPEXTEND_JSON_DIR . self::$json_file_name );
+                $tab_gutenberg_blocks_to_import = json_decode( $data_json_file, true );
+    
+                // Save in Wordpress post
+                if( is_array($tab_gutenberg_blocks_to_import) ){
+
+                    foreach( $tab_gutenberg_blocks_to_import as $block ) {
+                        $this->add_or_update_block($block);
+                    }
+                }
+            }
+            else
+                AdminNotice::add_notice( '001', 'Some JSON configuration files do not exist yet. Click <a href="' . add_query_arg( array( 'action' => 'generate_autoload_json_file', '_wpnonce' => wp_create_nonce( 'generate_autoload_json_file' ) ), admin_url( 'admin-post.php' ) ) . '">here</a> to generate them.', 'warning', false );
+        }
+    }
+    
+
+
+    /**
+	 * Create JSON file if doesn't exist
+	 * 
+	 */
+	public function generate_autoload_json_file() {
+
+		if( ! file_exists(WPEXTEND_JSON_DIR . self::$json_file_name) ) {
+			if( touch(WPEXTEND_JSON_DIR . self::$json_file_name) )
+				AdminNotice::add_notice( '017', self::$json_file_name .' file successfully created.', 'success' );
+			else
+				AdminNotice::add_notice( '018', 'unable to create ' . self::$json_file_name, 'error' );
+		}
     }
 
 
@@ -152,7 +337,7 @@ class GutenbergBlock {
                 //     'create_posts'              => "edit_{$capability_type}s"
                 // ],
                 'hierarchical'      => false,
-                'show_in_menu'      => false,
+                'show_in_menu'      => true,
                 'menu_position'     => 'null',
                 'rewrite'           => false,
                 'has_archive'       => false,
@@ -244,34 +429,37 @@ class GutenbergBlock {
      */
     public function update_block_categories( $categories, $post ) {
 
-        // Reset all block categories
-        // $categories = [
-        //     // [
-        //     //     'slug' => 'common',
-        //     //     'title' => 'Common Blocks'
-        //     // ],
-        //     // [
-        //     //     'slug' => 'formatting',
-        //     //     'title' => 'Formatting'
-        //     // ]
-        // ];
+        if( function_exists('acf_register_block') ) {
 
-        // Get all Gutenberg block taxonomies
-        $gutenberg_block_categories = get_terms([
-            'taxonomy' => self::$gutenberg_name_custom_post_type . '_category',
-            'hide_empty' => false
-        ]);
-        if( is_array($gutenberg_block_categories) && count($gutenberg_block_categories) > 0 ) {
-            foreach($gutenberg_block_categories as $tax) {
-                $categories[] = [
-                    'slug' => $tax->slug,
-                    'title' => $tax->name
-                ];
+            // Reset all block categories
+            // $categories = [
+            //     // [
+            //     //     'slug' => 'common',
+            //     //     'title' => 'Common Blocks'
+            //     // ],
+            //     // [
+            //     //     'slug' => 'formatting',
+            //     //     'title' => 'Formatting'
+            //     // ]
+            // ];
+
+            // Get all Gutenberg block taxonomies
+            $gutenberg_block_categories = get_terms( [
+                'taxonomy' => self::$gutenberg_name_custom_post_type . '_category',
+                'hide_empty' => false
+            ] );
+            if( is_array($gutenberg_block_categories) && count($gutenberg_block_categories) > 0 ) {
+                foreach($gutenberg_block_categories as $tax) {
+                    $categories[] = [
+                        'slug' => $tax->slug,
+                        'title' => $tax->name
+                    ];
+                }
             }
-        }
 
-        // Add Default categorie
-        $categories[] = self::$name_default_block_category;
+            // Add Default categorie
+            $categories[] = self::$name_default_block_category;
+        }
 
         // Return new categories
         return $categories;
@@ -285,13 +473,82 @@ class GutenbergBlock {
      */
     public function allowed_specifics_block_types( $allowed_block_types, $post ) {
 
-        $allowed_block_types = [
-            // 'core/paragraph',
-            // 'core/freeform'
-        ];
-        foreach( $this->get_all_blocks_saved() as $block_saved ){
-            $allowed_block_types[] = 'acf/' . $block_saved->post_name;
-        }
+        // if( function_exists('acf_register_block') ) {
+            
+            $allowed_block_types = [
+                'core/paragraph',
+                'core/image',
+                'core/gallery',
+                'core/cover',
+                'core/heading',
+                'core/list',
+                'core/quote',
+                'core/audio',
+                'core/file',
+                'core/video',
+                'core/missing',
+                'core/pullquote',
+                'core/code',
+                'core/html',
+                'core/preformatted',
+                'core/table',
+                'core/verse',
+                'core/button',
+                'core/media-text',
+                'core/nextpage',
+                'core/columns',
+                'core/separator',
+                'core/spacer',
+                'core/column',
+                'core/calendar',
+                'core/shortcode',
+                'core/archives',
+                'core/categories',
+                'core/latest-comments',
+                'core/latest-posts',
+                'core/rss',
+                'core/search',
+                'core/tag-cloud',
+                'core/embed',
+                'core-embed/twitter',
+                'core-embed/youtube',
+                'core-embed/facebook',
+                'core-embed/instagram',
+                'core-embed/wordpress',
+                'core-embed/soundcloud',
+                'core-embed/spotify',
+                'core-embed/flickr',
+                'core-embed/vimeo',
+                'core-embed/animoto',
+                'core-embed/cloudup',
+                'core-embed/collegehumor',
+                'core-embed/crowdsignal',
+                'core-embed/polldaddy',
+                'core-embed/dailymotion',
+                'core-embed/hulu',
+                'core-embed/imgur',
+                'core-embed/issuu',
+                'core-embed/kickstarter',
+                'core-embed/meetup-com',
+                'core-embed/mixcloud',
+                'core-embed/reddit',
+                'core-embed/reverbnation',
+                'core-embed/screencast',
+                'core-embed/scribd',
+                'core-embed/slideshare',
+                'core-embed/smugmug',
+                'core-embed/speaker',
+                'core-embed/speaker-deck',
+                'core-embed/ted',
+                'core-embed/tumblr',
+                'core-embed/videopress',
+                'core-embed/wordpress-tv',
+                'core-embed/amazon-kindle'
+            ];
+        //     foreach( $this->get_all_blocks_saved() as $block_saved ){
+        //         $allowed_block_types[] = 'acf/' . $block_saved->post_name;
+        //     }
+        // }
 
         return apply_filters('gutenberg_blocks_allowed', $allowed_block_types);
     }
@@ -318,7 +575,7 @@ class GutenbergBlock {
             $context_gutenberg_block['block'] = $block;
 
             // Store field values.
-            $context_gutenberg_block['fields'] = get_fields();
+            $context_gutenberg_block['fields'] = ( function_exists('get_fields') ) ? get_fields() : [];
 
             // Preview mode
             if( is_admin() || $is_preview ){
@@ -364,12 +621,12 @@ class GutenbergBlock {
                 'post_excerpt'  => $block->post_excerpt,
                 'custom_data'   => [
                     'taxonomy'      => $this->get_category_block($block->ID)['title'],
-                    'acf_data'      => get_fields($block->ID)
+                    'acf_data'      => ( function_exists('get_fields') ) ? get_fields($block->ID) : []
                 ]
             ];
         }
 
-        return json_encode( $tab_gutenberg_blocks_to_export, JSON_UNESCAPED_UNICODE );
+		return file_put_contents( WPEXTEND_JSON_DIR . self::$json_file_name, json_encode($tab_gutenberg_blocks_to_export, JSON_PRETTY_PRINT) );
     }
 
 
@@ -455,17 +712,18 @@ class GutenbergBlock {
      * Create controller file if missing when Gutenberg block post is saved
      * 
      */
-    public function on_saving_block($post_id, $block, $update){
+    public function on_saving_block( $post_id, $block, $update ){
 
         $post_type = get_post_type($post_id);
-        if( $post_type == self::$gutenberg_name_custom_post_type && get_post_status($post_id) == 'publish' ){
+
+        if( $post_type == self::$gutenberg_name_custom_post_type && get_post_status($post_id) == 'publish' && get_current_screen()->base == 'post' ){
 
             // Create friendly slug based on block name
             $friendly_slug = $this->acf_convert_to_friendly_slug($block->post_name);
 
             // Verify if directory controller exists
             if( !is_dir( get_theme_file_path(self::$path_gutenberg_theme_controllers . $friendly_slug . '/') ) ) {
-                mkdir( get_theme_file_path(self::$path_gutenberg_theme_controllers . $friendly_slug . '/') );
+                mkdir( get_theme_file_path(self::$path_gutenberg_theme_controllers . $friendly_slug . '/'), 0777, true );
             }
 
             // Verify if file controller exists
@@ -474,6 +732,23 @@ class GutenbergBlock {
                 $content = '<?php' . PHP_EOL . '/**' . PHP_EOL . ' * "' . $block->post_title . '" controller' . PHP_EOL . ' *' . PHP_EOL . ' * Get block values : $context_gutenberg_block["block"]' . PHP_EOL . ' * Get field values : $context_gutenberg_block["fields"]' . PHP_EOL . ' *' . PHP_EOL . ' */' . PHP_EOL . PHP_EOL . '// Timber context global scope & initialize return HTML variable' . PHP_EOL . 'global $context;' . PHP_EOL . '$return_html_by_reference = null;' . PHP_EOL . PHP_EOL . PHP_EOL . PHP_EOL . '/**' . PHP_EOL . ' * It\'s your turn to write something :' . PHP_EOL . ' *' . PHP_EOL . ' */' . PHP_EOL . '$controller_temp_data = $context;' . PHP_EOL  . PHP_EOL . PHP_EOL . PHP_EOL . '/**' . PHP_EOL . ' * ----------------------------------------' . PHP_EOL . ' * That\'s all, stop editing! Happy blogging.' . PHP_EOL . ' * One last thing to do: Timber render function' . PHP_EOL . ' *' . PHP_EOL . ' */' . PHP_EOL . '$return_html_by_reference .= Wpextend\Timber::render_view("' . $friendly_slug . '", $controller_temp_data);';
                 file_put_contents( get_theme_file_path(self::$path_gutenberg_theme_controllers . $friendly_slug . '/' . $friendly_slug . '.php'), $content, FILE_APPEND );
             }
+
+            $this->export_blocks_saved();
+        }
+    }
+    
+    
+    
+    /**
+     * Save JSON file config while delete_post
+     * 
+     */
+    public function on_trashed_post( $post_id ){
+
+        $post_type = get_post_type($post_id);
+        if( $post_type == self::$gutenberg_name_custom_post_type ){
+
+            $this->export_blocks_saved();
         }
     }
 

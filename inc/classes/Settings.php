@@ -9,7 +9,7 @@ class Settings {
 
     private static $_instance;
     
-    static public $admin_url = '_settings',
+    static public $admin_url = '',
         $wpe_settings_post_name = WPEXTEND_PREFIX_DATA_IN_DB . 'settings',
         $default_site_settings_name = 'WP Extend';
 
@@ -72,7 +72,21 @@ class Settings {
 	public function create_hooks() {
 
         add_action( 'admin_post_wpextend_settings_update', array($this, 'update') );
-	}
+
+        // Add sub-menu page into WPExtend menu
+		add_action( 'wpextend_define_admin_menu', array($this, 'define_admin_menu') );
+    }
+    
+
+
+    /**
+     * Add sub-menu page into WPExtend menu
+     * 
+     */
+    public function define_admin_menu() {
+
+        add_submenu_page(WPEXTEND_MAIN_SLUG_ADMIN_PAGE, 'WP Extend - General', 'General', 'manage_options', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . self::$admin_url, array( $this, 'render_admin_page' ) );
+    }
 
 
 
