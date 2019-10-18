@@ -119,7 +119,7 @@ class GlobalSettings {
 				$this->wpextend_global_settings = array_merge($this->wpextend_global_settings, $site_settings_json_file_content);
 		}
 		else
-			AdminNotice::add_notice( '001', 'Some JSON configuration files do not exist yet. Click <a href="' . add_query_arg( array( 'action' => 'generate_autoload_json_file', '_wpnonce' => wp_create_nonce( 'generate_autoload_json_file' ) ), admin_url( 'admin-post.php' ) ) . '">here</a> to generate them.', 'warning', false );
+			AdminNotice::add_notice_json_file_missing();
 
 		if( ! is_array( $this->wpextend_global_settings ) )
 			$this->wpextend_global_settings = array();
@@ -294,7 +294,7 @@ class GlobalSettings {
 		$current_screen = get_current_screen();
 
 		// Header page & open form
-		$retour_html = RenderAdminHtml::header( Settings::getInstance()->get_site_settings_name() );
+		$retour_html = RenderAdminHtml::header( Options::getInstance()->get_site_settings_name() );
 
 		$retour_html .= '<div class="accordion_wpextend">';
 

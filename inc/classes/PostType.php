@@ -335,7 +335,7 @@ class PostType {
 				return $json_content;
 		}
 		else
-			AdminNotice::add_notice( '001', 'Some JSON configuration files do not exist yet. Click <a href="' . add_query_arg( array( 'action' => 'generate_autoload_json_file', '_wpnonce' => wp_create_nonce( 'generate_autoload_json_file' ) ), admin_url( 'admin-post.php' ) ) . '">here</a> to generate them.', 'warning', false );
+			AdminNotice::add_notice_json_file_missing();
 
 		return [];
 	}
