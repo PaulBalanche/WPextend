@@ -15,7 +15,7 @@ class Options {
         $default_site_settings_name = 'WP Extend';
 
     private $options = [
-        'site_settings_name' => 'dasy',
+        'site_settings_name' => '',
         'enable_custom_post_type' => false,
         'enable_gutenberg' => false,
         'enable_thumbnail_api' => false
@@ -93,7 +93,7 @@ class Options {
     }
 
 
-    
+
     /**
 	* Register some Hooks
 	*
@@ -130,7 +130,7 @@ class Options {
 	public function render_admin_page() {
 
 		// Header page & open form
-		$retour_html = RenderAdminHtml::header('Settings');
+		$retour_html = RenderAdminHtml::header('Options');
 
         $retour_html .= '<div class="mt-1 white">';
         $retour_html .= RenderAdminHtml::form_open( admin_url( 'admin-post.php' ), 'wpextend_settings_update' );
