@@ -89,6 +89,10 @@ class ListTable extends WP_List_Table {
         // );
         $actions = [];
         
+        if( isset($item['action_view']) ) {
+            $actions['view'] = sprintf('<a href="' . $item['action_view'] . '">View</a>');
+        }
+
         if( isset($item['action_edit']) ) {
 
             $url = ( array_key_exists('_wpnonce', $item['action_edit']) ) ? admin_url( 'admin-post.php' ) : false;

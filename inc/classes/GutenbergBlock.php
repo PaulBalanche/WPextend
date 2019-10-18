@@ -106,8 +106,8 @@ class GutenbergBlock {
 	public function render_admin_page() {
 
 		// Header page & open form
-		$retour_html = RenderAdminHtml::header('Gutenberg');
-
+        $retour_html = RenderAdminHtml::header('Gutenberg');
+        
         $retour_html .= '<div class="mt-1 white">';
         
         $retour_html .= RenderAdminHtml::form_open('action...', 'action_hidden..');
@@ -337,7 +337,7 @@ class GutenbergBlock {
                 //     'create_posts'              => "edit_{$capability_type}s"
                 // ],
                 'hierarchical'      => false,
-                'show_in_menu'      => true,
+                'show_in_menu'      => false,
                 'menu_position'     => 'null',
                 'rewrite'           => false,
                 'has_archive'       => false,

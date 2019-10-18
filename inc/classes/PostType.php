@@ -172,10 +172,14 @@ class PostType {
 			foreach( $all_custom_post_type as $slug => $val) {
 
 				$current_list_Table_data = [
-					'name'			=> '<strong>' . $val['labels']['name'] . '</strong>',
+					'name'			=> '<strong><a class="row-title" href="' . admin_url('edit.php?post_type=' . $slug) . '">' . $val['labels']['name'] . '</a></strong>',
 					'slug'			=> $slug,
 					'origin'		=> $val['origin']
 				];
+
+
+				// View action
+				$current_list_Table_data['action_view'] = admin_url('edit.php?post_type=' . $slug);
 
 				// Edit action
 				if( strpos($val['origin'], 'load_custom_post_type_wpextend') === false ) {
@@ -258,6 +262,7 @@ class PostType {
 			
 			if( file_exists(WPEXTEND_JSON_DIR . self::$json_file_name) ) {
 				$actual_content_json_file = json_decode(file_get_contents(WPEXTEND_JSON_DIR . self::$json_file_name), true);
+				if( !is_array($actual_content_json_file) ) $actual_content_json_file = [];
 				$new_content_json_file = array_merge($actual_content_json_file, $new_item_to_add);
 				return file_put_contents( WPEXTEND_JSON_DIR . self::$json_file_name, json_encode($new_content_json_file, JSON_PRETTY_PRINT) );
 			}
