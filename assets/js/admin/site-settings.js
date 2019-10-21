@@ -18,6 +18,19 @@ jQuery( document ).ready(function() {
 	 //    });
 	  //
 	 //  });
+
+
+
+	 jQuery( '#container_allowed_gutenberg_block_types a').on('click', function( event ){
+ 
+		event.preventDefault();
+		if( jQuery(this).index() == 0 ) {
+			jQuery('#form_allowed_block_types :checkbox:enabled').prop('checked', true);
+		}
+		else if( jQuery(this).index() == 1 ) {
+			jQuery('#form_allowed_block_types :checkbox:enabled').prop('checked', false);
+		}
+	 });
  
  
 	 jQuery( '.accordion_wpextend' ).each( function(){

@@ -18,101 +18,8 @@ class GutenbergBlock {
 
     public static $gutenberg_name_custom_post_type = 'gutenberg_block',
         $json_file_name = 'gutenberg_block.json',
-        $admin_url = '_gutenberg_block';
-
-
-    
-    /**
-	* First instance of class GutenbergBlock
-	*
-	*/
-	public static function getInstance() {
-
-        if (is_null(self::$_instance)) {
-             self::$_instance = new GutenbergBlock();
-        }
-
-        return self::$_instance;
-   }
-
-
-
-   /**
-    * Construct
-    */
-    private function __construct() {
-
-        // Configure hooks
-        $this->create_hooks();
-    }
-
-
-
-    /**
-	* Register some Hooks
-	*
-	* @return void
-	*/
-	public function create_hooks() {
-
-		// Automatically add gutenberg blocks custom_post_type
-        add_filter( 'load_custom_post_type_wpextend', array($this, 'add_gutenberg_block_to_intial_custom_post_type'), 10, 1);
-
-        // Add custom fields to Gutenberg blocks
-        add_action( 'acf/init', array($this, 'acf_add_custom_fieds_to_gutenberg_block') );
-
-        // Register ACF Gutenberg blocks
-        add_action( 'acf/init', array($this, 'acf_init_register_gutenberg_blocks') );
-
-        // Update Gutenberg blocks abnd block categories
-        add_filter( 'block_categories', array($this, 'update_block_categories'), 10, 2 );
-        add_filter( 'allowed_block_types', array($this, 'allowed_specifics_block_types'), 10, 2 );
-
-        // Admin port to import Gutenberg blocks
-        add_action( 'admin_post_import_wpextend_' . self::$gutenberg_name_custom_post_type, array($this, 'import') );
-
-        // Create controller file if missing when Gutenberg block post is saved
-        add_action( 'save_post', array($this, 'on_saving_block'), 10, 3 );
-        add_action( 'trashed_post', array($this, 'on_trashed_post') );
-
-        // Filter render_block to update default Gutenberg blocks
-        // add_filter( 'render_block', array($this, 'filter_default_render_block'), 10, 2 );
-
-        add_action( 'current_screen', array($this, 'load_json') );
-        add_action( 'wpextend_generate_autoload_json_file', array($this, 'generate_autoload_json_file') );
-
-        // Add sub-menu page into WPExtend menu
-		add_action( 'wpextend_define_admin_menu', array($this, 'define_admin_menu') );
-	}
-
-
-
-    /**
-     * Add sub-menu page into WPExtend menu
-     * 
-     */
-    public function define_admin_menu() {
-
-        add_submenu_page(WPEXTEND_MAIN_SLUG_ADMIN_PAGE, 'WP Extend - Gutenberg', 'Gutenberg', 'manage_options', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . self::$admin_url, array( $this, 'render_admin_page' ) );
-    }
-
-
-
-    /**
-	* Render HTML admin page
-	*
-	* @return string
-	*/
-	public function render_admin_page() {
-
-		// Header page & open form
-        $retour_html = RenderAdminHtml::header('Gutenberg');
-        
-        $retour_html .= '<div class="mt-1 white">';
-        
-        $retour_html .= RenderAdminHtml::form_open('action...', 'action_hidden..');
-        $retour_html .= RenderAdminHtml::table_edit_open();
-        $all_block_types = [
+        $admin_url = '_gutenberg_block',
+        $default_block_types = [
             'common_blocks' => [
                 'core/paragraph',
                 'core/image',
@@ -192,9 +99,113 @@ class GutenbergBlock {
                 'core-embed/amazon-kindle'
             ]
         ];
-        foreach( $all_block_types as $cat => $block ) {
-            $retour_html .= TypeField::render_input_checkbox( $cat, $cat, $block, false, false, '', false, true );
+
+    public $allowed_block_types = null;
+
+
+    
+    /**
+	* First instance of class GutenbergBlock
+	*
+	*/
+	public static function getInstance() {
+
+        if (is_null(self::$_instance)) {
+             self::$_instance = new GutenbergBlock();
         }
+
+        return self::$_instance;
+   }
+
+
+
+   /**
+    * Construct
+    */
+    private function __construct() {
+
+        $this->load_default_block_types();
+
+        // Configure hooks
+        $this->create_hooks();
+    }
+
+
+
+    /**
+	* Register some Hooks
+	*
+	* @return void
+	*/
+	public function create_hooks() {
+
+		// Automatically add gutenberg blocks custom_post_type
+        add_filter( 'load_custom_post_type_wpextend', array($this, 'add_gutenberg_block_to_intial_custom_post_type'), 10, 1);
+
+        // Add custom fields to Gutenberg blocks
+        add_action( 'acf/init', array($this, 'acf_add_custom_fieds_to_gutenberg_block') );
+
+        // Register ACF Gutenberg blocks
+        add_action( 'acf/init', array($this, 'acf_init_register_gutenberg_blocks') );
+
+        // Update Gutenberg blocks abnd block categories
+        add_filter( 'block_categories', array($this, 'update_block_categories'), 10, 2 );
+        add_filter( 'allowed_block_types', array($this, 'allowed_specifics_block_types'), 10, 2 );
+
+        // Admin port to import Gutenberg blocks
+        add_action( 'admin_post_import_wpextend_' . self::$gutenberg_name_custom_post_type, array($this, 'import') );
+
+        // Create controller file if missing when Gutenberg block post is saved
+        add_action( 'save_post', array($this, 'on_saving_block'), 10, 3 );
+        add_action( 'trashed_post', array($this, 'on_trashed_post') );
+
+        // Filter render_block to update default Gutenberg blocks
+        // add_filter( 'render_block', array($this, 'filter_default_render_block'), 10, 2 );
+
+        add_action( 'current_screen', array($this, 'load_custom_blocks') );
+        add_action( 'wpextend_generate_autoload_json_file', array($this, 'generate_autoload_json_file') );
+
+        // Add sub-menu page into WPExtend menu
+        add_action( 'wpextend_define_admin_menu', array($this, 'define_admin_menu') );
+        
+        add_action( 'admin_post_update_allowed_block_types', array($this, 'update_allowed_block_types') );
+	}
+
+
+
+    /**
+     * Add sub-menu page into WPExtend menu
+     * 
+     */
+    public function define_admin_menu() {
+
+        add_submenu_page(WPEXTEND_MAIN_SLUG_ADMIN_PAGE, 'WP Extend - Gutenberg', 'Gutenberg', 'manage_options', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . self::$admin_url, array( $this, 'render_admin_page' ) );
+    }
+
+
+
+    /**
+	* Render HTML admin page
+	*
+	* @return string
+	*/
+	public function render_admin_page() {
+
+		// Header page & open form
+        $retour_html = RenderAdminHtml::header('Gutenberg');
+
+        $retour_html .= '<div id="container_allowed_gutenberg_block_types"><a href="" class="button">Check all</a> <a href="" class="button">Uncheck all</a></div>';
+
+        $retour_html .= '<div class="mt-1 white">';
+        
+        $retour_html .= RenderAdminHtml::form_open( admin_url( 'admin-post.php' ), 'update_allowed_block_types', 'form_allowed_block_types' );
+
+        $retour_html .= RenderAdminHtml::table_edit_open();
+        foreach( self::$default_block_types as $cat => $block ) {
+            $default_value = ( ! is_null($this->allowed_block_types) ) ? $this->allowed_block_types : $block;
+            $retour_html .= TypeField::render_input_checkbox( $cat, "allowed_block_types", $block, $default_value, false, '', false, true );
+        }
+        $retour_html .= TypeField::render_input_hidden( 'allowed_block_types[]', 'null' );
         $retour_html .= RenderAdminHtml::table_edit_close();
         $retour_html .= RenderAdminHtml::form_close( 'Submit', true );
 
@@ -202,36 +213,110 @@ class GutenbergBlock {
 
 		// return
 		echo $retour_html;
-	}
+    }
+    
 
+
+    public static function update_allowed_block_types() {
+
+        // Check valid nonce
+		check_admin_referer($_POST['action']);
+
+		if( isset($_POST['allowed_block_types']) && is_array($_POST['allowed_block_types']) ) {
+
+            $allowed_block_types = $_POST['allowed_block_types'];
+            foreach( $allowed_block_types as $key => $val ) {
+                if( $val == 'null' )
+                    unset($allowed_block_types[$key]);
+            }
+
+            // Save data into JSON file
+            $this->save_json( 'allowed_block_types', $allowed_block_types );
+
+			if( !isset( $_POST['ajax'] ) ) {
+				
+				AdminNotice::add_notice( '003', 'Category successfully added.', 'success' );
+
+				wp_safe_redirect( wp_get_referer() );
+				exit;
+			}
+		}
+    }
+
+
+
+    /**
+	 * Load default WP Core blocks
+	 * 
+	 */
+    public function load_default_block_types() {
+
+        $tab_json_imported = $this->load_json();
+
+        if( $tab_json_imported && is_array($tab_json_imported) && isset($tab_json_imported['allowed_block_types']) && is_array($tab_json_imported['allowed_block_types']) )
+            $this->allowed_block_types = $tab_json_imported['allowed_block_types'];
+    }
+
+
+
+    /**
+	 * Load custom blocks from JSON file
+	 * 
+	 */
+	public function load_custom_blocks( $current_screen ) {
+
+        if( 'gutenberg_block' == $current_screen->post_type || strpos($current_screen->base, 'wpextend') !== FALSE ) {
+
+            $tab_json_imported = $this->load_json();
+    
+            // Save in Wordpress post
+            if( $tab_json_imported && is_array($tab_json_imported) && isset($tab_json_imported['custom']) && is_array($tab_json_imported['custom']) ){
+
+                foreach( $tab_json_imported['custom'] as $block ) {
+                    $this->add_or_update_block($block);
+                }
+            }
+        }
+    }
+    
 
 
     /**
 	 * Load JSON file
 	 * 
 	 */
-	public function load_json( $current_screen ) {
+	public function load_json() {
 
-        if( 'gutenberg_block' == $current_screen->post_type || strpos($current_screen->base, 'wpextend') !== FALSE ) {
+        if( file_exists(WPEXTEND_JSON_DIR . self::$json_file_name) ) {
 
-            if( file_exists(WPEXTEND_JSON_DIR . self::$json_file_name) ) {
-
-                $data_json_file = file_get_contents( WPEXTEND_JSON_DIR . self::$json_file_name );
-                $tab_gutenberg_blocks_to_import = json_decode( $data_json_file, true );
-    
-                // Save in Wordpress post
-                if( is_array($tab_gutenberg_blocks_to_import) ){
-
-                    foreach( $tab_gutenberg_blocks_to_import as $block ) {
-                        $this->add_or_update_block($block);
-                    }
-                }
-            }
-            else
-                AdminNotice::add_notice_json_file_missing();
+            $data_json_file = file_get_contents( WPEXTEND_JSON_DIR . self::$json_file_name );
+            return json_decode( $data_json_file, true );
         }
+        else
+            AdminNotice::add_notice_json_file_missing();
+
+        return false;
     }
-    
+
+
+
+
+    /**
+	 * Save data into JSON file
+	 * 
+	 */
+	public function save_json( $key, $new_data, $options = JSON_PRETTY_PRINT ) {
+        
+        // Get actual content in order to replace it
+        $data_json_file = file_get_contents( WPEXTEND_JSON_DIR . self::$json_file_name );
+        $data_json_file_decode = json_decode( $data_json_file, true );
+        if( is_array($data_json_file_decode) )
+            $data_json_file_decode[$key] = $new_data;
+        else
+            $data_json_file_decode = [ $key => $new_data ];
+
+        return file_put_contents( WPEXTEND_JSON_DIR . self::$json_file_name, json_encode( $data_json_file_decode, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES ) );
+    }
 
 
     /**
@@ -473,78 +558,17 @@ class GutenbergBlock {
      */
     public function allowed_specifics_block_types( $allowed_block_types, $post ) {
 
+        if( ! is_null($this->allowed_block_types) ) {
+
+            $allowed_block_types = [];
+            foreach( $this->allowed_block_types as $allowed_block_type ){
+                $allowed_block_types[] = $allowed_block_type;
+            }
+        }
+
         // if( function_exists('acf_register_block') ) {
             
-            $allowed_block_types = [
-                'core/paragraph',
-                'core/image',
-                'core/gallery',
-                'core/cover',
-                'core/heading',
-                'core/list',
-                'core/quote',
-                'core/audio',
-                'core/file',
-                'core/video',
-                'core/missing',
-                'core/pullquote',
-                'core/code',
-                'core/html',
-                'core/preformatted',
-                'core/table',
-                'core/verse',
-                'core/button',
-                'core/media-text',
-                'core/nextpage',
-                'core/columns',
-                'core/separator',
-                'core/spacer',
-                'core/column',
-                'core/calendar',
-                'core/shortcode',
-                'core/archives',
-                'core/categories',
-                'core/latest-comments',
-                'core/latest-posts',
-                'core/rss',
-                'core/search',
-                'core/tag-cloud',
-                'core/embed',
-                'core-embed/twitter',
-                'core-embed/youtube',
-                'core-embed/facebook',
-                'core-embed/instagram',
-                'core-embed/wordpress',
-                'core-embed/soundcloud',
-                'core-embed/spotify',
-                'core-embed/flickr',
-                'core-embed/vimeo',
-                'core-embed/animoto',
-                'core-embed/cloudup',
-                'core-embed/collegehumor',
-                'core-embed/crowdsignal',
-                'core-embed/polldaddy',
-                'core-embed/dailymotion',
-                'core-embed/hulu',
-                'core-embed/imgur',
-                'core-embed/issuu',
-                'core-embed/kickstarter',
-                'core-embed/meetup-com',
-                'core-embed/mixcloud',
-                'core-embed/reddit',
-                'core-embed/reverbnation',
-                'core-embed/screencast',
-                'core-embed/scribd',
-                'core-embed/slideshare',
-                'core-embed/smugmug',
-                'core-embed/speaker',
-                'core-embed/speaker-deck',
-                'core-embed/ted',
-                'core-embed/tumblr',
-                'core-embed/videopress',
-                'core-embed/wordpress-tv',
-                'core-embed/amazon-kindle'
-            ];
+            
         //     foreach( $this->get_all_blocks_saved() as $block_saved ){
         //         $allowed_block_types[] = 'acf/' . $block_saved->post_name;
         //     }
@@ -626,7 +650,8 @@ class GutenbergBlock {
             ];
         }
 
-		return file_put_contents( WPEXTEND_JSON_DIR . self::$json_file_name, json_encode($tab_gutenberg_blocks_to_export, JSON_PRETTY_PRINT) );
+        // Save data into JSON file
+        return $this->save_json( 'custom', $tab_gutenberg_blocks_to_export );
     }
 
 
