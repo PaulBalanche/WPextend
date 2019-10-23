@@ -127,7 +127,7 @@ class CategorySettings {
 
 			if( !isset( $_POST['ajax'] ) ) {
 				
-				AdminNotice::add_notice( '003', 'Category successfully added.', 'success' );
+				AdminNotice::add_notice( '003', 'Category successfully added.', 'success', true, true, AdminNotice::$prefix_admin_notice );
 
 				wp_safe_redirect( wp_get_referer() );
 				exit;
@@ -159,7 +159,7 @@ class CategorySettings {
 
 			if( !isset( $_POST['ajax'] ) ) {
 
-				AdminNotice::add_notice( '004', 'Category successfully removed.', 'success' );
+				AdminNotice::add_notice( '004', 'Category successfully removed.', 'success', true, true, AdminNotice::$prefix_admin_notice );
 				
 				wp_safe_redirect( wp_get_referer() );
 				exit;

@@ -229,7 +229,7 @@ class SingleSetting {
 			if( !isset( $_POST['ajax'] ) ) {
 				$goback = add_query_arg( 'udpate', 'true', wp_get_referer() );
 
-				AdminNotice::add_notice( '009', 'Field successfully added.', 'success' );
+				AdminNotice::add_notice( '009', 'Field successfully added.', 'success', true, true, AdminNotice::$prefix_admin_notice );
 
 				wp_safe_redirect( $goback );
 				exit;
@@ -265,7 +265,7 @@ class SingleSetting {
 
 			if( !isset( $_POST['ajax'] ) ) {
 
-				AdminNotice::add_notice( '011', 'Field successfully removed', 'success' );
+				AdminNotice::add_notice( '011', 'Field successfully removed', 'success', true, true, AdminNotice::$prefix_admin_notice );
 
 				wp_safe_redirect( wp_get_referer() );
 				exit;

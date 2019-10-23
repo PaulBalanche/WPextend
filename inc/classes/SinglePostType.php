@@ -321,7 +321,7 @@ class SinglePostType {
 		
 			if( !isset( $_POST['ajax'] ) ) {
 
-				AdminNotice::add_notice( '010', 'Post type successfully added.', 'success' );
+				AdminNotice::add_notice( '010', 'Post type successfully added.', 'success', true, true, AdminNotice::$prefix_admin_notice );
 
 				wp_safe_redirect( wp_get_referer() );
 			}
@@ -348,7 +348,7 @@ class SinglePostType {
 
 			if( !isset( $_POST['ajax'] ) ) {
 				
-				AdminNotice::add_notice( '012', 'Post type successfully removed.', 'success' );
+				AdminNotice::add_notice( '012', 'Post type successfully removed.', 'success', true, true, AdminNotice::$prefix_admin_notice );
 
 	 			wp_safe_redirect( wp_get_referer() );
 			}

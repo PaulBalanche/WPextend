@@ -506,7 +506,7 @@ class GlobalSettings {
 
 			// Save in Wordpress database
 			if( GlobalSettings::getInstance()->save( $_POST['category'] ) )
-				AdminNotice::add_notice( '002', 'The changes have been saved.', 'success' );
+				AdminNotice::add_notice( '002', 'The changes have been saved.', 'success', true, true, AdminNotice::$prefix_admin_notice );
 
 			wp_safe_redirect( wp_get_referer() );
 			exit;
@@ -566,7 +566,7 @@ class GlobalSettings {
 
 			if( !isset( $_POST['ajax'] ) ) {
 
-				AdminNotice::add_notice( '005', 'File successfully imported.', 'success' );
+				AdminNotice::add_notice( '005', 'File successfully imported.', 'success', true, true, AdminNotice::$prefix_admin_notice );
 				
 				wp_safe_redirect( wp_get_referer() );
 			}
@@ -605,7 +605,7 @@ class GlobalSettings {
 
 			if( !isset( $_POST['ajax'] ) ) {
 
-				AdminNotice::add_notice( '006', 'Value successfully imported.', 'success' );
+				AdminNotice::add_notice( '006', 'Value successfully imported.', 'success', true, true, AdminNotice::$prefix_admin_notice );
 
 				wp_safe_redirect( wp_get_referer() );
 			}
@@ -658,9 +658,9 @@ class GlobalSettings {
 		if( ! file_exists(WPEXTEND_JSON_DIR . self::$json_file_name) ) {
 			
 			if( touch(WPEXTEND_JSON_DIR . self::$json_file_name) )
-				AdminNotice::add_notice( '013', self::$json_file_name .' file successfully created.', 'success' );
+				AdminNotice::add_notice( '013', self::$json_file_name .' file successfully created.', 'success', true, true, AdminNotice::$prefix_admin_notice );
 			else
-				AdminNotice::add_notice( '014', 'unable to create ' . self::$json_file_name, 'error' );
+				AdminNotice::add_notice( '014', 'unable to create ' . self::$json_file_name, 'error', true, true, AdminNotice::$prefix_admin_notice );
 		}
     }
 

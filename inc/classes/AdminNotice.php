@@ -10,7 +10,7 @@ class AdminNotice {
     private static $_instance;
     
     static public $session_name = WPEXTEND_PREFIX_DATA_IN_DB,
-        $prefix_admin_notice = '<strong>WP Extend :</strong>';
+        $prefix_admin_notice = 'WP Extend';
 
 
 
@@ -95,7 +95,7 @@ class AdminNotice {
                     if( isset($admin_notice['dismissible']) && $admin_notice['dismissible'] )
                         $class.= ' is-dismissible';
 
-                    printf( '<div class="%1$s"><p>' . self::$prefix_admin_notice . ' %2$s</p></div>', esc_attr( $class ), __( $admin_notice['message'], WPEXTEND_TEXTDOMAIN ) );
+                    printf( '<div class="%1$s"><p>%2$s%3$s</p></div>', esc_attr( $class ), ( ! empty($admin_notice['prefix']) ) ? '<strong>' . $admin_notice['prefix'] . '</strong> : ' : '', __( $admin_notice['message'], WPEXTEND_TEXTDOMAIN ) );
 
                     if( isset($admin_notice['single_display']) && $admin_notice['single_display'] )
                         unset( $_SESSION[self::$session_name][$key_admin_notice] );
@@ -109,7 +109,7 @@ class AdminNotice {
      * Add a notice to session
      * 
      */
-    public static function add_notice( $key, $message, $type = 'neutral', $dismissible = true, $single_display = true ) {
+    public static function add_notice( $key, $message, $type = 'neutral', $dismissible = true, $single_display = true, $prefix = '' ) {
 
         if( empty($key) || empty($message) )
             return;
@@ -121,10 +121,11 @@ class AdminNotice {
             return;
 
         $_SESSION[self::$session_name][$key] = [
-            'message' => $message,
-            'type' => $type,
-            'dismissible' => $dismissible,
-            'single_display' => $single_display
+            'message'           => $message,
+            'type'              => $type,
+            'dismissible'       => $dismissible,
+            'single_display'    => $single_display,
+            'prefix'            => $prefix
         ];
     }
 
@@ -136,7 +137,7 @@ class AdminNotice {
      */
     public static function add_notice_json_file_missing() {
         
-        AdminNotice::add_notice( '001', 'Some JSON configuration files do not exist yet. Click <a href="' . add_query_arg( array( 'action' => 'generate_autoload_json_file', '_wpnonce' => wp_create_nonce( 'generate_autoload_json_file' ) ), admin_url( 'admin-post.php' ) ) . '">here</a> to generate them.', 'warning', false );
+        AdminNotice::add_notice( '001', 'Some JSON configuration files do not exist yet. Click <a href="' . add_query_arg( array( 'action' => 'generate_autoload_json_file', '_wpnonce' => wp_create_nonce( 'generate_autoload_json_file' ) ), admin_url( 'admin-post.php' ) ) . '">here</a> to generate them.', 'warning', false, true, self::$prefix_admin_notice );
     }
 
 

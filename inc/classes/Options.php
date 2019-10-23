@@ -184,7 +184,7 @@ class Options {
         if( file_exists(WPEXTEND_JSON_DIR . self::$json_file_name) ) {
 
             if( file_put_contents( WPEXTEND_JSON_DIR . self::$json_file_name, json_encode($this->options, JSON_PRETTY_PRINT) ) )
-                AdminNotice::add_notice( '008', 'The changes have been saved.', 'success' );
+                AdminNotice::add_notice( '008', 'The changes have been saved.', 'success', true, true, AdminNotice::$prefix_admin_notice );
         }
     }
 
@@ -211,9 +211,9 @@ class Options {
 		if( ! file_exists(WPEXTEND_JSON_DIR . self::$json_file_name) ) {
 			
 			if( touch(WPEXTEND_JSON_DIR . self::$json_file_name) )
-				AdminNotice::add_notice( '019', self::$json_file_name .' file successfully created.', 'success' );
+				AdminNotice::add_notice( '019', self::$json_file_name .' file successfully created.', 'success', true, true, AdminNotice::$prefix_admin_notice );
 			else
-				AdminNotice::add_notice( '020', 'unable to create ' . self::$json_file_name, 'error' );
+				AdminNotice::add_notice( '020', 'unable to create ' . self::$json_file_name, 'error', true, true, AdminNotice::$prefix_admin_notice );
 		}
     }
 

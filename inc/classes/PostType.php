@@ -371,9 +371,9 @@ class PostType {
 
 		if( ! file_exists(WPEXTEND_JSON_DIR . self::$json_file_name) ) {
 			if( touch(WPEXTEND_JSON_DIR . self::$json_file_name) )
-				AdminNotice::add_notice( '015', self::$json_file_name .' file successfully created.', 'success' );
+				AdminNotice::add_notice( '015', self::$json_file_name .' file successfully created.', 'success', true, true, AdminNotice::$prefix_admin_notice );
 			else
-				AdminNotice::add_notice( '016', 'unable to create ' . self::$json_file_name, 'error' );
+				AdminNotice::add_notice( '016', 'unable to create ' . self::$json_file_name, 'error', true, true, AdminNotice::$prefix_admin_notice );
 		}
     }
 
