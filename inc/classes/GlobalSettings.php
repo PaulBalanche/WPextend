@@ -2,6 +2,10 @@
 
 namespace Wpextend;
 
+use \Wpextend\Package\AdminNotice;
+use \Wpextend\Package\RenderAdminHtml;
+use \Wpextend\Package\TypeField;
+
 /**
 *
 */
@@ -119,7 +123,7 @@ class GlobalSettings {
 				$this->wpextend_global_settings = array_merge($this->wpextend_global_settings, $site_settings_json_file_content);
 		}
 		else
-			AdminNotice::add_notice_json_file_missing();
+			Main::add_notice_json_file_missing();
 
 		if( ! is_array( $this->wpextend_global_settings ) )
 			$this->wpextend_global_settings = array();

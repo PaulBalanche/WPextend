@@ -2,6 +2,10 @@
 
 namespace Wpextend;
 
+use \Wpextend\Package\AdminNotice;
+use \Wpextend\Package\RenderAdminHtml;
+use \Wpextend\Package\TypeField;
+
 /**
  * Gutenberg support 
  * 
@@ -293,7 +297,7 @@ class GutenbergBlock {
             return json_decode( $data_json_file, true );
         }
         else
-            AdminNotice::add_notice_json_file_missing();
+            Main::add_notice_json_file_missing();
 
         return false;
     }

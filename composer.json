@@ -1,7 +1,7 @@
 {
     "name": "wpextend/wpextend",
     "description": "Extends basic Wordpress features such as add general settings, easy creating custom post type, ...",
-    "version": "2.5.0",
+    "version": "2.5.1",
     "type": "wordpress-plugin",
     "keywords": ["wordpress", "plugin", "wpextend", "general settings", "custom post type"],
     "homepage": "https://github.com/PaulBalanche/WPextend/",
@@ -18,7 +18,8 @@
         "email": "paul.balanche@gmail.com"
     },
     "require": {
-        "php": ">=7.0.0"
+        "php": ">=7.0.0",
+        "wpextend/package": "^1.0"
     },
     "autoload": {
         "psr-4": {

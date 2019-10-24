@@ -2,6 +2,9 @@
 
 namespace Wpextend;
 
+use \Wpextend\Package\AdminNotice;
+use \Wpextend\Package\RenderAdminHtml;
+
 /**
  *
  */
@@ -340,7 +343,7 @@ class PostType {
 				return $json_content;
 		}
 		else
-			AdminNotice::add_notice_json_file_missing();
+			Main::add_notice_json_file_missing();
 
 		return [];
 	}
