@@ -114,6 +114,7 @@ class GlobalSettings {
 
 		// Getting from database (legacy)
 		$this->wpextend_global_settings = get_option( $this->name_option_in_database );
+		if( ! is_array($this->wpextend_global_settings) ) $this->wpextend_global_settings = [];
 		
 		// Getting from JSON file
 		if( file_exists(WPEXTEND_JSON_DIR . self::$json_file_name) ) {
