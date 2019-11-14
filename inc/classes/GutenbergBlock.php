@@ -26,33 +26,34 @@ class GutenbergBlock {
         $default_block_types = [
             'common_blocks' => [
                 'core/paragraph',
-                'core/image',
-                'core/gallery',
-                'core/cover',
-                'core/heading',
                 'core/list',
+                'core/heading',
                 'core/quote',
                 'core/audio',
-                'core/file',
+                'core/image',
+                'core/cover',
                 'core/video',
-                'core/missing'
+                'core/gallery',
+                'core/file'
             ],
             'formatting' => [
-                'core/pullquote',
-                'core/code',
                 'core/html',
                 'core/preformatted',
-                'core/table',
-                'core/verse'
+                'core/code',
+                'core/verse',
+                'core/pullquote',
+                'core/table'
             ],
             'layout' => [
-                'core/button',
-                'core/media-text',
-                'core/nextpage',
                 'core/columns',
-                'core/separator',
+                'core/column',
+                'core/group',
+                'core/button',
+                'core/more',
+                'core/nextpage',
+                'core/media-text',
                 'core/spacer',
-                'core/column'
+                'core/separator'
             ],
             'widgets' => [
                 'core/calendar',
