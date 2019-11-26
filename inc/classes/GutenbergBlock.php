@@ -571,13 +571,15 @@ class GutenbergBlock {
             }
         }
 
-        // if( function_exists('acf_register_block') ) {
+        if( function_exists('acf_register_block') ) {
             
-            
-        //     foreach( $this->get_all_blocks_saved() as $block_saved ){
-        //         $allowed_block_types[] = 'acf/' . $block_saved->post_name;
-        //     }
-        // }
+            if( ! is_array($allowed_block_types) )
+                $allowed_block_types = [];
+
+            foreach( $this->get_all_blocks_saved() as $block_saved ){
+                $allowed_block_types[] = 'acf/' . $block_saved->post_name;
+            }
+        }
 
         return apply_filters('gutenberg_blocks_allowed', $allowed_block_types);
     }
