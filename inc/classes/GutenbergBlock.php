@@ -829,4 +829,52 @@ class GutenbergBlock {
 
 
 
+
+
+
+
+
+    /**
+ * Register custom blocks
+ */
+// add_action( 'init', __NAMESPACE__ . '\register_custom_block' );
+// function register_custom_block() {
+	
+// 	global $custom_block;
+
+// 	foreach( $custom_block as $namespace_blocks => $blocks ) {
+// 		if( is_array($blocks) ) {
+// 			foreach( $blocks as $key_block => $block ) {
+				
+// 				$args_register = [];
+
+// 				if( isset($block['build_file'], $block['asset_file'] ) ) {
+// 					$asset_file = include( $block['asset_file'] );
+
+// 					wp_register_script(
+// 						$namespace_blocks . '-' . $key_block,
+// 						$block['build_file'],
+// 						$asset_file['dependencies'],
+// 						$asset_file['version']
+// 					);
+
+// 					$args_register = [
+// 						'editor_script' => $namespace_blocks . '-' . $key_block,
+// 					];
+// 				}
+
+// 				if( isset($block['render_callback']) ) {
+
+// 					include( $block['render_callback'] );
+// 					if( function_exists( $namespace_blocks . '_' . $key_block . '_render_callback' ) )
+// 						$args_register['render_callback'] = $namespace_blocks . '_' . $key_block . '_render_callback';
+// 				}
+					
+// 				register_block_type( $namespace_blocks . '/' . $key_block, $args_register );
+// 			}
+// 		}
+// 	}
+// }
+
+
 }
