@@ -105,7 +105,8 @@ class GutenbergBlock {
             ]
         ];
 
-    public $allowed_block_types = null;
+    public $allowed_block_types = null,
+        $theme_blocks = [];
 
 
     
@@ -128,7 +129,8 @@ class GutenbergBlock {
     * Construct
     */
     private function __construct() {
-
+        
+        $this->load_theme_blocks();
         $this->load_default_block_types();
 
         // Configure hooks
@@ -246,6 +248,49 @@ class GutenbergBlock {
 				exit;
 			}
 		}
+    }
+
+
+
+    /**
+     * Load blocks defined in the current theme
+     * 
+     */
+    public function load_theme_blocks() {
+
+        $root_path_theme_blocks = get_stylesheet_directory() . '/wpextend/blocks';
+        $blocks_dir = scandir( $root_path_theme_blocks );
+        foreach( $blocks_dir as $namespace_blocks ) {
+            
+            if( ! is_dir( $root_path_theme_blocks . '/' . $namespace_blocks) || $namespace_blocks == '..' || $namespace_blocks == '.' )
+                continue;
+                
+            $this->theme_blocks[$namespace_blocks] = [];
+
+            $blocks = scandir( $root_path_theme_blocks . '/' . $namespace_blocks );
+            foreach( $blocks as $block ) {
+
+                if( ! is_dir( $root_path_theme_blocks . '/' . $namespace_blocks . '/' . $block ) || $block == '..' || $block == '.' )
+                    continue;
+                    
+                $this->theme_blocks[$namespace_blocks][$block] = [];
+
+                if( file_exists( $root_path_theme_blocks . '/' . $namespace_blocks . '/' . $block . '/build/index.js' ) && file_exists( $root_path_theme_blocks . '/' . $namespace_blocks . '/' . $block . '/build/index.asset.php' ) ) {
+
+                    $this->theme_blocks[$namespace_blocks][$block]['build_file'] = get_stylesheet_directory_uri() . '/' . $namespace_blocks . '/' . $block . '/build/index.js';
+                    $this->theme_blocks[$namespace_blocks][$block]['asset_file'] = $root_path_theme_blocks . '/' . $namespace_blocks . '/' . $block . '/build/index.asset.php';
+                }
+
+                if( file_exists( $root_path_theme_blocks . '/' . $namespace_blocks . '/' . $block . '/render.php' ) )
+                $this->theme_blocks[$namespace_blocks][$block]['render_callback'] = $root_path_theme_blocks . '/' . $namespace_blocks . '/' . $block . '/render.php';
+
+                if( count($this->theme_blocks[$namespace_blocks][$block]) == 0 )
+                    unset( $this->theme_blocks[$namespace_blocks][$block] );
+            }
+
+            if( count($this->theme_blocks[$namespace_blocks]) == 0 )
+                unset( $this->theme_blocks[$namespace_blocks] );
+        }
     }
 
 
@@ -579,7 +624,7 @@ class GutenbergBlock {
         //     }
         // }
 
-        return apply_filters('gutenberg_blocks_allowed', $allowed_block_types);
+        return $allowed_block_types;
     }
 
     
@@ -781,23 +826,6 @@ class GutenbergBlock {
             $this->export_blocks_saved();
         }
     }
-
-
-
-    /**
-     * Filter render_block to update default Gutenberg blocks
-     * 
-     */
-    // public function filter_default_render_block($block_content, $block){
-
-    //     if( !defined('REST_REQUEST') && !is_admin() && $block['blockName'] == 'core/paragraph' ) {
-
-    //         $this->acf_gutenberg_block_render_callback($block);
-    //     }
-    //     else{
-    //         return $block_content;
-    //     }
-    // }
 
 
 

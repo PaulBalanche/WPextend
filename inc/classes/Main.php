@@ -128,11 +128,6 @@ class Main {
 
         $retour_html .= '<div class="mt-1 white">';
 
-	 	// Global settings
-		$retour_html .= RenderAdminHtml::table_edit_open();
-		$retour_html .= TypeField::render_input_textarea( 'WP Extend Global settings', 'wpextend_global_settings_export', stripslashes( json_encode( GlobalSettings::getInstance()->wpextend_global_settings, JSON_UNESCAPED_UNICODE ) ), false, '', false );
-		$retour_html .= RenderAdminHtml::table_edit_close();
-
 		// Global settings values
 		$retour_html .= RenderAdminHtml::table_edit_open();
 		$retour_html .= TypeField::render_input_textarea( 'WP Extend Global settings values', 'wpextend_global_settings_value_export', GlobalSettings::getInstance()->prepare_values_to_export(), false, '', false );
@@ -142,13 +137,6 @@ class Main {
 			// Custom post type
 			$retour_html .= RenderAdminHtml::table_edit_open();
 			$retour_html .= TypeField::render_input_textarea( 'WP Extend Custom Post Type', 'wpextend_custom_post_type_export', stripslashes( json_encode( PostType::getInstance()->get_all_from_database(), JSON_UNESCAPED_UNICODE ) ), false, '', false );
-			$retour_html .= RenderAdminHtml::table_edit_close();
-		}
-
-		if( Options::getInstance()->get_option('enable_gutenberg') ) {
-			// Gutenberg blocks
-			$retour_html .= RenderAdminHtml::table_edit_open();
-			$retour_html .= TypeField::render_input_textarea( 'Gutenberg blocks', 'wpextend_gutenberg_blocks_export', stripslashes( GutenbergBlock::getInstance()->export_blocks_saved() ), false, '', false );
 			$retour_html .= RenderAdminHtml::table_edit_close();
 		}
 
