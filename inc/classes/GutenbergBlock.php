@@ -23,85 +23,79 @@ class GutenbergBlock {
     public static $gutenberg_name_custom_post_type = 'gutenberg_block',
         $json_file_name = 'gutenberg_block.json',
         $admin_url = '_gutenberg_block',
-        $default_block_types = [
-            'common_blocks' => [
-                'core/paragraph',
-                'core/list',
-                'core/heading',
-                'core/quote',
-                'core/audio',
-                'core/image',
-                'core/cover',
-                'core/video',
-                'core/gallery',
-                'core/file'
+        $wp_default_blocks = [
+            'core' => [
+                'paragraph',
+                'list',
+                'heading',
+                'quote',
+                'audio',
+                'image',
+                'cover',
+                'video',
+                'gallery',
+                'file',
+                'html',
+                'preformatted',
+                'code',
+                'verse',
+                'pullquote',
+                'table',
+                'columns',
+                'column',
+                'group',
+                'button',
+                'more',
+                'nextpage',
+                'media-text',
+                'spacer',
+                'separator',
+                'calendar',
+                'shortcode',
+                'archives',
+                'categories',
+                'latest-comments',
+                'latest-posts',
+                'rss',
+                'search',
+                'tag-cloud',
+                'embed',
             ],
-            'formatting' => [
-                'core/html',
-                'core/preformatted',
-                'core/code',
-                'core/verse',
-                'core/pullquote',
-                'core/table'
-            ],
-            'layout' => [
-                'core/columns',
-                'core/column',
-                'core/group',
-                'core/button',
-                'core/more',
-                'core/nextpage',
-                'core/media-text',
-                'core/spacer',
-                'core/separator'
-            ],
-            'widgets' => [
-                'core/calendar',
-                'core/shortcode',
-                'core/archives',
-                'core/categories',
-                'core/latest-comments',
-                'core/latest-posts',
-                'core/rss',
-                'core/search',
-                'core/tag-cloud'
-            ],
-            'embeds' => [
-                'core/embed',
-                'core-embed/twitter',
-                'core-embed/youtube',
-                'core-embed/facebook',
-                'core-embed/instagram',
-                'core-embed/wordpress',
-                'core-embed/soundcloud',
-                'core-embed/spotify',
-                'core-embed/flickr',
-                'core-embed/vimeo',
-                'core-embed/animoto',
-                'core-embed/cloudup',
-                'core-embed/collegehumor',
-                'core-embed/crowdsignal',
-                'core-embed/polldaddy',
-                'core-embed/dailymotion',
-                'core-embed/hulu',
-                'core-embed/imgur',
-                'core-embed/issuu',
-                'core-embed/kickstarter',
-                'core-embed/meetup-com',
-                'core-embed/mixcloud',
-                'core-embed/reddit',
-                'core-embed/reverbnation',
-                'core-embed/screencast',
-                'core-embed/scribd',
-                'core-embed/slideshare',
-                'core-embed/smugmug',
-                'core-embed/speaker',
-                'core-embed/speaker-deck',
-                'core-embed/ted',
-                'core-embed/tumblr',
-                'core-embed/videopress',
-                'core-embed/wordpress-tv',
-                'core-embed/amazon-kindle'
+            'core-embed' => [
+                'twitter',
+                'youtube',
+                'facebook',
+                'instagram',
+                'wordpress',
+                'soundcloud',
+                'spotify',
+                'flickr',
+                'vimeo',
+                'animoto',
+                'cloudup',
+                'collegehumor',
+                'crowdsignal',
+                'polldaddy',
+                'dailymotion',
+                'hulu',
+                'imgur',
+                'issuu',
+                'kickstarter',
+                'meetup-com',
+                'mixcloud',
+                'reddit',
+                'reverbnation',
+                'screencast',
+                'scribd',
+                'slideshare',
+                'smugmug',
+                'speaker',
+                'speaker-deck',
+                'ted',
+                'tumblr',
+                'videopress',
+                'wordpress-tv',
+                'amazon-kindle'
             ]
         ];
 
@@ -208,7 +202,8 @@ class GutenbergBlock {
         $retour_html .= RenderAdminHtml::form_open( admin_url( 'admin-post.php' ), 'update_allowed_block_types', 'form_allowed_block_types' );
 
         $retour_html .= RenderAdminHtml::table_edit_open();
-        foreach( self::$default_block_types as $cat => $block ) {
+
+        foreach( array_merge_recursive(self::$wp_default_blocks, $this->theme_blocks ) as $cat => $block ) {
             $default_value = ( ! is_null($this->allowed_block_types) ) ? $this->allowed_block_types : $block;
             $retour_html .= TypeField::render_input_checkbox( $cat, "allowed_block_types", $block, $default_value, false, '', false, true );
         }
@@ -273,19 +268,7 @@ class GutenbergBlock {
                 if( ! is_dir( $root_path_theme_blocks . '/' . $namespace_blocks . '/' . $block ) || $block == '..' || $block == '.' )
                     continue;
                     
-                $this->theme_blocks[$namespace_blocks][$block] = [];
-
-                if( file_exists( $root_path_theme_blocks . '/' . $namespace_blocks . '/' . $block . '/build/index.js' ) && file_exists( $root_path_theme_blocks . '/' . $namespace_blocks . '/' . $block . '/build/index.asset.php' ) ) {
-
-                    $this->theme_blocks[$namespace_blocks][$block]['build_file'] = get_stylesheet_directory_uri() . '/' . $namespace_blocks . '/' . $block . '/build/index.js';
-                    $this->theme_blocks[$namespace_blocks][$block]['asset_file'] = $root_path_theme_blocks . '/' . $namespace_blocks . '/' . $block . '/build/index.asset.php';
-                }
-
-                if( file_exists( $root_path_theme_blocks . '/' . $namespace_blocks . '/' . $block . '/render.php' ) )
-                $this->theme_blocks[$namespace_blocks][$block]['render_callback'] = $root_path_theme_blocks . '/' . $namespace_blocks . '/' . $block . '/render.php';
-
-                if( count($this->theme_blocks[$namespace_blocks][$block]) == 0 )
-                    unset( $this->theme_blocks[$namespace_blocks][$block] );
+                $this->theme_blocks[$namespace_blocks][] = $block;
             }
 
             if( count($this->theme_blocks[$namespace_blocks]) == 0 )
@@ -841,6 +824,30 @@ class GutenbergBlock {
 // function register_custom_block() {
 	
 // 	global $custom_block;
+
+
+
+
+
+// if( file_exists( $root_path_theme_blocks . '/' . $namespace_blocks . '/' . $block . '/build/index.js' ) && file_exists( $root_path_theme_blocks . '/' . $namespace_blocks . '/' . $block . '/build/index.asset.php' ) ) {
+
+//     $this->theme_blocks[$namespace_blocks][$block]['build_file'] = get_stylesheet_directory_uri() . '/' . $namespace_blocks . '/' . $block . '/build/index.js';
+//     $this->theme_blocks[$namespace_blocks][$block]['asset_file'] = $root_path_theme_blocks . '/' . $namespace_blocks . '/' . $block . '/build/index.asset.php';
+// }
+
+// if( file_exists( $root_path_theme_blocks . '/' . $namespace_blocks . '/' . $block . '/render.php' ) )
+// $this->theme_blocks[$namespace_blocks][$block]['render_callback'] = $root_path_theme_blocks . '/' . $namespace_blocks . '/' . $block . '/render.php';
+
+// if( count($this->theme_blocks[$namespace_blocks][$block]) == 0 )
+//     unset( $this->theme_blocks[$namespace_blocks][$block] );
+
+
+
+
+
+
+
+
 
 // 	foreach( $custom_block as $namespace_blocks => $blocks ) {
 // 		if( is_array($blocks) ) {
