@@ -6,7 +6,7 @@ namespace Wpextend;
  * Gutenberg support 
  * 
  */
-class ACFGutenbergBlock {
+class AcfGutenbergBlock {
 
     /**
      * Properties declaration
@@ -27,7 +27,7 @@ class ACFGutenbergBlock {
 	public static function getInstance() {
 
         if (is_null(self::$_instance)) {
-             self::$_instance = new ACFGutenbergBlock();
+             self::$_instance = new AcfGutenbergBlock();
         }
 
         return self::$_instance;
@@ -63,15 +63,14 @@ class ACFGutenbergBlock {
         add_action( 'acf/init', array($this, 'acf_init_register_gutenberg_blocks') );
 
         // Update Gutenberg blocks abnd block categories
+        add_filter( 'wpextend_load_all_gutenberg_blocks', array($this, 'load_all_blocks') );
         add_filter( 'block_categories', array($this, 'update_block_categories'), 10, 2 );
-        add_filter( 'allowed_block_types', array($this, 'allowed_specifics_block_types'), 10, 2 );
 
         // Create controller file if missing when Gutenberg block post is saved
         add_action( 'save_post', array($this, 'on_saving_block'), 10, 3 );
         add_action( 'trashed_post', array($this, 'on_trashed_post') );
 
         add_action( 'current_screen', array($this, 'load_custom_blocks') );
-        add_action( 'wpextend_generate_autoload_json_file', array($this, 'generate_autoload_json_file') );
 	}
 
 
@@ -84,7 +83,7 @@ class ACFGutenbergBlock {
 
         if( 'gutenberg_block' == $current_screen->post_type || strpos($current_screen->base, 'wpextend') !== FALSE ) {
 
-            $tab_json_imported = $this->load_json();
+            $tab_json_imported = GutenbergBlock::getInstance()->load_json();
     
             // Save in Wordpress post
             if( $tab_json_imported && is_array($tab_json_imported) && isset($tab_json_imported['custom']) && is_array($tab_json_imported['custom']) ){
@@ -272,6 +271,25 @@ class ACFGutenbergBlock {
 
 
     /**
+     * Filter all blocks in order
+     * 
+     */
+    public function load_all_blocks( $all_blocks ) {
+
+        foreach( $this->get_all_blocks_saved() as $block_saved ){
+            if( ! isset($all_blocks['acf']) )
+                $all_blocks['acf'] = [];
+            
+            if( ! in_array($block_saved->post_name, $all_blocks['acf']) )
+                $all_blocks['acf'][] = $block_saved->post_name;
+        }
+
+        return $all_blocks;
+    }
+
+
+
+    /**
      * Update Gutenberg blocks categories display on Gutenberg
      * 
      */
@@ -308,25 +326,6 @@ class ACFGutenbergBlock {
 
         // Return new categories
         return $categories;
-    }
-
-
-
-    /**
-     * Allow some Gutenberg blocks
-     * 
-     */
-    public function allowed_specifics_block_types( $allowed_block_types, $post ) {
-
-        // if( function_exists('acf_register_block') ) {
-            
-            
-        //     foreach( $this->get_all_blocks_saved() as $block_saved ){
-        //         $allowed_block_types[] = 'acf/' . $block_saved->post_name;
-        //     }
-        // }
-
-        return $allowed_block_types;
     }
 
     
@@ -403,7 +402,7 @@ class ACFGutenbergBlock {
         }
 
         // Save data into JSON file
-        return $this->save_json( 'custom', $tab_gutenberg_blocks_to_export );
+        return GutenbergBlock::getInstance()->save_json( 'custom', $tab_gutenberg_blocks_to_export );
     }
 
 

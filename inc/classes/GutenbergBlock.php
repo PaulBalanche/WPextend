@@ -55,16 +55,16 @@ class GutenbergBlock {
     */
     private function __construct() {
         
+        if( function_exists('acf_register_block') ) {
+            AcfGutenbergBlock::getInstance();
+        }
+
         $this->load_theme_blocks();
         $this->load_all_blocks();
         $this->load_allowed_block();
 
         // Configure hooks
         $this->create_hooks();
-
-        if( function_exists('acf_register_block') ) {
-            new AcfGutenbergBlock();
-        }
     }
 
 
@@ -229,6 +229,8 @@ class GutenbergBlock {
                 }
             }
         }
+
+        $this->all_blocks = apply_filters( 'wpextend_load_all_gutenberg_blocks', $this->all_blocks);
     }
 
 
