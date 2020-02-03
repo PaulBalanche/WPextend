@@ -97,10 +97,12 @@ class GutenbergBlock {
                 'wordpress-tv',
                 'amazon-kindle'
             ]
-        ];
+        ],
+        $theme_blocks_path = '/wpextend/blocks';
 
     public $allowed_block_types = null,
-        $theme_blocks = [];
+        $theme_blocks = [],
+        $all_blocks = [];
 
 
     
@@ -125,6 +127,7 @@ class GutenbergBlock {
     private function __construct() {
         
         $this->load_theme_blocks();
+        $this->load_all_blocks();
         $this->load_default_block_types();
 
         // Configure hooks
@@ -146,7 +149,8 @@ class GutenbergBlock {
         // Add custom fields to Gutenberg blocks
         add_action( 'acf/init', array($this, 'acf_add_custom_fieds_to_gutenberg_block') );
 
-        // Register ACF Gutenberg blocks
+        // Register custom and ACF Gutenberg blocks
+        add_action( 'init', array($this, 'register_custom_block') );
         add_action( 'acf/init', array($this, 'acf_init_register_gutenberg_blocks') );
 
         // Update Gutenberg blocks abnd block categories
@@ -203,9 +207,15 @@ class GutenbergBlock {
 
         $retour_html .= RenderAdminHtml::table_edit_open();
 
-        foreach( array_merge_recursive(self::$wp_default_blocks, $this->theme_blocks ) as $cat => $block ) {
-            $default_value = ( ! is_null($this->allowed_block_types) ) ? $this->allowed_block_types : $block;
-            $retour_html .= TypeField::render_input_checkbox( $cat, "allowed_block_types", $block, $default_value, false, '', false, true );
+        foreach( $this->all_blocks as $namespace_block => $blocks ) {
+
+            $blocks_temp = [];
+            foreach( $blocks as $key => $block ) {
+                $blocks_temp[$namespace_block . '/' . $block] = $block;
+            }
+
+            $default_value = ( ! is_null($this->allowed_block_types) ) ? $this->allowed_block_types : $blocks_temp;
+            $retour_html .= TypeField::render_input_checkbox( $namespace_block, "allowed_block_types", $blocks_temp, $default_value, false, '', false, true );
         }
         $retour_html .= TypeField::render_input_hidden( 'allowed_block_types[]', 'null' );
         $retour_html .= RenderAdminHtml::table_edit_close();
@@ -253,19 +263,18 @@ class GutenbergBlock {
      */
     public function load_theme_blocks() {
 
-        $root_path_theme_blocks = get_stylesheet_directory() . '/wpextend/blocks';
-        $blocks_dir = scandir( $root_path_theme_blocks );
+        $blocks_dir = scandir( get_stylesheet_directory() . self::$theme_blocks_path );
         foreach( $blocks_dir as $namespace_blocks ) {
             
-            if( ! is_dir( $root_path_theme_blocks . '/' . $namespace_blocks) || $namespace_blocks == '..' || $namespace_blocks == '.' )
+            if( ! is_dir( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks) || $namespace_blocks == '..' || $namespace_blocks == '.' )
                 continue;
                 
             $this->theme_blocks[$namespace_blocks] = [];
 
-            $blocks = scandir( $root_path_theme_blocks . '/' . $namespace_blocks );
+            $blocks = scandir( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks );
             foreach( $blocks as $block ) {
 
-                if( ! is_dir( $root_path_theme_blocks . '/' . $namespace_blocks . '/' . $block ) || $block == '..' || $block == '.' )
+                if( ! is_dir( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block ) || $block == '..' || $block == '.' )
                     continue;
                     
                 $this->theme_blocks[$namespace_blocks][] = $block;
@@ -273,6 +282,31 @@ class GutenbergBlock {
 
             if( count($this->theme_blocks[$namespace_blocks]) == 0 )
                 unset( $this->theme_blocks[$namespace_blocks] );
+        }
+    }
+
+
+
+    /**
+     * Load all blocks. Merge default WP Core blocks and them defined in the current theme
+     * 
+     */
+    public function load_all_blocks() {
+
+        $this->all_blocks = self::$wp_default_blocks;
+        foreach( $this->theme_blocks as $block_namespace => $blocks ) {
+            if( is_array($blocks) ) {
+                foreach( $blocks as $block ) {
+                    if( isset( $this->all_blocks[$block_namespace] ) ) {
+                        if( ! in_array($block, $this->all_blocks[$block_namespace]) ) {
+                            $this->all_blocks[$block_namespace][] = $block;
+                        }
+                    }
+                    else {
+                        $this->all_blocks[$block_namespace] = [ $block ];
+                    }
+                }
+            }
         }
     }
 
@@ -516,6 +550,50 @@ class GutenbergBlock {
 
 
     /**
+     * Register custom blocks
+     * 
+     */
+    function register_custom_block() {
+
+        foreach( $this->theme_blocks as $namespace_blocks => $blocks ) {
+            if( is_array($blocks) ) {
+                foreach( $blocks as $block ) {
+                    
+                    $args_register = [];
+
+                    // editor_script
+                    if( file_exists( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block . '/build/index.js' ) && file_exists( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block . '/build/index.asset.php' ) ) {
+                        $asset_file = include( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block . '/build/index.asset.php' );
+
+                        wp_register_script(
+                            $namespace_blocks . '-' . $block,
+                            get_stylesheet_directory_uri() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block . '/build/index.js',
+                            $asset_file['dependencies'],
+                            $asset_file['version']
+                        );
+
+                        $args_register = [
+                            'editor_script' => $namespace_blocks . '-' . $block,
+                        ];
+                    }
+
+                    // render_callback
+                    if( file_exists( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block . '/render.php' ) ) {
+
+                        include( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block . '/render.php' );
+                        if( function_exists( $namespace_blocks . '_' . $block . '_render_callback' ) )
+                            $args_register['render_callback'] = $namespace_blocks . '_' . $block . '_render_callback';
+                    }
+                        
+                    register_block_type( $namespace_blocks . '/' . $block, $args_register );
+                }
+            }
+        }
+    }
+
+
+
+    /**
      * Register ACF Gutenberg blocks
      * 
      */
@@ -593,10 +671,7 @@ class GutenbergBlock {
 
         if( ! is_null($this->allowed_block_types) ) {
 
-            $allowed_block_types = [];
-            foreach( $this->allowed_block_types as $allowed_block_type ){
-                $allowed_block_types[] = $allowed_block_type;
-            }
+            return $this->allowed_block_types;
         }
 
         // if( function_exists('acf_register_block') ) {
@@ -810,78 +885,6 @@ class GutenbergBlock {
         }
     }
 
-
-
-
-
-
-
-
-    /**
- * Register custom blocks
- */
-// add_action( 'init', __NAMESPACE__ . '\register_custom_block' );
-// function register_custom_block() {
-	
-// 	global $custom_block;
-
-
-
-
-
-// if( file_exists( $root_path_theme_blocks . '/' . $namespace_blocks . '/' . $block . '/build/index.js' ) && file_exists( $root_path_theme_blocks . '/' . $namespace_blocks . '/' . $block . '/build/index.asset.php' ) ) {
-
-//     $this->theme_blocks[$namespace_blocks][$block]['build_file'] = get_stylesheet_directory_uri() . '/' . $namespace_blocks . '/' . $block . '/build/index.js';
-//     $this->theme_blocks[$namespace_blocks][$block]['asset_file'] = $root_path_theme_blocks . '/' . $namespace_blocks . '/' . $block . '/build/index.asset.php';
-// }
-
-// if( file_exists( $root_path_theme_blocks . '/' . $namespace_blocks . '/' . $block . '/render.php' ) )
-// $this->theme_blocks[$namespace_blocks][$block]['render_callback'] = $root_path_theme_blocks . '/' . $namespace_blocks . '/' . $block . '/render.php';
-
-// if( count($this->theme_blocks[$namespace_blocks][$block]) == 0 )
-//     unset( $this->theme_blocks[$namespace_blocks][$block] );
-
-
-
-
-
-
-
-
-
-// 	foreach( $custom_block as $namespace_blocks => $blocks ) {
-// 		if( is_array($blocks) ) {
-// 			foreach( $blocks as $key_block => $block ) {
-				
-// 				$args_register = [];
-
-// 				if( isset($block['build_file'], $block['asset_file'] ) ) {
-// 					$asset_file = include( $block['asset_file'] );
-
-// 					wp_register_script(
-// 						$namespace_blocks . '-' . $key_block,
-// 						$block['build_file'],
-// 						$asset_file['dependencies'],
-// 						$asset_file['version']
-// 					);
-
-// 					$args_register = [
-// 						'editor_script' => $namespace_blocks . '-' . $key_block,
-// 					];
-// 				}
-
-// 				if( isset($block['render_callback']) ) {
-
-// 					include( $block['render_callback'] );
-// 					if( function_exists( $namespace_blocks . '_' . $key_block . '_render_callback' ) )
-// 						$args_register['render_callback'] = $namespace_blocks . '_' . $key_block . '_render_callback';
-// 				}
-					
-// 				register_block_type( $namespace_blocks . '/' . $key_block, $args_register );
-// 			}
-// 		}
-// 	}
-// }
 
 
 }
