@@ -52,7 +52,7 @@ class Main {
 			$this->instanceGutenbergBlockWpextend = GutenbergBlock::getInstance();
 			$this->instance_timber_wpextend = Timber::getInstance();
 		}
-		if( Options::getInstance()->get_option('enable_custom_post_type') || Options::getInstance()->get_option('enable_gutenberg') ){ $this->instance_post_type_wpextend = PostType::getInstance(); }
+		if( Options::getInstance()->get_option('enable_custom_post_type') || ( Options::getInstance()->get_option('enable_gutenberg') && function_exists('acf_register_block') ) ){ $this->instance_post_type_wpextend = PostType::getInstance(); }
 		if( Options::getInstance()->get_option('enable_thumbnail_api') ) { $this->instance_thumbnail_api = ThumbnailApi::getInstance(); }
 
 		add_theme_support('post-thumbnails');
