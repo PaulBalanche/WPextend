@@ -55,7 +55,7 @@ class GutenbergBlock {
     */
     private function __construct() {
         
-        if( function_exists('acf_register_block') ) {
+        if( function_exists('acf_register_block') && Options::getInstance()->get_option('enable_gutenberg_acf') ) {
             AcfGutenbergBlock::getInstance();
         }
 

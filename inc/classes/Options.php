@@ -22,6 +22,7 @@ class Options {
         'site_settings_name' => '',
         'enable_custom_post_type' => false,
         'enable_gutenberg' => false,
+        'enable_gutenberg_acf' => false,
         'enable_thumbnail_api' => false
     ];
 
@@ -143,6 +144,7 @@ class Options {
         $retour_html .= TypeField::render_input_text( 'Site settings name', self::$wpe_settings_post_name . '[site_settings_name]', $this->get_site_settings_name('editor'), self::$default_site_settings_name );
         $retour_html .= TypeField::render_input_radio( 'Custom post type' , self::$wpe_settings_post_name . '[enable_custom_post_type]', [ '0' => 'Off', '1' => 'On' ], $this->get_option('enable_custom_post_type') );
         $retour_html .= TypeField::render_input_radio( 'Gutenberg support' , self::$wpe_settings_post_name . '[enable_gutenberg]', [ '0' => 'Off', '1' => 'On' ], $this->get_option('enable_gutenberg') );
+        $retour_html .= TypeField::render_input_radio( 'Gutenberg ACF support' , self::$wpe_settings_post_name . '[enable_gutenberg_acf]', [ '0' => 'Off', '1' => 'On' ], $this->get_option('enable_gutenberg_acf') );
         $retour_html .= TypeField::render_input_radio( 'Thumbnail API' , self::$wpe_settings_post_name . '[enable_thumbnail_api]', [ '0' => 'Off', '1' => 'On' ], $this->get_option('enable_thumbnail_api') );
         $retour_html .= RenderAdminHtml::table_edit_close();
 
