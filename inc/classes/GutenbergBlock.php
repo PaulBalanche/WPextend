@@ -336,8 +336,21 @@ class GutenbergBlock {
                     if( file_exists( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block . '/render.php' ) ) {
 
                         include( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block . '/render.php' );
-                        if( function_exists( $namespace_blocks . '_' . $block . '_render_callback' ) )
-                            $args_register['render_callback'] = $namespace_blocks . '_' . $block . '_render_callback';
+                        if( function_exists( $namespace_blocks . '_' . str_replace('-', '_', $block) . '_render_callback' ) )
+                            $args_register['render_callback'] = $namespace_blocks . '_' . str_replace('-', '_', $block) . '_render_callback';
+                    }
+
+                    // editor_style
+                    if( file_exists( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block . '/assets/style/editor.min.css' ) ) {
+
+                        wp_register_style(
+                            $namespace_blocks . '-' . $block . 'editor-style',
+                            get_stylesheet_directory_uri() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block . '/assets/style/editor.min.css',
+                            array( 'wp-edit-blocks' ),
+                            filemtime( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block . '/assets/style/editor.min.css' )
+                        );
+ 
+                        $args_register['editor_style'] = $namespace_blocks . '-' . $block . 'editor-style';
                     }
                         
                     register_block_type( $namespace_blocks . '/' . $block, $args_register );
