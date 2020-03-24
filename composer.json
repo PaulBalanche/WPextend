@@ -1,11 +1,7 @@
 {
     "name": "wpextend/wpextend",
-    "description": "Extends basic Wordpress features such as add general settings, easy creating custom post type, ...",
-<<<<<<< HEAD
+    "description": "Extends basic Wordpress features.",
     "version": "2.5.6",
-=======
-    "version": "2.5.5",
->>>>>>> 00482022569e8187f6f9039e5d5ed9ec0aa3f22d
     "type": "wordpress-plugin",
     "keywords": ["wordpress", "plugin", "wpextend", "general settings", "custom post type"],
     "homepage": "https://github.com/PaulBalanche/WPextend/",
