@@ -5,6 +5,7 @@ namespace Wpextend;
 use \Wpextend\Package\AdminNotice;
 use \Wpextend\Package\RenderAdminHtml;
 use \Wpextend\Package\TypeField;
+use \Wpextend\Package\Multilanguage;
 
 /**
  *
