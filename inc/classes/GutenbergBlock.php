@@ -25,6 +25,9 @@ class GutenbergBlock {
             ],
             'core-embed' => [
                 'twitter', 'youtube', 'facebook', 'instagram', 'wordpress', 'soundcloud', 'spotify', 'flickr', 'vimeo', 'animoto', 'cloudup', 'collegehumor', 'crowdsignal', 'polldaddy', 'dailymotion', 'hulu', 'imgur', 'issuu', 'kickstarter', 'meetup-com', 'mixcloud', 'reddit', 'reverbnation', 'screencast', 'scribd', 'slideshare', 'smugmug', 'speaker', 'speaker-deck', 'ted', 'tumblr', 'videopress', 'wordpress-tv', 'amazon-kindle'
+            ],
+            'woocommerce' => [
+                'handpicked-products', 'all-reviews', 'featured-category', 'featured-product', 'product-best-sellers', 'product-categories', 'product-category', 'product-new', 'product-on-sale', 'products-by-attribute', 'product-top-rated', 'reviews-by-product', 'reviews-by-category', 'product-search', 'product-tag', 'all-products', 'price-filter', 'attribute-filter', 'active-filters'
             ]
         ],
         $theme_blocks_path = '/wpextend/blocks';
@@ -149,7 +152,7 @@ class GutenbergBlock {
      * Action to save allowed_block_types
      * 
      */
-    public static function update_allowed_block_types() {
+    public function update_allowed_block_types() {
 
         // Check valid nonce
 		check_admin_referer($_POST['action']);
