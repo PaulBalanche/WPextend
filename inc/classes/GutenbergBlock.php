@@ -186,25 +186,27 @@ class GutenbergBlock {
      */
     public function load_theme_blocks() {
 
-        $blocks_dir = scandir( get_stylesheet_directory() . self::$theme_blocks_path );
-        foreach( $blocks_dir as $namespace_blocks ) {
-            
-            if( ! is_dir( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks) || $namespace_blocks == '..' || $namespace_blocks == '.' )
-                continue;
+        if( file_exists( get_stylesheet_directory() . self::$theme_blocks_path ) ) {
+            $blocks_dir = scandir( get_stylesheet_directory() . self::$theme_blocks_path );
+            foreach( $blocks_dir as $namespace_blocks ) {
                 
-            $this->theme_blocks[$namespace_blocks] = [];
-
-            $blocks = scandir( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks );
-            foreach( $blocks as $block ) {
-
-                if( ! is_dir( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block ) || $block == '..' || $block == '.' )
+                if( ! is_dir( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks) || $namespace_blocks == '..' || $namespace_blocks == '.' )
                     continue;
                     
-                $this->theme_blocks[$namespace_blocks][] = $block;
-            }
+                $this->theme_blocks[$namespace_blocks] = [];
 
-            if( count($this->theme_blocks[$namespace_blocks]) == 0 ) {
-                unset( $this->theme_blocks[$namespace_blocks] );
+                $blocks = scandir( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks );
+                foreach( $blocks as $block ) {
+
+                    if( ! is_dir( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block ) || $block == '..' || $block == '.' )
+                        continue;
+                        
+                    $this->theme_blocks[$namespace_blocks][] = $block;
+                }
+
+                if( count($this->theme_blocks[$namespace_blocks]) == 0 ) {
+                    unset( $this->theme_blocks[$namespace_blocks] );
+                }
             }
         }
     }
