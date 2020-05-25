@@ -30,7 +30,8 @@ class GutenbergBlock {
                 'handpicked-products', 'all-reviews', 'featured-category', 'featured-product', 'product-best-sellers', 'product-categories', 'product-category', 'product-new', 'product-on-sale', 'products-by-attribute', 'product-top-rated', 'reviews-by-product', 'reviews-by-category', 'product-search', 'product-tag', 'all-products', 'price-filter', 'attribute-filter', 'active-filters'
             ]
         ],
-        $theme_blocks_path = '/wpextend/blocks';
+        $theme_blocks_path = '/wpextend/blocks',
+        $theme_patterns_path = '/wpextend/patterns';
 
     public $allowed_block_types = null,
         $theme_blocks = [],
@@ -79,8 +80,9 @@ class GutenbergBlock {
 	*/
 	public function create_hooks() {
 
-        // Register custom blocks
+        // Register custom blocks & patterns
         add_action( 'init', array($this, 'register_custom_block') );
+        add_action( 'admin_init', array($this, 'register_patterns') );
 
         // Update Gutenberg blocks abnd block categories
         add_filter( 'allowed_block_types', array($this, 'allowed_specifics_block_types'), 10, 2 );
@@ -310,10 +312,10 @@ class GutenbergBlock {
 
 
     /**
-     * Register custom blocks
+     * Register theme Custom Blocks
      * 
      */
-    function register_custom_block() {
+    public function register_custom_block() {
 
         foreach( $this->theme_blocks as $namespace_blocks => $blocks ) {
             if( is_array($blocks) ) {
@@ -359,6 +361,42 @@ class GutenbergBlock {
                     }
                         
                     register_block_type( $namespace_blocks . '/' . $block, $args_register );
+                }
+            }
+        }
+    }
+
+
+
+    /**
+     * Register theme Gutenberg patterns
+     * 
+     */
+    public function register_patterns() {
+
+        if( class_exists( '\WP_Patterns_Registry' ) && file_exists( get_stylesheet_directory() . self::$theme_patterns_path ) ) {
+            
+            $patterns_dir = scandir( get_stylesheet_directory() . self::$theme_patterns_path );
+            foreach( $patterns_dir as $namespace_patterns ) {
+
+                if( ! is_dir( get_stylesheet_directory() . self::$theme_patterns_path . '/' . $namespace_patterns ) || $namespace_patterns == '..' || $namespace_patterns == '.' )
+                    continue;
+
+                $patterns = scandir( get_stylesheet_directory() . self::$theme_patterns_path . '/' . $namespace_patterns );
+                foreach( $patterns as $pattern ) {
+
+                    if( is_dir( get_stylesheet_directory() . self::$theme_patterns_path . '/' . $namespace_patterns . '/' . $pattern ) || $pattern == '..' || $pattern == '.' )
+                        continue;
+                        
+                    // Get info file
+                    $file_pathinfo = pathinfo( get_stylesheet_directory() . self::$theme_patterns_path . '/' . $namespace_patterns . '/' . $pattern );
+                    if( $file_pathinfo['extension'] == 'json'  && ! \WP_Patterns_Registry::get_instance()->is_registered( $file_pathinfo['filename'] ) ) {
+
+                        register_pattern(
+                            $namespace_patterns . '/' . $file_pathinfo['filename'],
+                            json_decode( file_get_contents( get_stylesheet_directory() . self::$theme_patterns_path . '/' . $namespace_patterns . '/' . $pattern ), true )
+                        );
+                    }
                 }
             }
         }
