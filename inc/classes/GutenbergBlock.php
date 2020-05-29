@@ -359,7 +359,11 @@ class GutenbergBlock {
  
                         $args_register['editor_style'] = $namespace_blocks . '-' . $block . 'editor-style';
                     }
-                        
+                    
+                    $registry = \WP_Block_Type_Registry::get_instance();
+                    if ( $registry->is_registered( $namespace_blocks . '/' . $block ) ) {
+                        $registry->unregister( $namespace_blocks . '/' . $block );
+                    }
                     register_block_type( $namespace_blocks . '/' . $block, $args_register );
                 }
             }
@@ -374,7 +378,7 @@ class GutenbergBlock {
      */
     public function register_patterns() {
 
-        if( class_exists( '\WP_Patterns_Registry' ) && file_exists( get_stylesheet_directory() . self::$theme_patterns_path ) ) {
+        if( class_exists( '\WP_Block_Patterns_Registry' ) && file_exists( get_stylesheet_directory() . self::$theme_patterns_path ) ) {
             
             $patterns_dir = scandir( get_stylesheet_directory() . self::$theme_patterns_path );
             foreach( $patterns_dir as $namespace_patterns ) {
@@ -390,9 +394,9 @@ class GutenbergBlock {
                         
                     // Get info file
                     $file_pathinfo = pathinfo( get_stylesheet_directory() . self::$theme_patterns_path . '/' . $namespace_patterns . '/' . $pattern );
-                    if( $file_pathinfo['extension'] == 'json'  && ! \WP_Patterns_Registry::get_instance()->is_registered( $file_pathinfo['filename'] ) ) {
+                    if( $file_pathinfo['extension'] == 'json'  && ! \WP_Block_Patterns_Registry::get_instance()->is_registered( $file_pathinfo['filename'] ) ) {
 
-                        register_pattern(
+                        register_block_pattern(
                             $namespace_patterns . '/' . $file_pathinfo['filename'],
                             json_decode( file_get_contents( get_stylesheet_directory() . self::$theme_patterns_path . '/' . $namespace_patterns . '/' . $pattern ), true )
                         );
