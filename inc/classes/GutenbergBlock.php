@@ -81,7 +81,7 @@ class GutenbergBlock {
 	public function create_hooks() {
 
         // Register custom blocks & patterns
-        add_action( 'init', array($this, 'register_custom_block') );
+        add_action( 'init', array($this, 'register_custom_block'), 99 );
         add_action( 'admin_init', array($this, 'register_patterns') );
 
         // Update Gutenberg blocks abnd block categories
