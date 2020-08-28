@@ -84,6 +84,9 @@ class GutenbergBlock {
         add_action( 'init', array($this, 'register_custom_block'), 99 );
         add_action( 'admin_init', array($this, 'register_patterns') );
 
+        // admin_enqueue_scripts
+		add_action('admin_enqueue_scripts', array( __CLASS__, 'script_admin' ) );
+
         // Update Gutenberg blocks abnd block categories
         add_filter( 'allowed_block_types', array($this, 'allowed_specifics_block_types'), 10, 2 );
 
@@ -95,6 +98,17 @@ class GutenbergBlock {
         
         // Action to save allowed_block_types
         add_action( 'admin_post_update_allowed_block_types', array($this, 'update_allowed_block_types') );
+    }
+    
+
+
+    /**
+	 * Wordpress Enqueues functions
+	 *
+	 */
+	public static function script_admin() {
+
+		wp_enqueue_script( 'script_admin_block_editor', WPEXTEND_ASSETS_URL . 'js/admin/block-editor.js');
 	}
 
 
@@ -333,10 +347,16 @@ class GutenbergBlock {
                             $asset_file['dependencies'],
                             $asset_file['version']
                         );
+                        $args_register['editor_script'] = $namespace_blocks . '-' . $block;
 
-                        $args_register = [
-                            'editor_script' => $namespace_blocks . '-' . $block,
-                        ];
+                        // Localize script
+                        if( file_exists( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block . '/localize_script.php' ) ) {
+                            
+                            $data_localized = include( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block . '/localize_script.php' );
+                            if( is_array($data_localized) ) {
+                                wp_localize_script( $namespace_blocks . '-' . $block, 'global_localized', $data_localized );
+                            }
+                        }
                     }
 
                     // render_callback
@@ -351,20 +371,38 @@ class GutenbergBlock {
                     if( file_exists( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block . '/assets/style/editor.min.css' ) ) {
 
                         wp_register_style(
-                            $namespace_blocks . '-' . $block . 'editor-style',
+                            $namespace_blocks . '-' . $block . '-editor-style',
                             get_stylesheet_directory_uri() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block . '/assets/style/editor.min.css',
                             array( 'wp-edit-blocks' ),
                             filemtime( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block . '/assets/style/editor.min.css' )
                         );
- 
-                        $args_register['editor_style'] = $namespace_blocks . '-' . $block . 'editor-style';
+
+                        $args_register['editor_style'] = $namespace_blocks . '-' . $block . '-editor-style';
                     }
-                    
-                    $registry = \WP_Block_Type_Registry::get_instance();
-                    if ( $registry->is_registered( $namespace_blocks . '/' . $block ) ) {
-                        $registry->unregister( $namespace_blocks . '/' . $block );
+
+                    // Dynamic blocks treatment
+                    $dynamic_blocks = [];
+                    if( file_exists( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block . '/dynamic_block.php' ) ) {
+                        include( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block . '/dynamic_block.php' );
                     }
-                    register_block_type( $namespace_blocks . '/' . $block, $args_register );
+                    else {
+                        // No dynamic...single block
+                        $dynamic_blocks[] = [
+                            'name' => $namespace_blocks . '/' . $block,
+                            'args_register' => []
+                        ];
+                    }
+
+                    // Finally register block(s)
+                    foreach( $dynamic_blocks as $dynamic_single_block ) {
+                        
+                        $registry = \WP_Block_Type_Registry::get_instance();
+                        if ( $registry->is_registered( $dynamic_single_block['name'] ) ) {
+                            $registry->unregister( $dynamic_single_block['name'] );
+                        }
+
+                        register_block_type( $dynamic_single_block['name'], array_merge($args_register, $dynamic_single_block['args_register']) );
+                    }
                 }
             }
         }
