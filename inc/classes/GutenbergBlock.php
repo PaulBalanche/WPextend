@@ -108,7 +108,7 @@ class GutenbergBlock {
 	 */
 	public static function script_admin() {
 
-		wp_enqueue_script( 'script_admin_block_editor', WPEXTEND_ASSETS_URL . 'js/admin/block-editor.js');
+		// wp_enqueue_script( 'script_admin_block_editor', WPEXTEND_ASSETS_URL . 'js/admin/block-editor.js');
 	}
 
 
