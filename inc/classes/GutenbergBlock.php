@@ -11,7 +11,7 @@ use \Wpextend\Package\TypeField;
  * 
  */
 class GutenbergBlock {
-
+    
     /**
      * Properties declaration
      */
@@ -31,7 +31,8 @@ class GutenbergBlock {
             ]
         ],
         $theme_blocks_path = '/wpextend/blocks',
-        $theme_patterns_path = '/wpextend/patterns';
+        $theme_patterns_path = '/wpextend/patterns',
+        $container_class_name = 'container';
 
     public $allowed_block_types = null,
         $theme_blocks = [],
@@ -62,6 +63,8 @@ class GutenbergBlock {
         if( function_exists('acf_register_block') && Options::getInstance()->get_option('enable_gutenberg_acf') ) {
             AcfGutenbergBlock::getInstance();
         }
+
+        self::$container_class_name = ( defined('GUTENBERG_CONTAINER_CLASS') ) ? GUTENBERG_CONTAINER_CLASS : self::$container_class_name;
 
         $this->load_theme_blocks();
         $this->load_all_blocks();
@@ -98,6 +101,9 @@ class GutenbergBlock {
         
         // Action to save allowed_block_types
         add_action( 'admin_post_update_allowed_block_types', array($this, 'update_allowed_block_types') );
+
+        // Enqueue theme scripts & styles
+        add_action( 'wp_enqueue_scripts', array($this, 'theme_enqueue_blocks_scripts_and_styles') );
     }
     
 
@@ -120,6 +126,13 @@ class GutenbergBlock {
     public function define_admin_menu() {
 
         add_submenu_page(WPEXTEND_MAIN_SLUG_ADMIN_PAGE, 'WP Extend - Gutenberg', 'Gutenberg', 'manage_options', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . self::$admin_url, array( $this, 'render_admin_page' ) );
+    }
+
+
+
+    public static function get_container_class_name() {
+
+        return self::$container_class_name;
     }
 
 
@@ -457,6 +470,36 @@ class GutenbergBlock {
         }
 
         return $allowed_block_types;
+    }
+
+
+
+    /**
+     * Enqueue theme scripts & styles
+     * 
+     */
+    public function theme_enqueue_blocks_scripts_and_styles() {
+
+        foreach( $this->theme_blocks as $namespace_blocks => $blocks ) {
+            
+            if( is_array($blocks) ) {
+
+                foreach( $blocks as $block ) {
+
+                    if( is_array($this->allowed_block_types) && ! in_array($namespace_blocks . '/' . $block, $this->allowed_block_types) )
+                        continue;
+
+                    if( file_exists( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block . '/assets/style/theme.min.css' ) ) {
+                        wp_enqueue_style(
+                            $namespace_blocks . '-' . $block . '-theme-style',
+                            get_stylesheet_directory_uri() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block . '/assets/style/theme.min.css',
+                            [],
+                            filemtime( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block . '/assets/style/theme.min.css' )
+                        );
+                    }
+                }
+            }
+        }
     }
 
 
