@@ -229,8 +229,18 @@ class GutenbergBlock {
 
                     if( ! is_dir( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block ) || $block == '..' || $block == '.' )
                         continue;
-                        
+
                     $this->theme_blocks[$namespace_blocks][] = $block;
+
+                    // Dynamic blocks treatment
+                    if( file_exists( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block . '/dynamic_block.php' ) ) {
+
+                        $dynamic_blocks = [];
+                        include( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block . '/dynamic_block.php' );
+                        foreach( $dynamic_blocks as $dynamic_block ) {
+                            $this->theme_blocks[$namespace_blocks][] = str_replace($namespace_blocks . '/', '', $dynamic_block['name']);
+                        }
+                    }
                 }
 
                 if( count($this->theme_blocks[$namespace_blocks]) == 0 ) {
@@ -347,6 +357,9 @@ class GutenbergBlock {
         foreach( $this->theme_blocks as $namespace_blocks => $blocks ) {
             if( is_array($blocks) ) {
                 foreach( $blocks as $block ) {
+
+                    if( ! is_dir( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block ) )
+                        continue;
                     
                     $args_register = [];
 
@@ -499,6 +512,18 @@ class GutenbergBlock {
                     }
                 }
             }
+        }
+    }
+
+
+
+    public function render($path, $data) {
+
+        if( false ) {
+            return Timber::render_view($path, $data);
+        }
+        else {
+            return Blade::render_view($path, $data);
         }
     }
 
