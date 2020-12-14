@@ -20,7 +20,8 @@
     "require": {
         "php": ">=7.0.0",
         "wpextend/package": "^1.0",
-        "jenssegers/blade": "^1.4"
+        "jenssegers/blade": "^1.4",
+        "timber/timber": "^1.18"
     },
     "autoload": {
         "psr-4": {
