@@ -38,10 +38,24 @@ class Blade {
 
         // Try to get ENV timber_theme_location & timber_theme_location_sections
         self::$blade_theme_view_location = ( defined('BLADE_THEME_VIEW_LOCATION') && BLADE_THEME_VIEW_LOCATION ) ? BLADE_THEME_VIEW_LOCATION : self::$blade_theme_view_location;
-        self::$blade_theme_cachelocation = ( defined('BLADE_THEME_CACHE_LOCATION') && BLADE_THEME_CACHE_LOCATION ) ? BLADE_THEME_CACHE_LOCATION : self::$blade_theme_cache_location;
+        self::$blade_theme_cache_location = ( defined('BLADE_THEME_CACHE_LOCATION') && BLADE_THEME_CACHE_LOCATION ) ? BLADE_THEME_CACHE_LOCATION : self::$blade_theme_cache_location;
 
-        self::$blade = new \Jenssegers\Blade\Blade( get_theme_file_path(self::$blade_theme_view_location), get_theme_file_path(self::$blade_theme_cachelocation) );
+        // Load Blade
+	    self::$blade = new \Jenssegers\Blade\Blade( self::get_view_path(), self::get_cache_path() );
     }
+
+
+
+    public static function get_view_path() {
+        return get_theme_file_path( self::$blade_theme_view_location );
+    }
+
+
+
+    public static function get_cache_path() {
+        return get_theme_file_path( self::$blade_theme_cache_location );
+    }
+
 
 
     /**
@@ -50,7 +64,7 @@ class Blade {
      */
     public static function render_view($blade_path, $data) {
 
-        self::$blade->render($blade_path . '/' . $blade_path, $data);
+        return self::$blade->render($blade_path . '/' . $blade_path, $data);
     }
 
 

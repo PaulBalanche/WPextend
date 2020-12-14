@@ -517,14 +517,12 @@ class GutenbergBlock {
 
 
 
-    public function render($path, $data) {
+    public static function render($path, $data) {
 
-        if( false ) {
+        if( defined('WPE_TEMPLATE_ENGINE') && WPE_TEMPLATE_ENGINE == 'timber' )
             return Timber::render_view($path, $data);
-        }
-        else {
-            return Blade::render_view($path, $data);
-        }
+        else if( defined('WPE_TEMPLATE_ENGINE') && WPE_TEMPLATE_ENGINE == 'blade' )
+            return Blade::getInstance()::render_view($path, $data);
     }
 
 
