@@ -53,7 +53,11 @@ class Blade {
     public static function render_view($blade_path, $data) {
 
         if( class_exists("\Jenssegers\Blade\Blade", false) ) {
-            return self::$blade->render($blade_path . '/' . $blade_path, $data);
+
+            $blade_file = explode('/', $blade_path);
+            $blade_file = $blade_file[count($blade_file)-1];
+            
+            return self::$blade->render($blade_path . '/' . $blade_file, $data);
         }
     }
 
