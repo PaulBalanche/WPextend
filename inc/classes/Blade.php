@@ -41,7 +41,13 @@ class Blade {
         self::$blade_theme_cache_location = ( defined('BLADE_THEME_CACHE_LOCATION') && BLADE_THEME_CACHE_LOCATION ) ? BLADE_THEME_CACHE_LOCATION : self::$blade_theme_cache_location;
 
         // Load Blade
-        self::$blade = new \Jenssegers\Blade\Blade( get_theme_file_path( self::$blade_theme_view_location ), get_theme_file_path( self::$blade_theme_cache_location ) );
+        self::$blade = new \Jenssegers\Blade\Blade(
+            [
+                get_theme_file_path( 'wpextend/views' ),
+                get_theme_file_path( self::$blade_theme_view_location )
+            ],
+            get_theme_file_path( self::$blade_theme_cache_location )
+        );
     }
 
 

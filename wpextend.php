@@ -1,12 +1,15 @@
 <?php
 /**
-* Plugin Name: WP Extend
-* Plugin URI: https://github.com/PaulBalanche/WPextend
-* Description: Extends basic Wordpress features such as add general settings, easy creating custom post type, ...
-* Text Domain: wp-extend
-* Version: 2.6.3
-* Author: Paul Balanche
-**/
+ * Plugin Name: 		WP Extend
+ * Plugin URI: 			https://github.com/PaulBalanche/WPextend
+ * Description: 		Extends basic Wordpress features such as add general settings, easy creating custom post type, ...
+ * Version: 			2.6.3
+ * Requires at least: 	5.6
+ * Requires PHP:      	7.2
+ * Author: 				Paul Balanche
+ * Author URI:      	https://github.com/PaulBalanche/
+ * Text Domain:			wp-extend
+ */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
