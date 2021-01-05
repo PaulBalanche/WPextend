@@ -43,8 +43,8 @@ class Blade {
         // Load Blade
         self::$blade = new \Jenssegers\Blade\Blade(
             [
-                get_theme_file_path( 'wpextend/views' ),
-                get_theme_file_path( self::$blade_theme_view_location )
+                get_theme_file_path( self::$blade_theme_view_location ),
+                get_theme_file_path( 'wpextend/views' )
             ],
             get_theme_file_path( self::$blade_theme_cache_location )
         );

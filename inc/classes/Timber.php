@@ -14,7 +14,6 @@ class Timber {
     private static $_instance,
     $timber,
     $timber_theme_location = 'gutenberg-blocks/views/',
-    $timber_theme_location_sections = 'sections/',
     $timber_controllers_string_output;
 
 
@@ -39,14 +38,16 @@ class Timber {
      */
     private function __construct() {
 
-        // Try to get ENV timber_theme_location & timber_theme_location_sections
+        // Try to get ENV timber_theme_location
         self::$timber_theme_location = ( defined('TIMBER_THEME_LOCATION') && TIMBER_THEME_LOCATION ) ? TIMBER_THEME_LOCATION : self::$timber_theme_location;
-        self::$timber_theme_location_sections = ( defined('TIMBER_THEME_LOCATION_SECTIONS') && TIMBER_THEME_LOCATION_SECTIONS ) ? TIMBER_THEME_LOCATION_SECTIONS : self::$timber_theme_location_sections;
         self::$timber_controllers_string_output = ( defined('TIMBER_CONTROLLERS_STRING_OUTPUT') && TIMBER_CONTROLLERS_STRING_OUTPUT ) ? TIMBER_CONTROLLERS_STRING_OUTPUT : false;
 
         // Load Timber
         self::$timber = new \Timber\Timber();
-        \Timber\Timber::$locations = get_theme_file_path(self::$timber_theme_location);
+        \Timber\Timber::$locations = [
+            get_theme_file_path( self::$timber_theme_location ),
+            get_theme_file_path( 'wpextend/views' )
+        ];
     }
 
 
@@ -59,7 +60,7 @@ class Timber {
 
         if( class_exists("\Timber\Timber", false) ) {
 
-            $path_view = ( strpos($twig_view, '.twig') !== false ) ? $twig_view : self::$timber_theme_location_sections . $twig_view . '/' . $twig_view . '.twig';
+            $path_view = ( strpos($twig_view, '.twig') !== false ) ? $twig_view : $twig_view . '/' . $twig_view . '.twig';
             
             if ( self::$timber_controllers_string_output ) {
                return \Timber\Timber::compile( $path_view, $data );
