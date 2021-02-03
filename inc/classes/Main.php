@@ -76,8 +76,8 @@ class Main {
 	 */
 	public function create_hooks() {
 
-		add_action('admin_menu', array ( __CLASS__ ,  'define_admin_menu' ) );
-		add_action('admin_enqueue_scripts', array( __CLASS__, 'script_admin' ) );
+		add_action( 'admin_menu', array ( __CLASS__ ,  'define_admin_menu' ) );
+		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'script_admin' ) );
         add_action( 'admin_post_generate_autoload_json_file', 'Wpextend\Main::generate_autoload_json_file' );
 	}
 	
@@ -207,7 +207,10 @@ class Main {
      * 
      */
     public static function add_notice_json_file_missing() {
-        
+		
+		if( strpos($_SERVER['REQUEST_URI'], 'admin-post.php?action=') !== false )
+			return;
+			
         AdminNotice::add_notice( '001', 'Some JSON configuration files do not exist yet. Click <a href="' . add_query_arg( array( 'action' => 'generate_autoload_json_file', '_wpnonce' => wp_create_nonce( 'generate_autoload_json_file' ) ), admin_url( 'admin-post.php' ) ) . '">here</a> to generate them.', 'warning', false, true, AdminNotice::$prefix_admin_notice );
     }
 
