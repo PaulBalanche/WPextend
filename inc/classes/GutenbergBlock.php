@@ -104,6 +104,9 @@ class GutenbergBlock {
 
         // Enqueue theme scripts & styles
         add_action( 'wp_enqueue_scripts', array($this, 'theme_enqueue_blocks_scripts_and_styles') );
+
+        // Overide core block render function
+        add_filter( 'render_block', array($this, 'filter_render_block_core'), 10, 2 );
     }
     
 
@@ -355,7 +358,7 @@ class GutenbergBlock {
     public function register_custom_block() {
 
         foreach( $this->theme_blocks as $namespace_blocks => $blocks ) {
-            if( is_array($blocks) ) {
+            if( $namespace_blocks != 'core' && is_array($blocks) ) {
                 foreach( $blocks as $block ) {
 
                     if( ! is_dir( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block ) )
@@ -422,16 +425,49 @@ class GutenbergBlock {
                     // Finally register block(s)
                     foreach( $dynamic_blocks as $dynamic_single_block ) {
                         
-                        $registry = \WP_Block_Type_Registry::get_instance();
-                        if ( $registry->is_registered( $dynamic_single_block['name'] ) ) {
-                            $registry->unregister( $dynamic_single_block['name'] );
-                        }
+                        // $registry = \WP_Block_Type_Registry::get_instance();
+                        // if ( $registry->is_registered( $dynamic_single_block['name'] ) ) {
+                        //     $registry->unregister( $dynamic_single_block['name'] );
+                        // }
 
                         register_block_type( $dynamic_single_block['name'], array_merge($args_register, $dynamic_single_block['args_register']) );
                     }
                 }
             }
         }
+    }
+
+
+
+    /**
+     * Overide core block render function
+     * 
+     */
+    public function filter_render_block_core( $block_content, $block ) {
+
+        foreach( $this->theme_blocks as $namespace_blocks => $blocks ) {
+            
+            if( $namespace_blocks == 'core' && is_array($blocks) ) {
+                foreach( $blocks as $single_block ) {
+
+                    if( ! isset($block['blockName']) || ! isset($block['attrs']) || $block['blockName'] != $namespace_blocks . '/' . $single_block )
+                        continue;
+
+                    if( ! is_dir( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $single_block ) )
+                        continue;
+
+                    // render_callback
+                    if( file_exists( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $single_block . '/render.php' ) ) {
+
+                        include( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $single_block . '/render.php' );
+                        if( function_exists( $namespace_blocks . '_' . str_replace('-', '_', $single_block) . '_render_callback' ) )
+                            return call_user_func( $namespace_blocks . '_' . str_replace('-', '_', $single_block) . '_render_callback', $block['attrs'], $block_content);
+                    }
+                }
+            }
+        }
+
+        return $block_content;
     }
 
 
