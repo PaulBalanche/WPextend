@@ -30,8 +30,8 @@ class GutenbergBlock {
                 'handpicked-products', 'all-reviews', 'featured-category', 'featured-product', 'product-best-sellers', 'product-categories', 'product-category', 'product-new', 'product-on-sale', 'products-by-attribute', 'product-top-rated', 'reviews-by-product', 'reviews-by-category', 'product-search', 'product-tag', 'all-products', 'price-filter', 'attribute-filter', 'active-filters'
             ]
         ],
-        $theme_blocks_path = '/wpextend/blocks',
-        $theme_patterns_path = '/wpextend/patterns',
+        $theme_blocks_path = '/blocks',
+        $theme_patterns_path = '/patterns',
         $container_class_name = 'container';
 
     public $allowed_block_types = null,
@@ -139,6 +139,27 @@ class GutenbergBlock {
     }
 
 
+    public static function get_gutenberg_plugin_path() {
+        
+        return WP_PLUGIN_DIR . '/wpe-gutenberg-blocks';
+    }
+
+    public static function get_gutenberg_plugin_url() {
+        
+        return WP_PLUGIN_URL . '/wpe-gutenberg-blocks';
+    }
+
+    public static function get_blocks_path() {
+
+        return self::get_gutenberg_plugin_path() . self::$theme_blocks_path;
+    }
+
+    public static function get_blocks_path_url() {
+        
+        return self::get_gutenberg_plugin_url() . self::$theme_blocks_path;
+    }
+
+
 
     /**
 	* Render HTML admin page
@@ -218,28 +239,28 @@ class GutenbergBlock {
      */
     public function load_theme_blocks() {
 
-        if( file_exists( get_stylesheet_directory() . self::$theme_blocks_path ) ) {
-            $blocks_dir = scandir( get_stylesheet_directory() . self::$theme_blocks_path );
+        if( file_exists( self::get_blocks_path() ) ) {
+            $blocks_dir = scandir( self::get_blocks_path() );
             foreach( $blocks_dir as $namespace_blocks ) {
                 
-                if( ! is_dir( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks) || $namespace_blocks == '..' || $namespace_blocks == '.' )
+                if( ! is_dir( self::get_blocks_path() . '/' . $namespace_blocks) || $namespace_blocks == '..' || $namespace_blocks == '.' )
                     continue;
                     
                 $this->theme_blocks[$namespace_blocks] = [];
 
-                $blocks = scandir( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks );
+                $blocks = scandir( self::get_blocks_path() . '/' . $namespace_blocks );
                 foreach( $blocks as $block ) {
 
-                    if( ! is_dir( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block ) || $block == '..' || $block == '.' )
+                    if( ! is_dir( self::get_blocks_path() . '/' . $namespace_blocks . '/' . $block ) || $block == '..' || $block == '.' )
                         continue;
 
                     $this->theme_blocks[$namespace_blocks][] = $block;
 
                     // Dynamic blocks treatment
-                    if( file_exists( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block . '/dynamic_block.php' ) ) {
+                    if( file_exists( self::get_blocks_path() . '/' . $namespace_blocks . '/' . $block . '/dynamic_block.php' ) ) {
 
                         $dynamic_blocks = [];
-                        include( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block . '/dynamic_block.php' );
+                        include( self::get_blocks_path() . '/' . $namespace_blocks . '/' . $block . '/dynamic_block.php' );
                         foreach( $dynamic_blocks as $dynamic_block ) {
                             $this->theme_blocks[$namespace_blocks][] = str_replace($namespace_blocks . '/', '', $dynamic_block['name']);
                         }
@@ -361,27 +382,27 @@ class GutenbergBlock {
             if( $namespace_blocks != 'core' && is_array($blocks) ) {
                 foreach( $blocks as $block ) {
 
-                    if( ! is_dir( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block ) )
+                    if( ! is_dir( self::get_blocks_path() . '/' . $namespace_blocks . '/' . $block ) )
                         continue;
                     
                     $args_register = [];
 
                     // editor_script
-                    if( file_exists( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block . '/build/index.js' ) && file_exists( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block . '/build/index.asset.php' ) ) {
-                        $asset_file = include( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block . '/build/index.asset.php' );
+                    if( file_exists( self::get_blocks_path() . '/' . $namespace_blocks . '/' . $block . '/build/index.js' ) && file_exists( self::get_blocks_path() . '/' . $namespace_blocks . '/' . $block . '/build/index.asset.php' ) ) {
+                        $asset_file = include( self::get_blocks_path() . '/' . $namespace_blocks . '/' . $block . '/build/index.asset.php' );
 
                         wp_register_script(
                             $namespace_blocks . '-' . $block,
-                            get_stylesheet_directory_uri() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block . '/build/index.js',
+                            self::get_blocks_path_url() . '/' . $namespace_blocks . '/' . $block . '/build/index.js',
                             $asset_file['dependencies'],
                             $asset_file['version']
                         );
                         $args_register['editor_script'] = $namespace_blocks . '-' . $block;
 
                         // Localize script
-                        if( file_exists( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block . '/localize_script.php' ) ) {
+                        if( file_exists( self::get_blocks_path() . '/' . $namespace_blocks . '/' . $block . '/localize_script.php' ) ) {
                             
-                            $data_localized = include( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block . '/localize_script.php' );
+                            $data_localized = include( self::get_blocks_path() . '/' . $namespace_blocks . '/' . $block . '/localize_script.php' );
                             if( is_array($data_localized) ) {
                                 wp_localize_script( $namespace_blocks . '-' . $block, 'global_localized', $data_localized );
                             }
@@ -389,21 +410,21 @@ class GutenbergBlock {
                     }
 
                     // render_callback
-                    if( file_exists( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block . '/render.php' ) ) {
+                    if( file_exists( self::get_blocks_path() . '/' . $namespace_blocks . '/' . $block . '/render.php' ) ) {
 
-                        include( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block . '/render.php' );
+                        include( self::get_blocks_path() . '/' . $namespace_blocks . '/' . $block . '/render.php' );
                         if( function_exists( $namespace_blocks . '_' . str_replace('-', '_', $block) . '_render_callback' ) )
                             $args_register['render_callback'] = $namespace_blocks . '_' . str_replace('-', '_', $block) . '_render_callback';
                     }
 
                     // editor_style
-                    if( file_exists( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block . '/assets/style/editor.min.css' ) ) {
+                    if( file_exists( self::get_blocks_path() . '/' . $namespace_blocks . '/' . $block . '/assets/style/editor.min.css' ) ) {
 
                         wp_register_style(
                             $namespace_blocks . '-' . $block . '-editor-style',
-                            get_stylesheet_directory_uri() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block . '/assets/style/editor.min.css',
+                            self::get_blocks_path_url() . '/' . $namespace_blocks . '/' . $block . '/assets/style/editor.min.css',
                             array( 'wp-edit-blocks' ),
-                            filemtime( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block . '/assets/style/editor.min.css' )
+                            filemtime( self::get_blocks_path() . '/' . $namespace_blocks . '/' . $block . '/assets/style/editor.min.css' )
                         );
 
                         $args_register['editor_style'] = $namespace_blocks . '-' . $block . '-editor-style';
@@ -411,8 +432,8 @@ class GutenbergBlock {
 
                     // Dynamic blocks treatment
                     $dynamic_blocks = [];
-                    if( file_exists( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block . '/dynamic_block.php' ) ) {
-                        include( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block . '/dynamic_block.php' );
+                    if( file_exists( self::get_blocks_path() . '/' . $namespace_blocks . '/' . $block . '/dynamic_block.php' ) ) {
+                        include( self::get_blocks_path() . '/' . $namespace_blocks . '/' . $block . '/dynamic_block.php' );
                     }
                     else {
                         // No dynamic...single block
@@ -453,13 +474,13 @@ class GutenbergBlock {
                     if( ! isset($block['blockName']) || ! isset($block['attrs']) || $block['blockName'] != $namespace_blocks . '/' . $single_block )
                         continue;
 
-                    if( ! is_dir( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $single_block ) )
+                    if( ! is_dir( self::get_blocks_path() . '/' . $namespace_blocks . '/' . $single_block ) )
                         continue;
 
                     // render_callback
-                    if( file_exists( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $single_block . '/render.php' ) ) {
+                    if( file_exists( self::get_blocks_path() . '/' . $namespace_blocks . '/' . $single_block . '/render.php' ) ) {
 
-                        include( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $single_block . '/render.php' );
+                        include( self::get_blocks_path() . '/' . $namespace_blocks . '/' . $single_block . '/render.php' );
                         if( function_exists( $namespace_blocks . '_' . str_replace('-', '_', $single_block) . '_render_callback' ) )
                             return call_user_func( $namespace_blocks . '_' . str_replace('-', '_', $single_block) . '_render_callback', $block['attrs'], $block_content);
                     }
@@ -538,12 +559,12 @@ class GutenbergBlock {
                     if( is_array($this->allowed_block_types) && ! in_array($namespace_blocks . '/' . $block, $this->allowed_block_types) )
                         continue;
 
-                    if( file_exists( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block . '/assets/style/theme.min.css' ) ) {
+                    if( file_exists( self::get_blocks_path() . '/' . $namespace_blocks . '/' . $block . '/assets/style/theme.min.css' ) ) {
                         wp_enqueue_style(
                             $namespace_blocks . '-' . $block . '-theme-style',
-                            get_stylesheet_directory_uri() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block . '/assets/style/theme.min.css',
+                            self::get_blocks_path_url() . '/' . $namespace_blocks . '/' . $block . '/assets/style/theme.min.css',
                             [],
-                            filemtime( get_stylesheet_directory() . self::$theme_blocks_path . '/' . $namespace_blocks . '/' . $block . '/assets/style/theme.min.css' )
+                            filemtime( self::get_blocks_path() . '/' . $namespace_blocks . '/' . $block . '/assets/style/theme.min.css' )
                         );
                     }
                 }
