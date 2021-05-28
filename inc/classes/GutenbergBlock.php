@@ -87,9 +87,6 @@ class GutenbergBlock {
         add_action( 'init', array($this, 'register_custom_block'), 99 );
         add_action( 'admin_init', array($this, 'register_patterns') );
 
-        // admin_enqueue_scripts
-		add_action('admin_enqueue_scripts', array( __CLASS__, 'script_admin' ) );
-
         // Update Gutenberg blocks abnd block categories
         add_filter( 'allowed_block_types', array($this, 'allowed_specifics_block_types'), 10, 2 );
 
@@ -107,20 +104,13 @@ class GutenbergBlock {
 
         // Overide core block render function
         add_filter( 'render_block', array($this, 'filter_render_block_core'), 10, 2 );
+
+        // Create AJAX endpoint to get "frontspec" JSON file
+        add_action( 'wp_ajax_wpe_frontspec', array($this, 'get_frontspec_json_file') );
+        add_action( 'wp_ajax_nopriv_wpe_frontspec', array($this, 'get_frontspec_json_file') );
     }
+
     
-
-
-    /**
-	 * Wordpress Enqueues functions
-	 *
-	 */
-	public static function script_admin() {
-
-		// wp_enqueue_script( 'script_admin_block_editor', WPEXTEND_ASSETS_URL . 'js/admin/block-editor.js');
-	}
-
-
 
     /**
      * Add sub-menu page into WPExtend menu
@@ -157,6 +147,11 @@ class GutenbergBlock {
     public static function get_blocks_path_url() {
         
         return self::get_gutenberg_plugin_url() . self::$theme_blocks_path;
+    }
+
+    public static function get_fontspec_path() {
+        
+        return get_stylesheet_directory() . '/frontspec.json';
     }
 
 
@@ -580,6 +575,29 @@ class GutenbergBlock {
             return Timber::render_view($path, $data);
         else if( defined('WPE_TEMPLATE_ENGINE') && WPE_TEMPLATE_ENGINE == 'blade' )
             return Blade::getInstance()::render_view($path, $data);
+    }
+
+
+
+    /**
+     * Return data from "frontspec" JSON file
+     * 
+     */
+    public function get_frontspec_json_file() {
+
+        $front_spec = json_decode ( file_get_contents( self::get_fontspec_path() ), true );
+
+        if ( isset($_GET['data']) ) {
+
+            if ( array_key_exists($_GET['data'], $front_spec) )
+                echo json_encode( $front_spec[$_GET['data']] );
+            else
+                echo null;
+        }
+        else
+            echo json_encode( $front_spec );
+
+        wp_die();
     }
 
 
