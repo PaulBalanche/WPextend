@@ -106,8 +106,8 @@ class GutenbergBlock {
         add_filter( 'render_block', array($this, 'filter_render_block_core'), 10, 2 );
 
         // Create AJAX endpoint to get "frontspec" JSON file
-        add_action( 'wp_ajax_wpe_frontspec', array($this, 'get_frontspec_json_file') );
-        add_action( 'wp_ajax_nopriv_wpe_frontspec', array($this, 'get_frontspec_json_file') );
+        add_action( 'wp_ajax_wpe_frontspec', array($this, 'ajax_get_frontspec_json_file') );
+        add_action( 'wp_ajax_nopriv_wpe_frontspec', array($this, 'ajax_get_frontspec_json_file') );
     }
 
     
@@ -580,10 +580,10 @@ class GutenbergBlock {
 
 
     /**
-     * Return data from "frontspec" JSON file
+     * Return data from "frontspec" JSON file using AJAX
      * 
      */
-    public function get_frontspec_json_file() {
+    public function ajax_get_frontspec_json_file() {
 
         $front_spec = json_decode ( file_get_contents( self::get_fontspec_path() ), true );
 
@@ -598,6 +598,27 @@ class GutenbergBlock {
             echo json_encode( $front_spec );
 
         wp_die();
+    }
+
+
+
+    /**
+     * Return data from "frontspec" JSON file
+     * 
+     */
+    public static function get_frontspec_json_file($data) {
+
+        $front_spec = json_decode ( file_get_contents( self::get_fontspec_path() ), true );
+
+        if ( isset($data) ) {
+
+            if ( array_key_exists($data, $front_spec) )
+                return $front_spec[$data];
+            else
+                return null;
+        }
+        else
+            return $front_spec;
     }
 
 
