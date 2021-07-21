@@ -88,7 +88,7 @@ class GutenbergBlock {
         add_action( 'admin_init', array($this, 'register_patterns') );
 
         // Update Gutenberg blocks abnd block categories
-        add_filter( 'allowed_block_types', array($this, 'allowed_specifics_block_types'), 10, 2 );
+        add_filter( 'allowed_block_types_all', array($this, 'allowed_specifics_block_types'), 10, 2 );
 
         // Create autoload_json_file if mnissing
         add_action( 'wpextend_generate_autoload_json_file', array($this, 'generate_autoload_json_file') );
