@@ -13,8 +13,7 @@ class Timber {
      */
     private static $_instance,
     $timber,
-    $timber_theme_location = 'gutenberg-blocks/views/',
-    $timber_controllers_string_output;
+    $theme_view_root_location = 'gutenberg-blocks/views/';
 
 
 
@@ -38,16 +37,26 @@ class Timber {
      */
     private function __construct() {
 
-        // Try to get ENV timber_theme_location
-        self::$timber_theme_location = ( defined('TIMBER_THEME_LOCATION') && TIMBER_THEME_LOCATION ) ? TIMBER_THEME_LOCATION : self::$timber_theme_location;
-        self::$timber_controllers_string_output = ( defined('TIMBER_CONTROLLERS_STRING_OUTPUT') && TIMBER_CONTROLLERS_STRING_OUTPUT ) ? TIMBER_CONTROLLERS_STRING_OUTPUT : false;
-
         // Load Timber
         self::$timber = new \Timber\Timber();
         \Timber\Timber::$locations = [
-            get_theme_file_path( self::$timber_theme_location ),
+            get_theme_file_path( self::get_theme_view_location() ),
             GutenbergBlock::get_gutenberg_plugin_path() . '/views'
         ];
+    }
+
+
+
+    public static function get_theme_view_location() {
+
+        self::$theme_view_root_location = ( defined('THEME_VIEW_ROOT_LOCATION') && THEME_VIEW_ROOT_LOCATION ) ? THEME_VIEW_ROOT_LOCATION : self::$theme_view_root_location;
+        return self::$theme_view_root_location;
+    }
+
+
+    public static function get_view_filename_extension() {
+
+        return '.twig';
     }
 
 
@@ -62,7 +71,7 @@ class Timber {
 
             $path_view = ( strpos($twig_view, '.twig') !== false ) ? $twig_view : $twig_view . '/' . $twig_view . '.twig';
             
-            if ( self::$timber_controllers_string_output ) {
+            if ( defined('TIMBER_CONTROLLERS_STRING_OUTPUT') && TIMBER_CONTROLLERS_STRING_OUTPUT ) {
                return \Timber\Timber::compile( $path_view, $data );
             }
             else {

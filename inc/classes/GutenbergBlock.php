@@ -124,34 +124,43 @@ class GutenbergBlock {
 
 
     public static function get_container_class_name() {
-
         return self::$container_class_name;
     }
 
-
-    public static function get_gutenberg_plugin_path() {
-        
+    public static function get_gutenberg_plugin_path() {   
         return WP_PLUGIN_DIR . '/wpe-gutenberg-blocks';
     }
 
     public static function get_gutenberg_plugin_url() {
-        
         return WP_PLUGIN_URL . '/wpe-gutenberg-blocks';
     }
 
     public static function get_blocks_path() {
-
         return self::get_gutenberg_plugin_path() . self::$theme_blocks_path;
     }
 
     public static function get_blocks_path_url() {
-        
         return self::get_gutenberg_plugin_url() . self::$theme_blocks_path;
     }
 
     public static function get_fontspec_path() {
-        
         return get_stylesheet_directory() . '/frontspec.json';
+    }
+
+    public static function get_theme_view_location() {
+
+        if( defined('WPE_TEMPLATE_ENGINE') && WPE_TEMPLATE_ENGINE == 'timber' )
+            return Timber::get_theme_view_location();
+        else if( defined('WPE_TEMPLATE_ENGINE') && WPE_TEMPLATE_ENGINE == 'blade' )
+            return Blade::get_theme_view_location();
+    }
+    
+    public static function get_view_filename_extension() {
+
+        if( defined('WPE_TEMPLATE_ENGINE') && WPE_TEMPLATE_ENGINE == 'timber' )
+            return Timber::get_view_filename_extension();
+        else if( defined('WPE_TEMPLATE_ENGINE') && WPE_TEMPLATE_ENGINE == 'blade' )
+            return Blade::get_view_filename_extension();
     }
 
 
@@ -619,6 +628,43 @@ class GutenbergBlock {
         }
         else
             return $front_spec;
+    }
+
+
+
+    /**
+     * Generate single components frontspec from all viewspec find in each components.
+     * 
+     */
+    public static function get_frontspec_components() {
+
+        $front_components = [];
+
+        $components_dir = get_theme_file_path( self::get_theme_view_location() . COMPONENTS_RELATIVE_PATH );
+        if( file_exists($components_dir) ) {
+            
+            $components = scandir( $components_dir );
+            foreach( $components as $component ) {
+
+                if( ! is_dir($components_dir . $component) || $component == '..' || $component == '.' )
+                    continue;
+
+                if( file_exists( $components_dir . $component . '/viewspec.json' ) ) {
+
+                    $viewspec_data = json_decode ( file_get_contents( $components_dir . $component . '/viewspec.json' ), true );
+                    $viewspec_data['id'] = str_replace('_', '-', trim(strtolower($viewspec_data['id'])));
+                    $viewspec_data['path'] = COMPONENTS_RELATIVE_PATH . $component . '/' . $component . self::get_view_filename_extension();
+                    $viewspec_data['props'] = $viewspec_data['data'];
+                    unset($viewspec_data['data']);
+                    foreach($viewspec_data['props'] as $key_props => $props) {
+                        $viewspec_data['props'][$key_props]['type'] = strtolower($props['type']);
+                    }
+                    $front_components[$component] = $viewspec_data;
+                }
+            }
+        }
+
+        return $front_components;
     }
 
 
