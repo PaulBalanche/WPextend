@@ -636,7 +636,7 @@ class GutenbergBlock {
      * Generate single components frontspec from all viewspec find in each components.
      * 
      */
-    public static function get_frontspec_components() {
+    public static function get_frontspec_components( $only_editable = false ) {
 
         $front_components = [];
 
@@ -660,6 +660,7 @@ class GutenbergBlock {
                         $viewspec_data['props'][$key_props]['repeatable'] = ( strpos($props['type'], '[]') !== false ) ? true : false;
                         $viewspec_data['props'][$key_props]['label'] = ucfirst($key_props);
                     }
+                    $viewspec_data['props'] = apply_filters('wpextend/get_frontspec_component_props', $viewspec_data['props'], $viewspec_data['id'], $only_editable);
                     $front_components[$component] = $viewspec_data;
                 }
             }
