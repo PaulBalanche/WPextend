@@ -654,8 +654,6 @@ class GutenbergBlock {
                     $viewspec_data = json_decode ( file_get_contents( $components_dir . $component . '/viewspec.json' ), true );
                     $viewspec_data['id'] = str_replace('_', '-', trim(strtolower($viewspec_data['id'])));
                     $viewspec_data['path'] = COMPONENTS_RELATIVE_PATH . $component . '/' . $component . self::get_view_filename_extension();
-                    $viewspec_data['props'] = $viewspec_data['data'];
-                    unset($viewspec_data['data']);
                     foreach($viewspec_data['props'] as $key_props => $props) {
                         $viewspec_data['props'][$key_props]['type'] = strtolower($props['type']);
                     }
