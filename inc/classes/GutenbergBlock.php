@@ -655,7 +655,10 @@ class GutenbergBlock {
                     $viewspec_data['id'] = str_replace('_', '-', trim(strtolower($viewspec_data['id'])));
                     $viewspec_data['path'] = COMPONENTS_RELATIVE_PATH . $component . '/' . $component . self::get_view_filename_extension();
                     foreach($viewspec_data['props'] as $key_props => $props) {
-                        $viewspec_data['props'][$key_props]['type'] = strtolower($props['type']);
+
+                        $viewspec_data['props'][$key_props]['type'] = str_replace('[]', '', strtolower($props['type']));
+                        $viewspec_data['props'][$key_props]['repeatable'] = ( strpos($props['type'], '[]') !== false ) ? true : false;
+                        $viewspec_data['props'][$key_props]['label'] = ucfirst($key_props);
                     }
                     $front_components[$component] = $viewspec_data;
                 }
