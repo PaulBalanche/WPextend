@@ -146,6 +146,10 @@ class GutenbergBlock {
     public static function get_fontspec_path() {
         return get_stylesheet_directory() . '/frontspec.json';
     }
+    
+    public static function get_backspec_path() {
+        return get_stylesheet_directory() . '/backspec.json';
+    }
 
     public static function get_theme_view_location() {
 
@@ -615,11 +619,11 @@ class GutenbergBlock {
      * Return data from "frontspec" JSON file
      * 
      */
-    public static function get_frontspec_json_file($data) {
+    public static function get_frontspec_json_file( $data = false ) {
 
         $front_spec = json_decode ( file_get_contents( self::get_fontspec_path() ), true );
 
-        if ( isset($data) ) {
+        if ( $data ) {
 
             if ( array_key_exists($data, $front_spec) )
                 return $front_spec[$data];
@@ -628,6 +632,27 @@ class GutenbergBlock {
         }
         else
             return $front_spec;
+    }
+
+
+
+    /**
+     * Return data from "backspec" JSON file
+     * 
+     */
+    public static function get_backspec_json_file( $data = false ) {
+
+        $back_spec = json_decode ( file_get_contents( self::get_backspec_path() ), true );
+
+        if ( $data ) {
+
+            if ( array_key_exists($data, $back_spec) )
+                return $back_spec[$data];
+            else
+                return null;
+        }
+        else
+            return $back_spec;
     }
 
 
@@ -642,7 +667,8 @@ class GutenbergBlock {
 
         $components_dir = get_theme_file_path( self::get_theme_view_location() . COMPONENTS_RELATIVE_PATH );
         if( file_exists($components_dir) ) {
-            
+
+            $backspec_components = self::get_backspec_json_file('components');
             $components = scandir( $components_dir );
             foreach( $components as $component ) {
 
@@ -654,13 +680,24 @@ class GutenbergBlock {
                     $viewspec_data = json_decode ( file_get_contents( $components_dir . $component . '/viewspec.json' ), true );
                     $viewspec_data['id'] = str_replace('_', '-', trim(strtolower($viewspec_data['id'])));
                     $viewspec_data['path'] = COMPONENTS_RELATIVE_PATH . $component . '/' . $component . self::get_view_filename_extension();
+
+                    if( is_array($backspec_components) && isset($backspec_components[$viewspec_data['id']]) ) {
+                        $viewspec_data = array_replace_recursive( $viewspec_data, $backspec_components[$viewspec_data['id']]);
+                    }
+
                     foreach($viewspec_data['props'] as $key_props => $props) {
+
+                        if( $only_editable && isset( $props['editable'] ) && $props['editable'] == false ) {
+                            unset( $viewspec_data['props'][$key_props] );
+                            continue;
+                        }
 
                         $viewspec_data['props'][$key_props]['type'] = str_replace('[]', '', strtolower($props['type']));
                         $viewspec_data['props'][$key_props]['repeatable'] = ( strpos($props['type'], '[]') !== false ) ? true : false;
                         $viewspec_data['props'][$key_props]['label'] = ucfirst($key_props);
                     }
-                    $viewspec_data['props'] = apply_filters('wpextend/get_frontspec_component_props', $viewspec_data['props'], $viewspec_data['id'], $only_editable);
+
+                    $viewspec_data['props'] = apply_filters('wpextend/get_frontspec_component_props_' . $viewspec_data['id'], $viewspec_data['props'], $only_editable);
                     $front_components[$component] = $viewspec_data;
                 }
             }
