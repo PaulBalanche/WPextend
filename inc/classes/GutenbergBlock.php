@@ -687,7 +687,7 @@ class GutenbergBlock {
 
                     foreach($viewspec_data['props'] as $key_props => $props) {
 
-                        if( $only_editable && isset( $props['editable'] ) && $props['editable'] == false ) {
+                        if( ! isset($props['type']) || ( $only_editable && isset( $props['editable'] ) && $props['editable'] == false ) ) {
                             unset( $viewspec_data['props'][$key_props] );
                             continue;
                         }
