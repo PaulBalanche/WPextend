@@ -1,7 +1,7 @@
 {
     "name": "wpextend/wpextend",
     "description": "Extends basic Wordpress features.",
-    "version": "3.1.4",
+    "version": "3.1.5",
     "type": "wordpress-plugin",
     "keywords": ["wordpress", "plugin", "wpextend", "general settings", "custom post type"],
     "homepage": "https://github.com/PaulBalanche/WPextend/",

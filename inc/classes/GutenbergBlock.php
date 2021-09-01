@@ -619,9 +619,14 @@ class GutenbergBlock {
      * Return data from "frontspec" JSON file
      * 
      */
-    public static function get_frontspec_json_file( $data = false ) {
+    public static function get_frontspec_json_file( $data = false, $merge_backspec = true ) {
 
         $front_spec = json_decode ( file_get_contents( self::get_fontspec_path() ), true );
+
+        if( $merge_backspec ) {
+            $back_spec = self::get_backspec_json_file();
+            $front_spec = array_replace_recursive( $front_spec, $back_spec);
+        }
 
         if ( $data ) {
 
