@@ -223,8 +223,8 @@ class SinglePostType {
 		$retour_html .= TypeField::render_label_and_free_html( 'Args', '', '<div class="flex-container">' . $free_html . '</div>' );
 
 		// Taxonomy
-		$free_html = '<div class="flex_item mb-2">' . TypeField::render_input_text( '<strong>Taxonomy label</strong>', 'taxonomy[label]', $taxonomy['label'], '', false, '', false ) . '</div>';
-		$free_html .= '<div class="flex_item mb-2">' . TypeField::render_input_text( '<strong>Taxonomy slug</strong>', 'taxonomy[slug]', $taxonomy['slug'], '', false, '', false ) . '</div>';
+		$free_html = '<div class="flex_item mb-2">' . TypeField::render_input_text( '<strong>Taxonomy label</strong>', 'taxonomy[label]', ( ( is_array($taxonomy) ) ? $taxonomy['label'] : '' ), '', false, '', false ) . '</div>';
+		$free_html .= '<div class="flex_item mb-2">' . TypeField::render_input_text( '<strong>Taxonomy slug</strong>', 'taxonomy[slug]', ( ( is_array($taxonomy) ) ? $taxonomy['slug'] : '' ), '', false, '', false ) . '</div>';
 		$retour_html .= TypeField::render_label_and_free_html( 'Taxonomy', '', '<div class="flex-container">' . $free_html . '</div>' );
 
 		// Multiple post thumbnails

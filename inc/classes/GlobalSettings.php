@@ -242,7 +242,7 @@ class GlobalSettings {
 					){
 						$retour[$key] = $val[$instance_global_settings->wordpress_current_langage];
 					}
-					else
+					elseif( array_key_exists($instance_global_settings->wordpress_default_locale, $val) )
 						$retour[$key] = $val[$instance_global_settings->wordpress_default_locale];
 				}
 				return $retour;
