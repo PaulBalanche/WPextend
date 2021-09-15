@@ -154,8 +154,8 @@ class PostType {
 
 		add_submenu_page(WPEXTEND_MAIN_SLUG_ADMIN_PAGE, 'WP Extend - Custom Post Type', 'Custom Post Type', 'manage_options', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . self::$admin_url, array( $this, 'render_admin_page' ) );
 	}
-	
 
+	
 
 	/**
 	* Render HTML admin page

@@ -88,7 +88,7 @@ class Main {
     */
     public static function define_admin_menu() {
 
-		add_menu_page(Options::getInstance()->get_site_settings_name(), Options::getInstance()->get_site_settings_name(), 'edit_posts', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . '_site_settings', array( GlobalSettings::getInstance(), 'render_admin_page' ), '', 3 );
+		add_menu_page(Options::getInstance()->get_site_settings_name(), Options::getInstance()->get_site_settings_name(), 'edit_posts', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . '_site_settings', array( GlobalSettings::getInstance(), 'render_admin_page' ), '', Options::getInstance()->get_site_settings_menu_position() );
 		add_submenu_page(WPEXTEND_MAIN_SLUG_ADMIN_PAGE . '_site_settings', 'Site settings', 'Site settings', 'edit_posts', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . '_site_settings', array( GlobalSettings::getInstance(), 'render_admin_page' ) );
 
 		add_menu_page('WPE config', 'WPE config', 'manage_options', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . Options::$admin_url, array( Options::getInstance(), 'render_admin_page' ) );

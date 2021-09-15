@@ -16,7 +16,8 @@ class Options {
     static public $admin_url = '',
         $wpe_settings_post_name = WPEXTEND_PREFIX_DATA_IN_DB . 'options',
         $json_file_name = 'options.json',
-        $default_site_settings_name = 'WP Extend';
+        $default_site_settings_name = 'WP Extend',
+        $default_site_settings_menu_position = 3;
 
     private $options = [
         'site_settings_name' => '',
@@ -203,6 +204,17 @@ class Options {
             return $this->get_option('site_settings_name');
 
         return ( $view == 'editor' ) ? '' : self::$default_site_settings_name;
+    }
+
+
+
+
+    public function get_site_settings_menu_position( $view = 'public' ) {
+        
+        if( ! empty($this->get_option('site_settings_menu_position')) )
+            return $this->get_option('site_settings_menu_position');
+
+        return self::$default_site_settings_menu_position;
     }
 
     

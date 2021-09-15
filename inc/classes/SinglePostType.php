@@ -107,14 +107,14 @@ class SinglePostType {
 	 */
 	 public function register_custom_post_type(){
 
-		 // Just convert in boolean if necessary
+		// Just convert in boolean if necessary
 		foreach( $this->args as $key => $val ){
 			if( in_array($val, array('true', 'false') ) ){
 				$this->args[$key] = convertToBoolean($val);
 			}
 		}
 
-		 // Call wodpress register post type function
+		// Call wodpress register post type function
 	   	register_post_type($this->slug, $this->args);
 		if( is_array($this->taxonomy) ){
 			$this->register_custom_taxonomy();
