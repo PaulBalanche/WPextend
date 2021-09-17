@@ -100,9 +100,9 @@ class GlobalSettings {
 		elseif( isset($_GET['lang']) && !empty($_GET['lang']) ){
 			$this->wordpress_current_langage = $_GET['lang'];
 		}
-		else{
+		
+		if( $this->wordpress_current_langage == null || $this->wordpress_current_langage  == 'all' )
 			$this->wordpress_current_langage = $this->wordpress_default_locale;
-		}
 	}
 
 
@@ -198,7 +198,6 @@ class GlobalSettings {
 
 		// Get GlobalSettings instance
 		$instance_global_settings = GlobalSettings::getInstance();
-
 		if($id != null){
 
 			$id = sanitize_title( $id );
@@ -242,7 +241,7 @@ class GlobalSettings {
 					){
 						$retour[$key] = $val[$instance_global_settings->wordpress_current_langage];
 					}
-					elseif( array_key_exists($instance_global_settings->wordpress_default_locale, $val) )
+					else
 						$retour[$key] = $val[$instance_global_settings->wordpress_default_locale];
 				}
 				return $retour;
@@ -314,14 +313,14 @@ class GlobalSettings {
 					 $instance_category->capabilities == 'all' ||
 					 current_user_can('manage_options')
 				) &&
-				(
-					$current_screen->parent_base == WPEXTEND_MAIN_SLUG_ADMIN_PAGE ||
-					! $instance_category->wpml_compatible ||
-					(
-						$instance_category->wpml_compatible &&
-						! empty( apply_filters('wpml_current_language', NULL) )
-					)
-				) &&
+				// (
+				// 	$current_screen->parent_base == WPEXTEND_MAIN_SLUG_ADMIN_PAGE ||
+				// 	! $instance_category->wpml_compatible ||
+				// 	(
+				// 		$instance_category->wpml_compatible &&
+				// 		! empty( apply_filters('wpml_current_language', NULL) )
+				// 	)
+				// ) &&
 				(
 					$current_screen->parent_base == WPEXTEND_MAIN_SLUG_ADMIN_PAGE ||
 					( $current_screen->parent_base != WPEXTEND_MAIN_SLUG_ADMIN_PAGE && is_array($instance_category->list_settings) && count($instance_category->list_settings) > 0 )
@@ -329,7 +328,7 @@ class GlobalSettings {
 		 	) {
 
 			 	$retour_html .= '<h2>'.$val;
-			 	if( $instance_category->wpml_compatible && !empty(apply_filters('wpml_current_language', NULL )) ){
+			 	if( $instance_category->wpml_compatible && ! empty(apply_filters('wpml_current_language', NULL )) ){
 			 		$retour_html .= ' ('. apply_filters('wpml_current_language', NULL ) .')';
 				}
 				 
