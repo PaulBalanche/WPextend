@@ -135,6 +135,7 @@ class SinglePostType {
 			$this->slug,
 			array(
 				'label' => $this->taxonomy['label'],
+				'labels' => $this->taxonomy['labels'],
 				'rewrite' => array( 'slug' => $this->taxonomy['slug'] ),
 				'hierarchical' => $this->taxonomy['hierarchical'],
 				'sort' => true,
