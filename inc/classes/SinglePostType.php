@@ -15,6 +15,7 @@ class SinglePostType {
 	public $labels;
 	public $args;
 	public $taxonomy;
+	public $taxonomies;
 	public static $default_labels = array(
 		'name'						=> '%s',
 		'singular_name'				=> 'New %s',
@@ -96,6 +97,15 @@ class SinglePostType {
 			$this->taxonomy = $data['taxonomy'];
 			$this->taxonomy['hierarchical'] = ( array_key_exists('hierarchical', $data['taxonomy']) ) ? $data['taxonomy']['hierarchical'] : true;
 		}
+		elseif( array_key_exists('taxonomy', $data) && is_array($data['taxonomy']) ) {
+			$this->taxonomies = [];
+			foreach( $data['taxonomy'] as $key_taxo => $taxo ) {
+				if( array_key_exists('slug', $taxo) && array_key_exists('label', $taxo) && !empty($taxo['slug']) && !empty($taxo['label']) ){
+					$this->taxonomies[$key_taxo] = $taxo;
+					$this->taxonomies[$key_taxo]['hierarchical'] = ( array_key_exists('hierarchical', $taxo) ) ? convertToBoolean( $taxo['hierarchical'] ) : true;		
+				}
+			}
+		}
  	 }
 
 
@@ -114,10 +124,16 @@ class SinglePostType {
 			}
 		}
 
-		// Call wodpress register post type function
+		// Call Wordpress register post type function
 	   	register_post_type($this->slug, $this->args);
+
 		if( is_array($this->taxonomy) ){
-			$this->register_custom_taxonomy();
+			$this->register_custom_taxonomy( $this->taxonomy );
+		}
+
+		if( is_array($this->taxonomies) && count($this->taxonomies) > 0 ){
+			foreach( $this->taxonomies as $taxo )
+				$this->register_custom_taxonomy( $taxo );
 		}
 	 }
 
@@ -128,16 +144,16 @@ class SinglePostType {
 	 *
 	 * @return void
 	 */
-	 public function register_custom_taxonomy(){
+	 public function register_custom_taxonomy( $data_taxo ){
 
 		register_taxonomy(
-			$this->taxonomy['slug'],
+			$data_taxo['slug'],
 			$this->slug,
 			array(
-				'label' => $this->taxonomy['label'],
-				'labels' => $this->taxonomy['labels'],
-				'rewrite' => array( 'slug' => $this->taxonomy['slug'] ),
-				'hierarchical' => ( $this->taxonomy['hierarchical'] == 'true') ? true : false,
+				'label' => $data_taxo['label'],
+				'labels' => $data_taxo['labels'],
+				'rewrite' => array( 'slug' => $data_taxo['slug'] ),
+				'hierarchical' => $data_taxo['hierarchical'],
 				'sort' => true,
 				'show_ui' => true,
 				'show_admin_column' => true,
