@@ -137,7 +137,7 @@ class SinglePostType {
 				'label' => $this->taxonomy['label'],
 				'labels' => $this->taxonomy['labels'],
 				'rewrite' => array( 'slug' => $this->taxonomy['slug'] ),
-				'hierarchical' => $this->taxonomy['hierarchical'],
+				'hierarchical' => ( $this->taxonomy['hierarchical'] == 'true') ? true : false,
 				'sort' => true,
 				'show_ui' => true,
 				'show_admin_column' => true,
