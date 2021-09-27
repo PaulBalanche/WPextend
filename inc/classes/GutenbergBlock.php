@@ -680,35 +680,78 @@ class GutenbergBlock {
                 if( ! is_dir($components_dir . $component) || $component == '..' || $component == '.' )
                     continue;
 
-                if( file_exists( $components_dir . $component . '/viewspec.json' ) ) {
-
-                    $viewspec_data = json_decode ( file_get_contents( $components_dir . $component . '/viewspec.json' ), true );
-                    $viewspec_data['id'] = str_replace('_', '-', trim(strtolower($viewspec_data['id'])));
-                    $viewspec_data['path'] = COMPONENTS_RELATIVE_PATH . $component . '/' . $component . self::get_view_filename_extension();
-
-                    if( is_array($backspec_components) && isset($backspec_components[$viewspec_data['id']]) ) {
-                        $viewspec_data = array_replace_recursive( $viewspec_data, $backspec_components[$viewspec_data['id']]);
-                    }
-
-                    foreach($viewspec_data['props'] as $key_props => $props) {
-
-                        if( ! isset($props['type']) || ( $only_editable && isset( $props['editable'] ) && $props['editable'] == false ) ) {
-                            unset( $viewspec_data['props'][$key_props] );
-                            continue;
-                        }
-
-                        $viewspec_data['props'][$key_props]['type'] = str_replace('[]', '', strtolower($props['type']));
-                        $viewspec_data['props'][$key_props]['repeatable'] = ( strpos($props['type'], '[]') !== false ) ? true : false;
-                        $viewspec_data['props'][$key_props]['label'] = ucfirst($key_props);
-                    }
-
-                    $viewspec_data['props'] = apply_filters('wpextend/get_frontspec_component_props_' . $viewspec_data['id'], $viewspec_data['props'], $only_editable);
-                    $front_components[$component] = $viewspec_data;
+                $front_components[$component] = self::get_recursive_viewspec( $components_dir . $component . '/viewspec.json', $only_editable );
+                if( is_null($front_components[$component]) ) {
+                    unset( $front_components[$component] );
+                    continue;
+                }
+                
+                if( is_array($backspec_components) && is_array($front_components[$component]) && isset($backspec_components[$front_components[$component]['id']]) ) {
+                    $front_components[$component] = array_replace_recursive( $front_components[$component], $backspec_components[$front_components[$component]['id']]);
                 }
             }
         }
-
         return $front_components;
+    }
+
+
+
+    /**
+     * Recursive function to get deep viewspec
+     * 
+     */
+    public static function get_recursive_viewspec( $path_viewspec_file, $only_editable = false ) {
+
+        if( file_exists( $path_viewspec_file ) ) {
+
+            $component_dir_path = dirname($path_viewspec_file);
+            $basename_component = basename($component_dir_path);
+
+            $viewspec_data = json_decode( file_get_contents( $path_viewspec_file ), true );
+            $viewspec_data['id'] = str_replace('_', '-', trim(strtolower($viewspec_data['id'])));
+
+            if( file_exists( get_theme_file_path( self::get_theme_view_location() . COMPONENTS_RELATIVE_PATH . $basename_component . '/' . $basename_component . self::get_view_filename_extension() ) ) )
+                $viewspec_data['path'] = COMPONENTS_RELATIVE_PATH . $basename_component . '/' . $basename_component . self::get_view_filename_extension();
+
+            if( isset($viewspec_data['props']) ) {
+
+                foreach($viewspec_data['props'] as $key_props => $props) {
+
+                    // Extend
+                    if( isset($props['extends']) ) {
+    
+                        $viewspec_data['props'][$key_props] = wp_parse_args( $props, self::get_recursive_viewspec( get_theme_file_path( self::get_theme_view_location() . 'components/' . $props['extends'] . '/viewspec.json' ) ) );
+                        unset( $viewspec_data['props'][$key_props]['extends'] );
+                        $props['type'] = 'object';
+                    }
+                    // Prop spec
+                    else if( ! is_array($props) ) {
+    
+                        if( strpos($props, 'prop.') !== false ) {
+                            $sub_props = str_replace('prop.', '', $props);
+                            $viewspec_data['props'][$key_props] = self::get_recursive_viewspec( get_theme_file_path( self::get_theme_view_location() . 'props/' . $sub_props . '/propspec.json' ) );
+                            $props = [
+                                'type' => $viewspec_data['props'][$key_props]['type']
+                            ];
+                        }
+                    }
+                    elseif( ! isset($props['type']) || ( $only_editable && isset( $props['editable'] ) && $props['editable'] == false ) ) {
+                        unset( $viewspec_data['props'][$key_props] );
+                        continue;
+                    }
+    
+                    $viewspec_data['props'][$key_props]['type'] = str_replace('[]', '', strtolower($props['type']));
+                    $viewspec_data['props'][$key_props]['repeatable'] = ( strpos($props['type'], '[]') !== false ) ? true : false;
+                    $viewspec_data['props'][$key_props]['label'] = ucfirst($key_props);
+                }
+
+                $viewspec_data['props'] = apply_filters('wpextend/get_frontspec_component_props_' . $viewspec_data['id'], $viewspec_data['props'], $only_editable);
+            }
+
+            return $viewspec_data;
+        }
+
+        return null;
     }
 
 
