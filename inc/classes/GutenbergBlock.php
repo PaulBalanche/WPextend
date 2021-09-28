@@ -15,28 +15,29 @@ class GutenbergBlock {
     /**
      * Properties declaration
      */
-    private static $_instance;
+    private static  $_instance;
 
-    public static $json_file_name = 'gutenberg_block.json',
-        $admin_url = '_gutenberg_block',
-        $wp_default_blocks = [
-            'core' => [
-                'paragraph', 'list', 'heading', 'quote', 'audio', 'image', 'cover', 'video', 'gallery', 'file', 'html', 'preformatted', 'code', 'verse', 'pullquote', 'table', 'columns', 'column', 'group', 'button', 'more', 'nextpage', 'media-text', 'spacer', 'separator', 'calendar', 'shortcode', 'archives', 'categories', 'latest-comments', 'latest-posts', 'rss', 'search', 'tag-cloud', 'embed',
-            ],
-            'core-embed' => [
-                'twitter', 'youtube', 'facebook', 'instagram', 'wordpress', 'soundcloud', 'spotify', 'flickr', 'vimeo', 'animoto', 'cloudup', 'collegehumor', 'crowdsignal', 'polldaddy', 'dailymotion', 'hulu', 'imgur', 'issuu', 'kickstarter', 'meetup-com', 'mixcloud', 'reddit', 'reverbnation', 'screencast', 'scribd', 'slideshare', 'smugmug', 'speaker', 'speaker-deck', 'ted', 'tumblr', 'videopress', 'wordpress-tv', 'amazon-kindle'
-            ],
-            'woocommerce' => [
-                'handpicked-products', 'all-reviews', 'featured-category', 'featured-product', 'product-best-sellers', 'product-categories', 'product-category', 'product-new', 'product-on-sale', 'products-by-attribute', 'product-top-rated', 'reviews-by-product', 'reviews-by-category', 'product-search', 'product-tag', 'all-products', 'price-filter', 'attribute-filter', 'active-filters'
-            ]
-        ],
-        $theme_blocks_path = '/blocks',
-        $theme_patterns_path = '/patterns',
-        $container_class_name = 'container';
+    public static   $json_file_name = 'gutenberg_block.json',
+                    $components_spec_generated_json_filename = 'components_spec_generated.json',
+                    $admin_url = '_gutenberg_block',
+                    $wp_default_blocks = [
+                        'core' => [
+                            'paragraph', 'list', 'heading', 'quote', 'audio', 'image', 'cover', 'video', 'gallery', 'file', 'html', 'preformatted', 'code', 'verse', 'pullquote', 'table', 'columns', 'column', 'group', 'button', 'more', 'nextpage', 'media-text', 'spacer', 'separator', 'calendar', 'shortcode', 'archives', 'categories', 'latest-comments', 'latest-posts', 'rss', 'search', 'tag-cloud', 'embed',
+                        ],
+                        'core-embed' => [
+                            'twitter', 'youtube', 'facebook', 'instagram', 'wordpress', 'soundcloud', 'spotify', 'flickr', 'vimeo', 'animoto', 'cloudup', 'collegehumor', 'crowdsignal', 'polldaddy', 'dailymotion', 'hulu', 'imgur', 'issuu', 'kickstarter', 'meetup-com', 'mixcloud', 'reddit', 'reverbnation', 'screencast', 'scribd', 'slideshare', 'smugmug', 'speaker', 'speaker-deck', 'ted', 'tumblr', 'videopress', 'wordpress-tv', 'amazon-kindle'
+                        ],
+                        'woocommerce' => [
+                            'handpicked-products', 'all-reviews', 'featured-category', 'featured-product', 'product-best-sellers', 'product-categories', 'product-category', 'product-new', 'product-on-sale', 'products-by-attribute', 'product-top-rated', 'reviews-by-product', 'reviews-by-category', 'product-search', 'product-tag', 'all-products', 'price-filter', 'attribute-filter', 'active-filters'
+                        ]
+                    ],
+                    $theme_blocks_path = '/blocks',
+                    $theme_patterns_path = '/patterns',
+                    $container_class_name = 'container';
 
-    public $allowed_block_types = null,
-        $theme_blocks = [],
-        $all_blocks = [];
+    public  $allowed_block_types = null,
+            $theme_blocks = [],
+            $all_blocks = [];
 
 
     
@@ -668,6 +669,9 @@ class GutenbergBlock {
      */
     public static function get_frontspec_components( $only_editable = false ) {
 
+        if( file_exists( get_theme_file_path(self::$components_spec_generated_json_filename) ) )
+			return json_decode( file_get_contents(get_theme_file_path(self::$components_spec_generated_json_filename)), true);
+
         $front_components = [];
 
         $components_dir = get_theme_file_path( self::get_theme_view_location() . COMPONENTS_RELATIVE_PATH );
@@ -691,6 +695,9 @@ class GutenbergBlock {
                 }
             }
         }
+
+        file_put_contents( get_theme_file_path(self::$components_spec_generated_json_filename), json_encode($front_components, JSON_PRETTY_PRINT) );
+
         return $front_components;
     }
 
