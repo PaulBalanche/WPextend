@@ -3,7 +3,7 @@
  * Plugin Name: 		WP Extend
  * Plugin URI: 			https://github.com/PaulBalanche/WPextend
  * Description: 		Extends basic Wordpress features such as add general settings, easy creating custom post type, ...
- * Version: 			3.2.3
+ * Version: 			3.2.4
  * Requires at least: 	5.6
  * Requires PHP:      	7.2
  * Author: 				Paul Balanche
@@ -18,7 +18,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 error_reporting(E_ALL | E_STRICT);
 
 // Start new or resume existing session
-session_start();
+if (session_status() == PHP_SESSION_NONE)
+	session_start();
 
 /**
 * Define variables
