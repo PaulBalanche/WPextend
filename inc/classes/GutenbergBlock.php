@@ -583,6 +583,10 @@ class GutenbergBlock {
 
 
 
+    /**
+     * Render component view using Blade or Twig
+     * 
+     */
     public static function render($path, $data) {
 
         if( defined('WPE_TEMPLATE_ENGINE') && WPE_TEMPLATE_ENGINE == 'timber' )
@@ -664,98 +668,162 @@ class GutenbergBlock {
 
 
     /**
-     * Generate single components frontspec from all viewspec find in each components.
+     * Get components frontspec generated thanks to all viewspec find in each front components.
+     * In order to prevent to loop on all components directories each time, a components_spec_generated JSON file is generated firt time, and simply use next times.
      * 
      */
-    public static function get_frontspec_components( $only_editable = false ) {
+    public static function get_components_frontspec( $only_editable = false ) {
 
-        if( file_exists( get_theme_file_path(self::$components_spec_generated_json_filename) ) )
+        // If components_spec_generated JSON file exists, just get its content and return it.
+        if( ( ! defined('WP_ENV') || WP_ENV !== 'dev' ) && file_exists( get_theme_file_path(self::$components_spec_generated_json_filename) ) )
 			return json_decode( file_get_contents(get_theme_file_path(self::$components_spec_generated_json_filename)), true);
 
-        $front_components = [];
+        // Else, loop each components and generate single JSON file.
+        $final_components_to_return = [];
+        $backspec_components = self::get_backspec_json_file('components');
 
         $components_dir = get_theme_file_path( self::get_theme_view_location() . COMPONENTS_RELATIVE_PATH );
         if( file_exists($components_dir) ) {
-
-            $backspec_components = self::get_backspec_json_file('components');
+            
+            // Scan components dir
             $components = scandir( $components_dir );
+
+            // Loop each components
             foreach( $components as $component ) {
 
                 if( ! is_dir($components_dir . $component) || $component == '..' || $component == '.' )
                     continue;
 
-                $front_components[$component] = self::get_recursive_viewspec( $components_dir . $component . '/viewspec.json', $only_editable );
-                if( is_null($front_components[$component]) ) {
-                    unset( $front_components[$component] );
+                // Treat viewspec JSON file for the current component
+                $final_components_to_return[ $component ] = self::get_component_viewspec( $components_dir . $component . '/viewspec.json', $only_editable );
+
+                // If invalid or null component, just bypass it and continue to the next component
+                if( is_null($final_components_to_return[$component]) || ! is_array($final_components_to_return[$component]) ) {
+                    unset( $final_components_to_return[$component] );
                     continue;
                 }
                 
-                if( is_array($backspec_components) && is_array($front_components[$component]) && isset($backspec_components[$front_components[$component]['id']]) ) {
-                    $front_components[$component] = array_replace_recursive( $front_components[$component], $backspec_components[$front_components[$component]['id']]);
+                // Merge component attributes with back-spec JSON file
+                if( is_array($backspec_components) && isset($backspec_components[$final_components_to_return[$component]['id']]) ) {
+                    $final_components_to_return[$component] = array_replace_recursive( $final_components_to_return[$component], $backspec_components[$final_components_to_return[$component]['id']]);
                 }
             }
         }
 
-        file_put_contents( get_theme_file_path(self::$components_spec_generated_json_filename), json_encode($front_components, JSON_PRETTY_PRINT) );
+        // Write the components frontspec generated in a JSON file.
+        file_put_contents( get_theme_file_path(self::$components_spec_generated_json_filename), json_encode($final_components_to_return, JSON_PRETTY_PRINT) );
 
-        return $front_components;
+        return $final_components_to_return;
     }
 
 
 
     /**
-     * Recursive function to get deep viewspec
+     * Recursive function to get and treat viewspec JSON file for a single component
      * 
      */
-    public static function get_recursive_viewspec( $path_viewspec_file, $only_editable = false ) {
+    public static function get_component_viewspec( $path_viewspec_file, $only_editable = false ) {
 
+        // If viewspec file exist
         if( file_exists( $path_viewspec_file ) ) {
 
             $component_dir_path = dirname($path_viewspec_file);
             $basename_component = basename($component_dir_path);
 
+            // Get the file content
             $viewspec_data = json_decode( file_get_contents( $path_viewspec_file ), true );
-            $viewspec_data['id'] = str_replace('_', '-', trim(strtolower($viewspec_data['id'])));
+            if( $viewspec_data && is_array($viewspec_data) ) {
 
-            if( file_exists( get_theme_file_path( self::get_theme_view_location() . COMPONENTS_RELATIVE_PATH . $basename_component . '/' . $basename_component . self::get_view_filename_extension() ) ) )
-                $viewspec_data['path'] = COMPONENTS_RELATIVE_PATH . $basename_component . '/' . $basename_component . self::get_view_filename_extension();
+                // Serialize component ID
+                $viewspec_data['id'] = str_replace( '_', '-', trim( strtolower( $viewspec_data['id'] ) ) );
 
-            if( isset($viewspec_data['props']) ) {
+                // Add path attribute requires by component render method
+                if( file_exists( get_theme_file_path( self::get_theme_view_location() . COMPONENTS_RELATIVE_PATH . $basename_component . '/' . $basename_component . self::get_view_filename_extension() ) ) )
+                    $viewspec_data['path'] = COMPONENTS_RELATIVE_PATH . $basename_component . '/' . $basename_component . self::get_view_filename_extension();
 
-                foreach($viewspec_data['props'] as $key_props => $props) {
+                // Get and treat component props
+                if( isset($viewspec_data['props']) && is_array($viewspec_data['props']) ) {
+                    $viewspec_data['type'] = 'object';
+                    $viewspec_data['props'] = self::get_component_props($viewspec_data['props'], $viewspec_data['id'], $only_editable);
+                }
+
+                return $viewspec_data;
+            }
+        }
+        
+        return null;
+    }
+
+
+
+    /**
+     * Recursive function to get and treat component props
+     *
+     */
+    public static function get_component_props( $component_props, $component_id = false, $only_editable = false ) {
+
+        if( is_array($component_props) ) {
+
+            foreach($component_props as $key_props => $props) {
+
+                if( is_array($props) ) {
 
                     // Extend
                     if( isset($props['extends']) ) {
-    
-                        $viewspec_data['props'][$key_props] = wp_parse_args( $props, self::get_recursive_viewspec( get_theme_file_path( self::get_theme_view_location() . 'components/' . $props['extends'] . '/viewspec.json' ) ) );
-                        unset( $viewspec_data['props'][$key_props]['extends'] );
-                        $props['type'] = 'object';
+                    
+                        $component_props[$key_props] = wp_parse_args( $props, self::get_extends_component_viewspec($props['extends']) );
+                        unset( $component_props[$key_props]['extends'] );
                     }
-                    // Prop spec
-                    else if( ! is_array($props) ) {
-    
-                        if( strpos($props, 'prop.') !== false ) {
-                            $sub_props = str_replace('prop.', '', $props);
-                            $viewspec_data['props'][$key_props] = self::get_recursive_viewspec( get_theme_file_path( self::get_theme_view_location() . 'props/' . $sub_props . '/propspec.json' ) );
-                            $props = [
-                                'type' => $viewspec_data['props'][$key_props]['type']
-                            ];
-                        }
-                    }
-                    elseif( ! isset($props['type']) || ( $only_editable && isset( $props['editable'] ) && $props['editable'] == false ) ) {
-                        unset( $viewspec_data['props'][$key_props] );
-                        continue;
-                    }
-    
-                    $viewspec_data['props'][$key_props]['type'] = str_replace('[]', '', strtolower($props['type']));
-                    $viewspec_data['props'][$key_props]['repeatable'] = ( strpos($props['type'], '[]') !== false ) ? true : false;
-                    $viewspec_data['props'][$key_props]['label'] = ucfirst($key_props);
+                }
+                else {
+                    // Extend bis
+                    $component_props[$key_props] = self::get_extends_component_viewspec($props);
                 }
 
-                $viewspec_data['props'] = apply_filters('wpextend/get_frontspec_component_props_' . $viewspec_data['id'], $viewspec_data['props'], $only_editable);
-            }
+                // If invalid or null component, or type absent, or need only editable props => just bypass it and continue to the next component
+                if( is_null($component_props[$key_props]) || ! is_array($component_props[$key_props]) || ! isset($component_props[$key_props]['type']) || ( $only_editable && isset( $props['editable'] ) && $props['editable'] == false ) ) {
+                    unset( $component_props[$key_props] );
+                    continue;
+                }
 
-            return $viewspec_data;
+                // Serialize and add some update into few attributes.
+                $component_props[$key_props]['type'] = str_replace('[]', '', strtolower($component_props[$key_props]['type']));
+                $component_props[$key_props]['repeatable'] = ( strpos($component_props[$key_props]['type'], '[]') !== false ) ? true : false;
+                $component_props[$key_props]['label'] = ucfirst($key_props);
+                
+                // If type is object with sub-props, call this recursive method
+                if( $component_props[$key_props]['type'] == 'object' && isset($component_props[$key_props]['props']) && is_array($component_props[$key_props]['props']) )
+                    $component_props[$key_props]['props'] = self::get_component_props($component_props[$key_props]['props']);
+            }
+        }
+
+        if( $component_id )
+            $component_props = apply_filters('wpextend/get_frontspec_component_props_' . $component_id, $component_props);
+
+        return $component_props;
+    }
+
+
+
+    /**
+     * Get and treat extended component 
+     * 
+     */
+    public static function get_extends_component_viewspec( $extends ) {
+
+        if( strpos($extends, '.') !== false ) {
+
+            $frontspec_views_path = self::get_frontspec_json_file( 'views' );
+            if( is_array($frontspec_views_path) && isset($frontspec_views_path['folders']) & is_array($frontspec_views_path['folders']) ) {
+
+                $prefix_extends = explode('.', $extends);
+                if( is_array($prefix_extends) && count($prefix_extends) == 2 && isset($frontspec_views_path['folders'][ $prefix_extends[0] ]) ) {
+
+                    $extends_json_files = glob( get_theme_file_path( self::get_theme_view_location() . $frontspec_views_path['folders'][ $prefix_extends[0] ] . '/' . $prefix_extends[1] . '/*.json' ) );
+                    if( $extends_json_files && is_array($extends_json_files) && count($extends_json_files) == 1 )
+                        return self::get_component_viewspec( $extends_json_files[0] );
+                }
+            }
         }
 
         return null;
