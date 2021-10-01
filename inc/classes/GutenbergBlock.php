@@ -790,6 +790,7 @@ class GutenbergBlock {
                 $component_props[$key_props]['repeatable'] = ( strpos($component_props[$key_props]['type'], '[]') !== false ) ? true : false;
                 $component_props[$key_props]['type'] = str_replace('[]', '', strtolower($component_props[$key_props]['type']));
                 $component_props[$key_props]['label'] = ucfirst($key_props);
+                $component_props[$key_props]['category'] = ( isset($component_props[$key_props]['category']) ) ? strtolower($component_props[$key_props]['category']) : '';
                 
                 // If type is object with sub-props, call this recursive method
                 if( $component_props[$key_props]['type'] == 'object' && isset($component_props[$key_props]['props']) && is_array($component_props[$key_props]['props']) )
