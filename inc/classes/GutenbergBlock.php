@@ -18,7 +18,7 @@ class GutenbergBlock {
     private static  $_instance;
 
     public static   $json_file_name = 'gutenberg_block.json',
-                    $components_spec_generated_json_filename = 'components_spec_generated.json',
+                    $components_spec_generated_json_filename = 'components_spec_generated',
                     $admin_url = '_gutenberg_block',
                     $wp_default_blocks = [
                         'core' => [
@@ -675,12 +675,11 @@ class GutenbergBlock {
     public static function get_components_frontspec( $only_editable = false ) {
 
         // If components_spec_generated JSON file exists, just get its content and return it.
-        if( ( ! defined('WP_ENV') || WP_ENV !== 'dev' ) && file_exists( get_theme_file_path(self::$components_spec_generated_json_filename) ) )
-			return json_decode( file_get_contents(get_theme_file_path(self::$components_spec_generated_json_filename)), true);
+        if( ( ! defined('WP_ENV') || WP_ENV !== 'dev' ) && file_exists( get_theme_file_path( ( $only_editable ) ? self::$components_spec_generated_json_filename . '_only_editable.json' : self::$components_spec_generated_json_filename . '.json' ) ) )
+			return json_decode( file_get_contents(get_theme_file_path( ( $only_editable ) ? self::$components_spec_generated_json_filename . '_only_editable.json' : self::$components_spec_generated_json_filename . '.json' )), true);
 
         // Else, loop each components and generate single JSON file.
         $final_components_to_return = [];
-        $backspec_components = self::get_backspec_json_file('components');
 
         $components_dir = get_theme_file_path( self::get_theme_view_location() . COMPONENTS_RELATIVE_PATH );
         if( file_exists($components_dir) ) {
@@ -702,16 +701,11 @@ class GutenbergBlock {
                     unset( $final_components_to_return[$component] );
                     continue;
                 }
-                
-                // Merge component attributes with back-spec JSON file
-                if( is_array($backspec_components) && isset($backspec_components[$final_components_to_return[$component]['id']]) ) {
-                    $final_components_to_return[$component] = array_replace_recursive( $final_components_to_return[$component], $backspec_components[$final_components_to_return[$component]['id']]);
-                }
             }
         }
 
         // Write the components frontspec generated in a JSON file.
-        file_put_contents( get_theme_file_path(self::$components_spec_generated_json_filename), json_encode($final_components_to_return, JSON_PRETTY_PRINT) );
+        file_put_contents( get_theme_file_path( ( $only_editable ) ? self::$components_spec_generated_json_filename . '_only_editable.json' : self::$components_spec_generated_json_filename . '.json' ), json_encode($final_components_to_return, JSON_PRETTY_PRINT) );
 
         return $final_components_to_return;
     }
@@ -736,6 +730,12 @@ class GutenbergBlock {
 
                 // Serialize component ID
                 $viewspec_data['id'] = str_replace( '_', '-', trim( strtolower( $viewspec_data['id'] ) ) );
+
+                // Merge component attributes with back-spec JSON file
+                $backspec_components = self::get_backspec_json_file('components');
+                if( is_array($backspec_components) && isset($backspec_components[$viewspec_data['id']]) ) {
+                    $viewspec_data = array_replace_recursive( $viewspec_data, $backspec_components[$viewspec_data['id']]);
+                }
 
                 // Add path attribute requires by component render method
                 if( file_exists( get_theme_file_path( self::get_theme_view_location() . COMPONENTS_RELATIVE_PATH . $basename_component . '/' . $basename_component . self::get_view_filename_extension() ) ) )
