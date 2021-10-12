@@ -146,19 +146,25 @@ class SinglePostType {
 	 */
 	 public function register_custom_taxonomy( $data_taxo ){
 
+		$args_taxpo = [
+			'label' => $data_taxo['label'],
+			'labels' => $data_taxo['labels'],
+			'rewrite' => array( 'slug' => $data_taxo['slug'] ),
+			'hierarchical' => $data_taxo['hierarchical'],
+			'sort' => true,
+			'show_ui' => true,
+			'show_admin_column' => true,
+			'show_in_rest' => true
+		];
+
+		if( isset($data_taxo['capabilities']) ) {
+			$args_taxpo['capabilities'] = $data_taxo['capabilities'];
+		}
+
 		register_taxonomy(
 			$data_taxo['slug'],
 			$this->slug,
-			array(
-				'label' => $data_taxo['label'],
-				'labels' => $data_taxo['labels'],
-				'rewrite' => array( 'slug' => $data_taxo['slug'] ),
-				'hierarchical' => $data_taxo['hierarchical'],
-				'sort' => true,
-				'show_ui' => true,
-				'show_admin_column' => true,
-				'show_in_rest' => true
-			)
+			$data_taxo
 		);
 	}
 
