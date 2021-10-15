@@ -673,15 +673,17 @@ class GutenbergBlock {
      * 
      */
     public static function get_components_frontspec( $only_editable = false ) {
+        
+        $components_spec_generated_json_filename = ( $only_editable ) ? self::$components_spec_generated_json_filename . '_only_editable.json' : self::$components_spec_generated_json_filename . '.json';
 
         // If components_spec_generated JSON file exists, just get its content and return it.
-        if( ( ! defined('WP_ENV') || WP_ENV !== 'dev' ) && file_exists( get_theme_file_path( ( $only_editable ) ? self::$components_spec_generated_json_filename . '_only_editable.json' : self::$components_spec_generated_json_filename . '.json' ) ) )
-			return json_decode( file_get_contents(get_theme_file_path( ( $only_editable ) ? self::$components_spec_generated_json_filename . '_only_editable.json' : self::$components_spec_generated_json_filename . '.json' )), true);
+        if( ( ! defined('WP_ENV') || WP_ENV !== 'dev' ) && file_exists( get_stylesheet_directory() . '/' . $components_spec_generated_json_filename ) )
+			return json_decode( file_get_contents( get_stylesheet_directory() . '/' . $components_spec_generated_json_filename ), true);
 
         // Else, loop each components and generate single JSON file.
         $final_components_to_return = [];
 
-        $components_dir = get_theme_file_path( self::get_theme_view_location() . COMPONENTS_RELATIVE_PATH );
+        $components_dir = get_stylesheet_directory() . self::get_theme_view_location() . COMPONENTS_RELATIVE_PATH;
         if( file_exists($components_dir) ) {
             
             // Scan components dir
@@ -705,7 +707,7 @@ class GutenbergBlock {
         }
 
         // Write the components frontspec generated in a JSON file.
-        file_put_contents( get_theme_file_path( ( $only_editable ) ? self::$components_spec_generated_json_filename . '_only_editable.json' : self::$components_spec_generated_json_filename . '.json' ), json_encode($final_components_to_return, JSON_PRETTY_PRINT) );
+        file_put_contents( get_stylesheet_directory() . '/' . $components_spec_generated_json_filename, json_encode($final_components_to_return, JSON_PRETTY_PRINT) );
 
         return $final_components_to_return;
     }
@@ -738,7 +740,7 @@ class GutenbergBlock {
                 }
 
                 // Add path attribute requires by component render method
-                if( file_exists( get_theme_file_path( self::get_theme_view_location() . COMPONENTS_RELATIVE_PATH . $basename_component . '/' . $basename_component . self::get_view_filename_extension() ) ) )
+                if( file_exists( get_stylesheet_directory() . self::get_theme_view_location() . COMPONENTS_RELATIVE_PATH . $basename_component . '/' . $basename_component . self::get_view_filename_extension() ) )
                     $viewspec_data['path'] = COMPONENTS_RELATIVE_PATH . $basename_component . '/' . $basename_component . self::get_view_filename_extension();
 
                 // Get and treat component props
@@ -820,7 +822,7 @@ class GutenbergBlock {
                 $prefix_extends = explode('.', $extends);
                 if( is_array($prefix_extends) && count($prefix_extends) == 2 && isset($frontspec_views_path['folders'][ $prefix_extends[0] ]) ) {
 
-                    $extends_json_files = glob( get_theme_file_path( self::get_theme_view_location() . $frontspec_views_path['folders'][ $prefix_extends[0] ] . '/' . $prefix_extends[1] . '/*.json' ) );
+                    $extends_json_files = glob( get_stylesheet_directory() . self::get_theme_view_location() . $frontspec_views_path['folders'][ $prefix_extends[0] ] . '/' . $prefix_extends[1] . '/*.json' );
                     if( $extends_json_files && is_array($extends_json_files) && count($extends_json_files) == 1 )
                         return self::get_component_viewspec( $extends_json_files[0] );
                 }

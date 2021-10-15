@@ -40,7 +40,7 @@ class Timber {
         // Load Timber
         self::$timber = new \Timber\Timber();
         \Timber\Timber::$locations = [
-            get_theme_file_path( self::get_theme_view_location() ),
+            get_stylesheet_directory() . self::get_theme_view_location(),
             GutenbergBlock::get_gutenberg_plugin_path() . '/views'
         ];
     }
