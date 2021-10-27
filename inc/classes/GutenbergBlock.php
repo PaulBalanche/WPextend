@@ -828,6 +828,11 @@ class GutenbergBlock {
                 }
             }
         }
+        else {
+            $extends_json_files = glob( get_stylesheet_directory() . self::get_theme_view_location() . 'components/' . $extends . '/*.json' );
+            if( $extends_json_files && is_array($extends_json_files) && count($extends_json_files) == 1 )
+                return self::get_component_viewspec( $extends_json_files[0] );
+        }
 
         return null;
     }
