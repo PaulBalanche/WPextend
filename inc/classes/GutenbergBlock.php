@@ -635,7 +635,7 @@ class GutenbergBlock {
 
         if ( $data ) {
 
-            if ( array_key_exists($data, $front_spec) )
+            if( array_key_exists($data, $front_spec) )
                 return $front_spec[$data];
             else
                 return null;
@@ -730,6 +730,7 @@ class GutenbergBlock {
             $viewspec_data = json_decode( file_get_contents( $path_viewspec_file ), true );
             if( $viewspec_data && is_array($viewspec_data) ) {
 
+
                 // Serialize component ID
                 $viewspec_data['id'] = str_replace( '_', '-', trim( strtolower( $viewspec_data['id'] ) ) );
 
@@ -737,6 +738,11 @@ class GutenbergBlock {
                 $backspec_components = self::get_backspec_json_file('components');
                 if( is_array($backspec_components) && isset($backspec_components[$viewspec_data['id']]) ) {
                     $viewspec_data = array_replace_recursive( $viewspec_data, $backspec_components[$viewspec_data['id']]);
+                }
+
+                // Need only editable component => just bypass it and continue to the next component
+                if( $only_editable && isset( $viewspec_data['editable'] ) && $viewspec_data['editable'] == false ) {
+                    return null;
                 }
 
                 // Add path attribute requires by component render method
