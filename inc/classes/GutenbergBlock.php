@@ -696,15 +696,21 @@ class GutenbergBlock {
                     continue;
 
                 // Treat viewspec JSON file for the current component
-                $final_components_to_return[ $component ] = self::get_component_viewspec( $components_dir . $component . '/viewspec.json', $only_editable );
+                $final_components_to_return[ strtolower( $component ) ] = self::get_component_viewspec( $components_dir . $component . '/viewspec.json', $only_editable );
 
                 // If invalid or null component, just bypass it and continue to the next component
-                if( is_null($final_components_to_return[$component]) || ! is_array($final_components_to_return[$component]) ) {
-                    unset( $final_components_to_return[$component] );
+                if( is_null($final_components_to_return[ strtolower( $component ) ]) || ! is_array($final_components_to_return[ strtolower( $component ) ]) ) {
+                    unset( $final_components_to_return[ strtolower( $component ) ] );
                     continue;
                 }
             }
         }
+
+        // Merge again with backspec JSON file adding missing component
+        $final_components_to_return = self::components_merge_front_and_back_spec_files( $final_components_to_return );
+
+        // Apply filters
+        $final_components_to_return = apply_filters( 'wpextend_get_components_frontspec', $final_components_to_return);
 
         // Write the components frontspec generated in a JSON file.
         file_put_contents( get_stylesheet_directory() . '/' . $components_spec_generated_json_filename, json_encode($final_components_to_return, JSON_PRETTY_PRINT) );
@@ -841,6 +847,27 @@ class GutenbergBlock {
         }
 
         return null;
+    }
+
+
+
+    /**
+     * Merge again with backspec JSON file adding missing component
+     * 
+     */
+    public static function components_merge_front_and_back_spec_files( $components ) {
+
+        $backspec_components = self::get_backspec_json_file('components');
+        if( is_array($backspec_components) && count($backspec_components) > 0 ) {
+
+            foreach( $backspec_components as $key => $val ) {
+                if( ! isset($components[$key]) && isset($val['id']) ) {
+                    $components[$key] = $val;
+                }
+            }
+        }
+
+        return $components;
     }
 
 
