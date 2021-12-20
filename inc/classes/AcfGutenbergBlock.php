@@ -64,7 +64,7 @@ class AcfGutenbergBlock {
 
         // Update Gutenberg blocks abnd block categories
         add_filter( 'wpextend_load_all_gutenberg_blocks', array($this, 'load_all_blocks') );
-        add_filter( 'block_categories', array($this, 'update_block_categories'), 10, 2 );
+        add_filter( 'block_categories_all', array($this, 'update_block_categories'), 10, 2 );
 
         // Create controller file if missing when Gutenberg block post is saved
         add_action( 'save_post', array($this, 'on_saving_block'), 10, 3 );
