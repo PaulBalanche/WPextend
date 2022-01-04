@@ -757,7 +757,7 @@ class GutenbergBlock {
 
                 // Get and treat component props
                 if( isset($viewspec_data['props']) && is_array($viewspec_data['props']) ) {
-                    $viewspec_data['type'] = 'object';
+                    $viewspec_data['type'] = ( isset($viewspec_data['type']) ) ? $viewspec_data['type'] : 'object';
                     $viewspec_data['props'] = self::get_component_props($viewspec_data['props'], $viewspec_data['id'], $only_editable);
                 }
 
@@ -784,7 +784,6 @@ class GutenbergBlock {
 
                     // Extend
                     if( isset($props['extends']) ) {
-                    
                         $component_props[$key_props] = wp_parse_args( $props, self::get_extends_component_viewspec($props['extends']) );
                         unset( $component_props[$key_props]['extends'] );
                     }
@@ -801,14 +800,14 @@ class GutenbergBlock {
                 }
 
                 // Serialize and add some update into few attributes.
-                $component_props[$key_props]['repeatable'] = ( strpos($component_props[$key_props]['type'], '[]') !== false ) ? true : false;
+                $component_props[$key_props]['repeatable'] = ( strpos($component_props[$key_props]['type'], '[]') !== false || ( isset($component_props[$key_props]['repeatable']) && $component_props[$key_props]['repeatable']) ) ? true : false;
                 $component_props[$key_props]['type'] = str_replace('[]', '', strtolower($component_props[$key_props]['type']));
                 $component_props[$key_props]['label'] = ( isset($component_props[$key_props]['label']) ) ? $component_props[$key_props]['label'] : ucfirst($key_props);
                 $component_props[$key_props]['category'] = ( isset($component_props[$key_props]['category']) ) ? strtolower($component_props[$key_props]['category']) : '';
                 
                 // If type is object with sub-props, call this recursive method
-                if( $component_props[$key_props]['type'] == 'object' && isset($component_props[$key_props]['props']) && is_array($component_props[$key_props]['props']) )
-                    $component_props[$key_props]['props'] = self::get_component_props($component_props[$key_props]['props']);
+                if( ( $component_props[$key_props]['type'] == 'object' || $component_props[$key_props]['type'] == 'Object[]' ) && isset($component_props[$key_props]['props']) && is_array($component_props[$key_props]['props']) )
+                    $component_props[$key_props]['props'] = self::get_component_props($component_props[$key_props]['props'], false, $only_editable);
             }
         }
 
