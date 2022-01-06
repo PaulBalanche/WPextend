@@ -43,7 +43,8 @@ class SingleSetting {
 			$this->repeatable = ( array_key_exists('repeatable', $instance_settings_wpextend->wpextend_global_settings[$category]['fields'][$id]) ) ? $instance_settings_wpextend->wpextend_global_settings[$category]['fields'][$id]['repeatable'] : false;
 
 			// Pour les champs custom post
-			if( $this->type == 'select_post_type' ){
+			if( $this->type == 'select_post_type' ) {
+
 				$list_custom_post = get_posts( array(
 					'posts_per_page'   => -1,
 					'orderby'          => 'title',
@@ -52,17 +53,77 @@ class SingleSetting {
 					'post_status'      => 'publish',
 					'suppress_filters' => false
 				));
-				$this->options = [];
-				foreach( $list_custom_post as $custom_post ){
-					$this->options[$custom_post->ID] = $custom_post->post_title;
-				}
+
+				$list_custom_post_hierarchical = $this->posts_sort_hierarchically($list_custom_post);
+				$this->options = $this->get_deep_select_option( $list_custom_post_hierarchical );
 			}
 		}
 	}
 
 
 
+	public function get_deep_select_option( $list, $prefix = '' ) {
 
+		$options = [];
+
+		foreach( $list as $value ){
+
+			$options[ $value->ID ] = ( ! empty($prefix) ) ? $prefix . ' ' . $value->post_title : $value->post_title;
+
+			if( isset( $value->child ) ) {
+				$options = $options + $this->get_deep_select_option( $value->child, $prefix . '-' );
+			}
+		}
+
+		return $options;
+	}
+
+
+
+	public function posts_sort_hierarchically( $posts ) {
+
+		$posts_sorted = [];
+
+		while( count($posts) > 0 ) {
+
+			foreach( $posts as $key => $post ) {
+
+				$posts[$key]->child = [];
+
+				if( ! isset($posts[$key]->post_parent) || ! $posts[$key]->post_parent || $posts[$key]->post_parent == 0 ) {
+					$posts_sorted[ $posts[$key]->ID ] = $posts[$key];
+					unset($posts[$key]);
+				}
+				elseif( isset($posts_sorted[ $posts[$key]->post_parent ] ) ) {
+					$posts_sorted[ $posts[$key]->post_parent ]->child[ $posts[$key]->ID ] = $posts[$key];
+					unset($posts[$key]);
+				}
+				else {
+					$this->find_deep_relationship( $posts_sorted, $posts, $key );
+				}
+			}
+		}
+
+		return $posts_sorted;
+	}
+
+
+
+	public function find_deep_relationship( &$posts_sorted, &$ref_posts, $key_post ) {
+
+		foreach( $posts_sorted as $key => $post ) {
+
+			if( count($post->child) > 0 ) {
+				if( isset($post->child[ $ref_posts[$key_post]->post_parent ] ) ) {
+					$posts_sorted[ $key ]->child[ $ref_posts[$key_post]->post_parent ]->child[ $ref_posts[$key_post]->ID ] = $ref_posts[$key_post];
+					unset($ref_posts[$key_post]);
+				}
+				else {
+					$this->find_deep_relationship( $posts_sorted[ $key ]->child, $ref_posts, $key_post );
+				}
+			}
+		}
+	}
 
 
 
