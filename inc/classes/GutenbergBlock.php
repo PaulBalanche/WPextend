@@ -757,7 +757,7 @@ class GutenbergBlock {
 
                 // Get and treat component props
                 if( isset($viewspec_data['props']) && is_array($viewspec_data['props']) ) {
-                    $viewspec_data['type'] = ( isset($viewspec_data['type']) ) ? $viewspec_data['type'] : 'object';
+                    $viewspec_data['type'] = ( isset($viewspec_data['type']) && $viewspec_data['type'] != 'twig' ) ? $viewspec_data['type'] : 'object';
                     $viewspec_data['props'] = self::get_component_props($viewspec_data['props'], $viewspec_data['id'], $only_editable);
                 }
 
