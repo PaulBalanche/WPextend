@@ -710,7 +710,7 @@ class GutenbergBlock {
         $final_components_to_return = self::components_merge_front_and_back_spec_files( $final_components_to_return );
 
         // Apply filters
-        $final_components_to_return = apply_filters( 'wpextend_get_components_frontspec', $final_components_to_return);
+        $final_components_to_return = apply_filters( 'wpextend/get_components_frontspec', $final_components_to_return, $only_editable );
 
         // Write the components frontspec generated in a JSON file.
         file_put_contents( get_stylesheet_directory() . '/' . $components_spec_generated_json_filename, json_encode($final_components_to_return, JSON_PRETTY_PRINT) );
