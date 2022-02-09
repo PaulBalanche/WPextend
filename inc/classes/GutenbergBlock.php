@@ -654,7 +654,7 @@ class GutenbergBlock {
 
         $back_spec = json_decode ( file_get_contents( self::get_backspec_path() ), true );
 
-        if ( $data ) {
+        if( $data && is_array($back_spec) ) {
 
             if ( array_key_exists($data, $back_spec) )
                 return $back_spec[$data];
