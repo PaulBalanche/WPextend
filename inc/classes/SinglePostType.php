@@ -95,7 +95,7 @@ class SinglePostType {
 
 		if( array_key_exists('taxonomy', $data) && is_array($data['taxonomy']) && array_key_exists('slug', $data['taxonomy']) && array_key_exists('label', $data['taxonomy']) && !empty($data['taxonomy']['slug']) && !empty($data['taxonomy']['label']) ){
 			$this->taxonomy = $data['taxonomy'];
-			$this->taxonomy['hierarchical'] = ( array_key_exists('hierarchical', $data['taxonomy']) ) ? $data['taxonomy']['hierarchical'] : true;
+			$this->taxonomy['hierarchical'] = ( array_key_exists('hierarchical', $data['taxonomy']) ) ? convertToBoolean( $data['taxonomy']['hierarchical'] ) : true;
 		}
 		elseif( array_key_exists('taxonomy', $data) && is_array($data['taxonomy']) ) {
 			$this->taxonomies = [];
