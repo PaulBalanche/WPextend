@@ -3,7 +3,7 @@
  * Plugin Name: 		WP Extend
  * Plugin URI: 			https://github.com/PaulBalanche/WPextend
  * Description: 		Extends basic Wordpress features such as add general settings, easy creating custom post type, ...
- * Version: 			3.4.1
+ * Version: 			3.4.2
  * Requires at least: 	5.6
  * Requires PHP:      	7.2
  * Author: 				Paul Balanche

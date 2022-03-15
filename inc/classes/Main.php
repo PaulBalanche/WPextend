@@ -97,6 +97,7 @@ class Main {
 
 		add_submenu_page(WPEXTEND_MAIN_SLUG_ADMIN_PAGE, 'WP Extend - Export', 'Export', 'manage_options', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . Main::$admin_url_export, array( Main::getInstance(), 'render_export' ) );
 		add_submenu_page(WPEXTEND_MAIN_SLUG_ADMIN_PAGE, 'WP Extend - Import', 'Import', 'manage_options', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . Main::$admin_url_import, array( Main::getInstance(), 'render_import' ) );
+		add_submenu_page(WPEXTEND_MAIN_SLUG_ADMIN_PAGE, 'WP Extend - Debug', 'Debug', 'manage_options', WPEXTEND_MAIN_SLUG_ADMIN_PAGE . '_debug', array( Main::getInstance(), 'render_debug_page' ) );
 	 }
 
 
@@ -174,6 +175,31 @@ class Main {
 		$retour_html .= RenderAdminHtml::form_close( 'Import', true );
 		if( file_exists( WPEXTEND_IMPORT_DIR . 'global_settings_value.json' ) ){
 			$retour_html .= '<p><a href="' . add_query_arg( ['action' => 'import_wpextend_global_settings_values', 'file' => 'global_settings_value'] , wp_nonce_url(admin_url( 'admin-post.php' ), 'import_wpextend_global_settings_values')) . '" class="button" >Import JSON file</a></p>';
+		}
+
+		$retour_html .= '</div>';
+
+	 	echo $retour_html;
+	 }
+	 
+	 
+	 
+	 /**
+	 * Render HTML debug page
+	 *
+	 */
+	 public static function render_debug_page() {
+
+	 	// Header page & open form
+		$retour_html = RenderAdminHtml::header('Debug');
+
+		if( isset($_GET['phpinfo']) ) {
+			phpinfo();
+			exit;
+		}
+		else {
+			$retour_html .= '<a href="?page=wpextend_debug&phpinfo" >phpinfo</a>';
+			$retour_html .= '<pre>' . print_r( $_SERVER, true ) . '</pre>';
 		}
 
 		$retour_html .= '</div>';
