@@ -14,6 +14,7 @@ class SinglePostType {
 	public $slug;
 	public $labels;
 	public $args;
+	public $annex_args;
 	public $taxonomy;
 	public static $default_labels = array(
 		'name'						=> '%s',
@@ -90,7 +91,7 @@ class SinglePostType {
 		$this->slug = $slug;
 		$this->args = ( isset($data['args']) ) ? wp_parse_args( $data['args'], self::$default_args ) : self::$default_args;
 		$this->args['labels'] = $this->labels;
-		$this->annex_args = ( isset($data['annex_args']) ) ? wp_parse_args( $data['annex_args'], self::$default_annex_args ) : self::$default_annex_args;
+		$this->annex_args = ( isset($data['annex_args']) ) ? wp_parse_args( $data['annex_args'], [ 'multiple_post_thumbnails' => '0' ] ) : [ 'multiple_post_thumbnails' => '0' ];
 
 		if( array_key_exists('taxonomy', $data) && is_array($data['taxonomy']) && array_key_exists('slug', $data['taxonomy']) && array_key_exists('label', $data['taxonomy']) && !empty($data['taxonomy']['slug']) && !empty($data['taxonomy']['label']) ){
 			$this->taxonomy = $data['taxonomy'];
